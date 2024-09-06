@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "author": "weishh <763569906@qq.com>",
+  "scripts": {
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "setup": "umi setup",
+    "start": "pnpm run dev",
+    "gld": "node ./script/getLotteryData.js"
+  },
+  "dependencies": {
+    "@ant-design/charts": "^2.2.1",
+    "@ant-design/plots": "^2.3.1",
+    "antd": "^5.20.5",
+    "puppeteer": "^23.2.2",
+    "umi": "^4.3.18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "typescript": "^5.0.3"
+  }
+}

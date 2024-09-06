@@ -1,0 +1,30 @@
+import historyData from "data/history_data.json";
+import analysisData from "data/analysis_data.json";
+
+/**
+ * 取最近 {count} 期的数据
+ *
+ * count 不传则返回全部数据
+ * @param count
+ * @returns
+ */
+export const getHistoryData = (count?: number): any[] => {
+  if (count) {
+    return historyData.slice(-count);
+  }
+  return historyData;
+};
+
+/**
+ * 取某个维度 {key} 的数据
+ *
+ * key 不传则返回全部数据
+ * @param count
+ * @returns
+ */
+export const getAnalysisData = (key: string): any => {
+  if (key) {
+    return (analysisData as Record<string, any>)[key];
+  }
+  return analysisData;
+};
