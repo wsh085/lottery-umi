@@ -15,6 +15,12 @@ export default function Layout() {
         <li>
           <Link to="/number">数字_统计</Link>
         </li>
+        <li>
+          <Link to="/preshahao">前区杀号</Link>
+        </li>
+        {/* <li>
+          <Link to="/tensorflow">学习预测</Link>
+        </li> */}
       </ul>
       <Outlet />
     </div>
