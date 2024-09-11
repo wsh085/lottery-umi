@@ -6,6 +6,7 @@ export default defineConfig({
     { path: "/hongqiu", component: "hongqiu" },
     { path: "/number", component: "number" },
     { path: "/preshahao", component: "preshahao" },
+    { path: "/piantaifenxi", component: "piantaifenxi" },
   ],
   alias: {
     data: '/data',
