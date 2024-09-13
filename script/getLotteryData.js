@@ -123,11 +123,11 @@ const url =
             tdData[j].textContent !== ""
           ) {
             if (j < 40) {
-              // 蓝球
-              blue.push(tdData[j].textContent);
-            } else {
               // 红球
               red.push(tdData[j].textContent);
+            } else {
+              // 蓝球
+              blue.push(tdData[j].textContent);
             }
           }
         }

@@ -15,6 +15,7 @@ import {
 import { getHistoryData } from "@/utils";
 import { FORM_ITEM_LAYOUT } from "@/utils/constants";
 import useObjectState from "@/hooks/useObjectState";
+import XuanhaoModal from "./components/XuanhaoModal";
 
 const Ways = [
   {
@@ -54,6 +55,10 @@ const PreShaHaoStatistics = () => {
   }>({
     count: undefined,
     key: undefined,
+  });
+
+  const [modalParams, updateModalParams] = useObjectState({
+    open: false,
   });
 
   const historyData = useMemo(() => {
@@ -322,7 +327,8 @@ const PreShaHaoStatistics = () => {
   /**
    * 获取杀号
    */
-  const handleShaHao = () => {
+  const handleShaHao = (params: { showModal?: boolean }) => {
+    const { showModal = true } = params;
     const result: Record<string, number[]> = {};
     let data = [];
     let killNumbers: number[] = [];
@@ -349,22 +355,26 @@ const PreShaHaoStatistics = () => {
         killNumbers = [...killNumbers, ...result[item.value]];
       }
     });
-    Modal.info({
-      title: `本期推荐的杀号: ${uniq(killNumbers)
-        .sort((a, b) => a - b)
-        .join("  ")}`,
-      content: (
-        <div>
-          {Object.keys(result).map((key) => {
-            return (
-              <div>
-                {key}：{result[key].join("  ")}
-              </div>
-            );
-          })}
-        </div>
-      ),
-    });
+    params.showModal &&
+      Modal.info({
+        title: `本期推荐的杀号: ${uniq(killNumbers)
+          .sort((a, b) => a - b)
+          .join("  ")}`,
+        content: (
+          <div>
+            {Object.keys(result).map((key) => {
+              return (
+                <div>
+                  {key}：{result[key].join("  ")}
+                </div>
+              );
+            })}
+          </div>
+        ),
+      });
+    return uniq(killNumbers)
+      .sort((a, b) => a - b)
+      .join("  ");
   };
 
   // #region 渲染DOM
@@ -401,8 +411,15 @@ const PreShaHaoStatistics = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
-            <Button onClick={() => handleShaHao()}>获取当期的杀号</Button>
+          <Col span={4}>
+            <Button onClick={() => handleShaHao({ showModal: true })}>
+              获取当期的杀号
+            </Button>
+          </Col>
+          <Col span={4}>
+            <Button onClick={() => updateModalParams({ open: true })}>
+              选号
+            </Button>
           </Col>
         </Row>
       </Form>
@@ -427,6 +444,12 @@ const PreShaHaoStatistics = () => {
           <Line {...config} />
         </>
       )}
+      <XuanhaoModal
+        open={modalParams.open}
+        handleShaHao={handleShaHao}
+        onOk={() => updateModalParams({ open: false })}
+        onCancel={() => updateModalParams({ open: false })}
+      />
     </div>
   );
 };

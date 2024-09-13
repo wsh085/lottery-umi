@@ -16,7 +16,7 @@ const HongQiuStatistics = () => {
     key: string;
   }>({
     region: undefined,
-    qiu: "蓝球",
+    qiu: "红球",
     key: "出现总次数",
   });
 
@@ -115,8 +115,8 @@ const HongQiuStatistics = () => {
                   })
                 }
                 options={[
-                  { value: "蓝球", label: "蓝球" },
                   { value: "红球", label: "红球" },
+                  { value: "蓝球", label: "蓝球" },
                 ]}
               />
             </Form.Item>
