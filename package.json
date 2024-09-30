@@ -7,7 +7,8 @@
     "postinstall": "umi setup",
     "setup": "umi setup",
     "start": "pnpm run dev",
-    "gld": "node ./script/getLotteryData.js"
+    "gld": "node ./script/getLotteryData.js",
+    "getAll": "node ./script/getAllHistoryData.js"
   },
   "dependencies": {
     "@ant-design/charts": "^2.2.1",
