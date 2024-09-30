@@ -1,5 +1,6 @@
 import historyData from "data/history_data.json";
 import analysisData from "data/analysis_data.json";
+import allHistoryData from "data/all_history_data.json";
 
 /**
  * 取最近 {count} 期的数据
@@ -13,6 +14,14 @@ export const getHistoryData = (count?: number): any[] => {
     return historyData.slice(-count);
   }
   return historyData;
+};
+
+/**
+ * 取全部历史数据
+ * @returns
+ */
+export const getAllHistoryData = (): any[] => {
+  return allHistoryData;
 };
 
 /**
