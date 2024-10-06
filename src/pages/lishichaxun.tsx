@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, Col, Form, Input, Row, Table } from "antd";
 import { getAllHistoryData } from "@/utils";
 import { FORM_ITEM_LAYOUT } from "@/utils/constants";
 import useObjectState from "@/hooks/useObjectState";
+import { uniq } from "lodash-es";
 
 /**
  * 历史数据查询
@@ -42,7 +43,47 @@ const LiShiChaXun = () => {
     setDataSource(result);
   };
 
-  console.info("dataSource", dataSource);
+  // 计算重复出现的号码
+  const chongfuNumber = useMemo(() => {
+    if (dataSource.length) {
+      const redResult: string[] = [];
+      const blueResult: string[] = [];
+      const allRedNumber: string[] = [];
+      const allBlueNumber: string[] = [];
+
+      dataSource.forEach((item: any) => {
+        // 红球
+        const redqiu = item["下一期"]["红球"]?.split(" ") || [];
+        // 蓝球
+        const blueqiu = item["下一期"]["蓝球"]?.split(" ") || [];
+
+        redqiu.forEach((key: string) => {
+          if (allRedNumber.includes(key)) {
+            redResult.push(key);
+          } else {
+            allRedNumber.push(key);
+          }
+        });
+
+        blueqiu.forEach((key: string) => {
+          if (allBlueNumber.includes(key)) {
+            blueResult.push(key);
+          } else {
+            allBlueNumber.push(key);
+          }
+        });
+      });
+
+      return {
+        red: uniq(redResult.sort((a, b) => Number(a) - Number(b))),
+        blue: uniq(blueResult.sort((a, b) => Number(a) - Number(b))),
+      };
+    }
+    return {
+      red: [],
+      blue: [],
+    };
+  }, [dataSource]);
 
   // #region 渲染DOM
   return (
@@ -53,6 +94,7 @@ const LiShiChaXun = () => {
             <Form.Item label="红球" name="red">
               <Input
                 className="w-1-1"
+                allowClear
                 placeholder="请输入红球号码，空格分隔"
                 onChange={(e) =>
                   updateParams({
@@ -66,6 +108,7 @@ const LiShiChaXun = () => {
             <Form.Item label="蓝球" name="blue">
               <Input
                 className="w-1-1"
+                allowClear
                 placeholder="请输入蓝球号码，空格分隔"
                 onChange={(e) =>
                   updateParams({
@@ -122,6 +165,24 @@ const LiShiChaXun = () => {
           showQuickJumper: true,
         }}
       />
+      {
+        // 红球重复号码
+        chongfuNumber.red?.length ? (
+          <div className="mt-24">
+            <div>红球重复出现的号码：</div>
+            <div>{chongfuNumber.red?.join("  ")}</div>
+          </div>
+        ) : null
+      }
+      {
+        // 蓝球重复号码
+        chongfuNumber.blue?.length ? (
+          <div className="mt-24">
+            <div>蓝球重复出现的号码：</div>
+            <div>{chongfuNumber.blue?.join("  ")}</div>
+          </div>
+        ) : null
+      }
     </div>
   );
 };
