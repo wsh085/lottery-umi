@@ -14,9 +14,11 @@ const LiShiChaXun = () => {
   const [dataSource, setDataSource] = useState([]);
 
   const [params, updateParams] = useObjectState<{
+    qishu?: string;
     red?: string;
     blue?: string;
   }>({
+    qishu: undefined,
     red: undefined,
     blue: undefined,
   });
@@ -29,7 +31,13 @@ const LiShiChaXun = () => {
   const blue: string[] = params.blue?.split(" ") || []; // 蓝球
 
   const handleDataSource = () => {
-    const allHistoryData = getAllHistoryData(); // 全部历史数据
+    let allHistoryData = getAllHistoryData(); // 全部历史数据
+
+    allHistoryData = params.qishu
+      ? allHistoryData?.filter(
+          (item) => Number(item["期数"]) <= Number(params.qishu)
+        )
+      : allHistoryData;
 
     const result: any = [];
 
@@ -105,7 +113,21 @@ const LiShiChaXun = () => {
     <div>
       <Form {...FORM_ITEM_LAYOUT}>
         <Row>
-          <Col span={8}>
+          <Col span={6}>
+            <Form.Item label="期数" name="qishu">
+              <Input
+                className="w-1-1"
+                allowClear
+                placeholder="请输入期数"
+                onChange={(e) =>
+                  updateParams({
+                    qishu: e.target.value,
+                  })
+                }
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
             <Form.Item label="红球" name="red">
               <Input
                 className="w-1-1"
@@ -119,7 +141,7 @@ const LiShiChaXun = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Form.Item label="蓝球" name="blue">
               <Input
                 className="w-1-1"
@@ -133,7 +155,7 @@ const LiShiChaXun = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Space>
               <Button className="w-1-1" onClick={() => handleDataSource()}>
                 查询
@@ -145,6 +167,14 @@ const LiShiChaXun = () => {
                 方法验证
               </Button>
             </Space>
+          </Col>
+          <Col span={6}>
+            <Input.TextArea
+              className="w-1-1"
+              allowClear
+              placeholder="请输入"
+              rows={2}
+            />
           </Col>
         </Row>
       </Form>
@@ -165,7 +195,9 @@ const LiShiChaXun = () => {
             </div>
             <div>5、取红球的第1个号码 + 蓝球全部号码 进行查询</div>
             <div>6、取红球的第1个、第3个、第5个号码 进行查询</div>
-            <div>7、取蓝球的蓝球全部号码 进行查询，关注出现次数最多的号码</div>
+            <div>7、取红球的第1个、第5个号码 + 蓝球第1个号码 进行查询</div>
+            <div>8、取红球的第4个、第5个号码 + 蓝球全部号码 进行查询</div>
+            <div>9、取蓝球的蓝球全部号码 进行查询，关注出现次数最多的号码</div>
 
             <div className="mt-16">
               <div>分析多种方法相同号码的出现次数</div>
@@ -275,3 +307,21 @@ const LiShiChaXun = () => {
 };
 
 export default LiShiChaXun;
+
+// 06 09 19 25 30 + 06 12
+// 10 17 18 21 34 + 05 11
+// 19 22 23 29 35 + 08 10
+// 04 07 11 32 35 + 05 07
+// 05 17 25 30 33 + 01 12
+// 04 06 11 20 31 + 01 05
+// 02 03 23 24 26 + 05 11
+// 03 07 20 24 31 + 04 09
+// 12 15 18 24 29 + 03 11
+// 02 07 16 20 33 + 03 11
+// 04 05 14 21 34 + 06 09
+// 02 03 13 19 26 + 02 03
+// 01 09 15 30 33 + 04 09
+// 14 17 18 28 34 + 02 03
+// 02 05 15 17 26 + 02 08
+// 06 07 13 25 33 + 05 08
+// 01 03 09 16 19 + 05 11
