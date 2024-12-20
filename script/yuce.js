@@ -3,8 +3,8 @@ const path = require('path');
 const tf = require('@tensorflow/tfjs');
 
 // 添加常量定义
-const HISTORY_PERIODS = 30;    // 使用最近50期数据
-const TRAINING_EPOCHS = 300;   // 训练200轮
+const HISTORY_PERIODS = 50;    // 使用最近50期数据
+const TRAINING_EPOCHS = 200;   // 训练200轮
 const PREDICTION_TIMES = 10;   // 预测10次取平均
 const MIN_CONFIDENCE = 90;     // 最低置信度要求
 
@@ -39,7 +39,7 @@ function prepareData(historyData, sequenceLength = 5) {
   const labels = [];
   
   const RED_MIN = 1, RED_MAX = 35;  // 修改红球范围
-  const BLUE_MIN = 1, BLUE_MAX = 16;
+  const BLUE_MIN = 1, BLUE_MAX = 12;
   
   for (let i = sequenceLength; i < historyData.length; i++) {
     const sequence = historyData.slice(i - sequenceLength, i);
