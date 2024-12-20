@@ -11,11 +11,13 @@
     "获取大乐透历史数据": "",
     "getAll": "node ./script/getAllHistoryData.js",
     "获取双色球历史数据": "",
-    "getAllSsq": "node ./script/getAllSsqHistoryData.js"
+    "getAllSsq": "node ./script/getAllSsqHistoryData.js",
+    "yuce": "node ./script/yuce.js"
   },
   "dependencies": {
     "@ant-design/charts": "^2.2.1",
     "@ant-design/plots": "^2.3.1",
+    "@tensorflow/tfjs": "^4.22.0",
     "antd": "^5.20.5",
     "lodash-es": "^4.17.21",
     "puppeteer": "^23.2.2",
