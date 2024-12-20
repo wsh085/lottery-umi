@@ -8,7 +8,10 @@
     "setup": "umi setup",
     "start": "pnpm run dev",
     "gld": "node ./script/getLotteryData.js",
-    "getAll": "node ./script/getAllHistoryData.js"
+    "获取大乐透历史数据": "",
+    "getAll": "node ./script/getAllHistoryData.js",
+    "获取双色球历史数据": "",
+    "getAllSsq": "node ./script/getAllSsqHistoryData.js"
   },
   "dependencies": {
     "@ant-design/charts": "^2.2.1",
