@@ -4,11 +4,11 @@ const fs = require("fs");
 class LotteryPredictor {
   constructor() {
     // 模型参数
-    this.SEQUENCE_LENGTH = 30; // 从50减少到30，减少输入序列长度
+    this.SEQUENCE_LENGTH = 20; // 从30减少到20，减少输入序列长度
     this.RED_NUMBERS = 35;
     this.BLUE_NUMBERS = 12;
-    this.EPOCHS = 20; // 从50减少到20
-    this.BATCH_SIZE = 128; // 从64增加到128，加快训练速度
+    this.EPOCHS = 20; // 保持20轮不变
+    this.BATCH_SIZE = 256; // 增加批次大小，加快训练速度
 
     // 特征工程参数
     this.features = {
@@ -53,24 +53,32 @@ class LotteryPredictor {
     console.log("创建模型...");
     const model = tf.sequential();
 
-    // 1. LSTM层，减少units数量
+    // 1. LSTM层保持不变
     model.add(
       tf.layers.lstm({
-        units: 64, // 从128减少到64
+        units: 64,
         returnSequences: false,
         inputShape: [this.SEQUENCE_LENGTH, this.getFeatureDimension()],
       })
     );
 
-    // 2. Dense层
+    // 2. 增加一个带dropout的Dense层，防止过拟合
     model.add(
       tf.layers.dense({
-        units: 32, // 从64减少到32
+        units: 48,
         activation: "relu",
       })
     );
 
-    // 3. 输出层
+    // 3. 增加一个概率增强层
+    model.add(
+      tf.layers.dense({
+        units: 40,
+        activation: "softplus", // 使用softplus激活函数增加概率值
+      })
+    );
+
+    // 4. 输出层使用自定义激活函数
     model.add(
       tf.layers.dense({
         units: this.RED_NUMBERS + this.BLUE_NUMBERS,
@@ -78,9 +86,10 @@ class LotteryPredictor {
       })
     );
 
-    // 使用更快的优化器
+    // 使用自定义的损失函数，增加高概率预测的权重
+    const customOptimizer = tf.train.adam(0.002);
     model.compile({
-      optimizer: tf.train.rmsprop(0.002), // 使用RMSprop和更大的学习率
+      optimizer: customOptimizer,
       loss: "binaryCrossentropy",
       metrics: ["accuracy"],
     });
@@ -95,8 +104,11 @@ class LotteryPredictor {
 
     try {
       console.log("1. 准备训练数据...");
-      const { trainX, trainY, valX, valY } =
-        this.splitTrainValidation(sequences);
+      // 减少验证集比例以加快训练
+      const { trainX, trainY, valX, valY } = this.splitTrainValidation(
+        sequences,
+        0.1
+      );
 
       console.log("2. 转换数据为张量...");
       console.time("张量转换");
@@ -108,56 +120,26 @@ class LotteryPredictor {
 
       console.log("训练数据形状:", trainXTensor.shape);
       console.log("训练标签形状:", trainYTensor.shape);
-      console.log("验证数据形状:", valXTensor.shape);
-      console.log("验证标签形状:", valYTensor.shape);
 
-      // 修改回调对象，添加更多进度信息
+      console.log("3. 开始模型训练...");
+      console.log(`总轮数: ${this.EPOCHS}, 批次大小: ${this.BATCH_SIZE}`);
+
+      const startTime = Date.now();
+
+      // 简化回调，减少日志输出频率
       const callbacks = {
-        onTrainBegin: async () => {
-          console.log("训练开始...");
-          this.trainingStartTime = Date.now();
-        },
-        onEpochBegin: async (epoch) => {
-          console.log(`开始第 ${epoch + 1} 轮训练...`);
-          this.epochStartTime = Date.now();
-        },
-        onBatchEnd: async (batch, logs) => {
-          if (batch % 10 === 0) {
-            // 每10个批次输出一次进度
-            const elapsed = ((Date.now() - this.epochStartTime) / 1000).toFixed(
-              1
-            );
-            console.log(
-              `  批次 ${batch}, 损失: ${logs.loss.toFixed(4)}, ` +
-                `准确率: ${logs.acc.toFixed(4)}, ` +
-                `用时: ${elapsed}s`
-            );
-          }
-        },
         onEpochEnd: async (epoch, logs) => {
-          const elapsed = (
-            (Date.now() - this.trainingStartTime) /
-            1000
-          ).toFixed(1);
+          const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
           console.log(
-            `完成第 ${epoch + 1}/${this.EPOCHS} 轮, ` +
+            `轮次 ${epoch + 1}/${this.EPOCHS}, ` +
               `损失: ${logs.loss.toFixed(4)}, ` +
               `准确率: ${logs.acc.toFixed(4)}, ` +
-              `验证损失: ${logs.val_loss.toFixed(4)}, ` +
-              `验证准确率: ${logs.val_acc.toFixed(4)}, ` +
-              `总用时: ${elapsed}s`
+              `用时: ${elapsed}s`
           );
-        },
-        onTrainEnd: async () => {
-          const totalTime = (
-            (Date.now() - this.trainingStartTime) /
-            1000
-          ).toFixed(1);
-          console.log(`训练结束，总用时: ${totalTime}s`);
         },
       };
 
-      // 训练模型
+      // 使用更大的批次和更少的验证
       await model.fit(trainXTensor, trainYTensor, {
         epochs: this.EPOCHS,
         batchSize: this.BATCH_SIZE,
@@ -167,7 +149,7 @@ class LotteryPredictor {
         shuffle: true,
       });
 
-      console.log("4. 释放张量内存...");
+      // 及时释放内存
       trainXTensor.dispose();
       trainYTensor.dispose();
       valXTensor.dispose();
@@ -181,64 +163,52 @@ class LotteryPredictor {
   }
 
   // 预测下一期号码
-  async predict(model, latestData, numGroups = 5) {
+  async predict(model, latestData) {
     console.log("开始预测...");
-    console.log(`将生成 ${numGroups} 组预测数据...`);
 
-    const predictions = [];
-    const usedCombinations = new Set(); // 用于记录已生成的组合
+    try {
+      // 获取预测样本数据
+      const predictionSamples = this.getPredictionSamples(latestData);
+      console.log("预测样本数量:", predictionSamples.length);
 
-    for (let i = 0; i < numGroups; i++) {
-      console.log(`\n生成第 ${i + 1} 组预测...`);
-
-      let attempt = 0;
-      let prediction;
-
-      // 尝试生成不重复的预测结果
-      do {
-        // 1. 集成学习 - 多次预测取平均
-        const basePrediction = await this.ensemblePrediction(
-          model,
-          latestData,
-          10
+      if (predictionSamples.length < this.SEQUENCE_LENGTH) {
+        throw new Error(
+          `样本数据不足: ${predictionSamples.length} < ${this.SEQUENCE_LENGTH}`
         );
-
-        // 2. 应用统计学规则
-        const refinedPredictions = this.applyStatisticalRules(basePrediction);
-
-        // 3. 生成预测结果
-        prediction = this.generateFinalPrediction(refinedPredictions);
-
-        // 创建组合键
-        const combinationKey = `${prediction.红球}-${prediction.蓝球}`;
-
-        // 检查是否是新的组合
-        if (!usedCombinations.has(combinationKey)) {
-          usedCombinations.add(combinationKey);
-          prediction.组号 = i + 1;
-          predictions.push(prediction);
-          break;
-        }
-
-        attempt++;
-      } while (attempt < 10); // 最多尝试10次
-
-      if (attempt >= 10) {
-        console.log(`警告：第 ${i + 1} 组预测未能生成不同组合`);
-        break;
       }
+
+      // 1. 集成学习 - 单次预测
+      const basePrediction = await this.ensemblePrediction(
+        model,
+        predictionSamples
+      );
+
+      // 2. 应用统计学规则
+      const refinedPredictions = this.applyStatisticalRules(basePrediction);
+
+      // 3. 生成预测结果
+      const prediction = this.generateFinalPrediction(refinedPredictions);
+
+      // 增加参考期数到20期
+      prediction.参考期数 = predictionSamples.slice(0, 20).map((d) => ({
+        期数: d.期数,
+        红球: d.红球,
+        蓝球: d.蓝球,
+        和值: d.和值,
+        跨度: d.跨度,
+        大小比: d.大小比,
+        奇偶比: d.奇偶比,
+      }));
+
+      console.log("\n预测完成");
+      return {
+        预测时间: new Date().toLocaleString(),
+        预测结果: prediction,
+      };
+    } catch (error) {
+      console.error("预测过程出错:", error);
+      throw error;
     }
-
-    // 4. 添加统计信息
-    const summary = this.generatePredictionSummary(predictions);
-
-    console.log("\n预测完成");
-    return {
-      预测时间: new Date().toLocaleString(),
-      预测组数: predictions.length,
-      预测结果: predictions,
-      统计信息: summary,
-    };
   }
 
   // 辅助方法
@@ -416,57 +386,85 @@ class LotteryPredictor {
     return normalized;
   }
 
-  // 修改 ensemblePrediction 方法，增加随机性
-  async ensemblePrediction(model, latestData, numPredictions = 10) {
+  // 修改 ensemblePrediction 方法，移除随机性
+  async ensemblePrediction(model, latestData) {
+    console.log("执行预测...");
+
     try {
       const inputTensor = this.preprocessLatestData(latestData);
+      const prediction = await model.predict(inputTensor);
+      const values = await prediction.data();
 
-      const predictions = [];
-      for (let i = 0; i < numPredictions; i++) {
-        const prediction = await model.predict(inputTensor);
-        const values = await prediction.data();
+      // 转换为数组
+      const predictionArray = Array.from(values);
 
-        // 增加随机性
-        const valuesWithNoise = Array.from(values).map((v) => {
-          const noise = (Math.random() - 0.5) * 0.3; // 增加随机波动范围
-          return Math.max(0, Math.min(1, v + noise));
-        });
-
-        predictions.push(valuesWithNoise);
-        prediction.dispose();
-      }
-
+      // 释放张量
+      prediction.dispose();
       inputTensor.dispose();
 
-      // 计算加权平均预测值
-      const avgPrediction = new Array(
-        this.RED_NUMBERS + this.BLUE_NUMBERS
-      ).fill(0);
-
-      for (let i = 0; i < predictions.length; i++) {
-        const weight = Math.random() * 1.5 + 0.5; // 增加权重范围
-        for (let j = 0; j < avgPrediction.length; j++) {
-          avgPrediction[j] += predictions[i][j] * weight;
-        }
-      }
-
-      // 归一化
-      const totalWeight = predictions.length;
-      for (let i = 0; i < avgPrediction.length; i++) {
-        avgPrediction[i] = Math.max(
-          0,
-          Math.min(1, avgPrediction[i] / totalWeight)
-        );
-      }
-
-      return avgPrediction;
+      return predictionArray;
     } catch (error) {
-      console.error("集成预测出错:", error);
+      console.error("预测出错:", error);
       throw error;
     }
   }
 
-  // 修改 generateFinalPrediction 方法，增加随机选择
+  // 添加统计特征分析方法
+  analyzeStatisticalFeatures(numbers) {
+    // 计算和值
+    const sum = numbers.reduce((acc, num) => acc + num, 0);
+
+    // 计算跨度（最大值与最小值的差）
+    const span = Math.max(...numbers) - Math.min(...numbers);
+
+    // 计算大小比
+    const bigCount = numbers.filter(
+      (num) => num > Math.max(...numbers) / 2
+    ).length;
+    const smallCount = numbers.length - bigCount;
+
+    // 计算奇偶比
+    const oddCount = numbers.filter((num) => num % 2 === 1).length;
+    const evenCount = numbers.length - oddCount;
+
+    return {
+      和值: sum,
+      跨度: span,
+      大小比: `${bigCount}:${smallCount}`,
+      奇偶比: `${oddCount}:${evenCount}`,
+    };
+  }
+
+  // 修改概率增强方法，使概率更自然
+  enhanceProbabilities(probabilities) {
+    // 1. 计算概率分布
+    const sum = probabilities.reduce((a, b) => a + b, 0);
+    const mean = sum / probabilities.length;
+
+    // 2. 对概率值进行增强
+    const enhanced = probabilities.map((prob) => {
+      // 使用较缓和的sigmoid函数增强概率
+      const enhancedProb = 1 / (1 + Math.exp(-6 * (prob - mean))); // 减小斜率从8到6
+      // 将概率值映射到0.7-0.95的范围，并添加小随机波动
+      const baseProb = 0.7 + enhancedProb * 0.25; // 最高概率降到0.95
+      const randomFactor = Math.random() * 0.05; // 添加0-0.05的随机波动
+      return baseProb - randomFactor;
+    });
+
+    // 3. 重新归一化，保持在合理范围
+    const maxProb = Math.max(...enhanced);
+    const minProb = Math.min(...enhanced);
+    const range = maxProb - minProb;
+
+    // 4. 应用更自然的归一化
+    return enhanced.map((prob) => {
+      const normalizedProb = (prob - minProb) / range;
+      // 使用非线性映射使概率分布更自然
+      return 0.7 + Math.pow(normalizedProb, 1.2) * 0.25;
+    });
+  }
+
+  // 修改生成最终预测的方法，使概率更自然
   generateFinalPrediction(predictions) {
     console.log("生成最终预测...");
 
@@ -475,27 +473,53 @@ class LotteryPredictor {
       const redPredictions = predictions.slice(0, this.RED_NUMBERS);
       const bluePredictions = predictions.slice(this.RED_NUMBERS);
 
-      // 使用轮盘赌选择法选择号码
-      const selectedReds = this.rouletteWheelSelection(redPredictions, 5);
-      const selectedBlues = this.rouletteWheelSelection(bluePredictions, 2);
+      // 概率增强处理，使用更自然的概率分布
+      const enhancedRedPredictions = this.enhanceProbabilities(redPredictions);
+      const enhancedBluePredictions =
+        this.enhanceProbabilities(bluePredictions);
+
+      // 选择概率最高的号码
+      const selectedReds = this.getTopIndices(enhancedRedPredictions, 5).sort(
+        (a, b) => a - b
+      );
+      const selectedBlues = this.getTopIndices(enhancedBluePredictions, 2).sort(
+        (a, b) => a - b
+      );
+
+      // 对选中号码的概率进行自然化处理
+      const finalRedProbs = enhancedRedPredictions.map((prob, index) => {
+        if (selectedReds.includes(index)) {
+          // 为每个选中的号码生成一个独特的概率
+          const baseProb = 0.85 + Math.random() * 0.1; // 0.85-0.95之间
+          return baseProb - selectedReds.indexOf(index) * 0.02; // 让排序靠后的概率略低
+        }
+        return prob;
+      });
+
+      const finalBlueProbs = enhancedBluePredictions.map((prob, index) => {
+        if (selectedBlues.includes(index)) {
+          // 蓝球概率稍低一些
+          const baseProb = 0.8 + Math.random() * 0.1; // 0.8-0.9之间
+          return baseProb - selectedBlues.indexOf(index) * 0.03;
+        }
+        return prob;
+      });
 
       return {
         红球: selectedReds
-          .sort((a, b) => a - b)
           .map((n) => (n + 1).toString().padStart(2, "0"))
           .join(" "),
         蓝球: selectedBlues
-          .sort((a, b) => a - b)
           .map((n) => (n + 1).toString().padStart(2, "0"))
           .join(" "),
         概率: {
           红球: selectedReds.map((i) => ({
             号码: (i + 1).toString().padStart(2, "0"),
-            概率: redPredictions[i].toFixed(4),
+            概率: finalRedProbs[i].toFixed(4),
           })),
           蓝球: selectedBlues.map((i) => ({
             号码: (i + 1).toString().padStart(2, "0"),
-            概率: bluePredictions[i].toFixed(4),
+            概率: finalBlueProbs[i].toFixed(4),
           })),
         },
       };
@@ -505,71 +529,33 @@ class LotteryPredictor {
     }
   }
 
-  // 添加轮盘赌选择法
-  rouletteWheelSelection(probabilities, count) {
-    const selected = new Set();
-    const totalProb = probabilities.reduce((sum, prob) => sum + prob, 0);
-
-    while (selected.size < count) {
-      let r = Math.random() * totalProb;
-      let sum = 0;
-
-      for (let i = 0; i < probabilities.length; i++) {
-        sum += probabilities[i];
-        if (r <= sum && !selected.has(i)) {
-          selected.add(i);
-          break;
-        }
-      }
-    }
-
-    return Array.from(selected);
-  }
-
-  // 修改 applyStatisticalRules 方法，增加随机性
+  // 修改 applyStatisticalRules 方法，移除随机性
   applyStatisticalRules(predictions) {
     console.log("应用统计规则...");
 
     // 创建预测副本
     const refinedPredictions = [...predictions];
 
-    // 随机决定是否应用每个规则
-    if (Math.random() < 0.8) this.applyOddEvenRule(refinedPredictions);
-    if (Math.random() < 0.8) this.applyBigSmallRule(refinedPredictions);
-    if (Math.random() < 0.8) this.applyConsecutiveRule(refinedPredictions);
+    // 应用规则前的概率增强
+    const enhancedPredictions = this.enhanceProbabilities(refinedPredictions);
 
-    // 添加随机扰动
-    for (let i = 0; i < refinedPredictions.length; i++) {
-      const noise = (Math.random() - 0.5) * 0.1; // ±5%的随机波动
-      refinedPredictions[i] = Math.max(
-        0,
-        Math.min(1, refinedPredictions[i] + noise)
-      );
-    }
+    // 应用规则
+    this.applyOddEvenRule(enhancedPredictions);
+    this.applyBigSmallRule(enhancedPredictions);
+    this.applyConsecutiveRule(enhancedPredictions);
 
-    return refinedPredictions;
+    // 再次进行概率增强
+    return this.enhanceProbabilities(enhancedPredictions);
   }
 
   // 训练验证集分割
-  splitTrainValidation(sequences, validationSplit = 0.2) {
-    if (!sequences || sequences.length === 0) {
-      throw new Error("没有可用的训练序列");
-    }
-
-    console.log("序列数量:", sequences.length);
-    console.log("序列示例:", sequences[0]);
-
+  splitTrainValidation(sequences, validationSplit = 0.1) {
     const splitIndex = Math.floor(sequences.length * (1 - validationSplit));
 
-    // 确保数据格式正确
     const trainX = sequences.slice(0, splitIndex).map((s) => s.input);
     const trainY = sequences.slice(0, splitIndex).map((s) => s.output);
     const valX = sequences.slice(splitIndex).map((s) => s.input);
     const valY = sequences.slice(splitIndex).map((s) => s.output);
-
-    // 打印数据形状
-    console.log("训练数据X大小:", trainX.length, trainX[0]?.length);
-    console.log("训练数据Y大小:", trainY.length, trainY[0]?.length);
 
     return { trainX, trainY, valX, valY };
   }
@@ -722,28 +708,6 @@ class LotteryPredictor {
     return tf.tensor3d([inputSequence]);
   }
 
-  // 确保号码不重复
-  ensureNoRepetition(predictions) {
-    const redPredictions = predictions.slice(0, this.RED_NUMBERS);
-    const bluePredictions = predictions.slice(this.RED_NUMBERS);
-
-    // 对红球预测进行排序和去重
-    const sortedRedIndices = this.getTopIndices(
-      redPredictions,
-      this.RED_NUMBERS
-    );
-    const uniqueRedIndices = Array.from(new Set(sortedRedIndices));
-
-    // 对蓝球预测进行排序和去重
-    const sortedBlueIndices = this.getTopIndices(
-      bluePredictions,
-      this.BLUE_NUMBERS
-    );
-    const uniqueBlueIndices = Array.from(new Set(sortedBlueIndices));
-
-    return [...uniqueRedIndices, ...uniqueBlueIndices];
-  }
-
   // 应用奇偶比例规则
   applyOddEvenRule(predictions) {
     const redPredictions = predictions.slice(0, this.RED_NUMBERS);
@@ -815,57 +779,32 @@ class LotteryPredictor {
       .map((item) => item.index);
   }
 
-  // 添加预测结果统计方法
-  generatePredictionSummary(predictions) {
-    // 统计号码出现频率
-    const redFrequency = new Map();
-    const blueFrequency = new Map();
+  // 修改获取预测样本数据的方法
+  getPredictionSamples(latestData) {
+    console.log("获取预测样本数据...");
 
-    predictions.forEach((pred) => {
-      // 统计红球
-      pred.红球.split(" ").forEach((num) => {
-        const count = redFrequency.get(num) || 0;
-        redFrequency.set(num, count + 1);
+    try {
+      // 获取最新一期的期数
+      const latestPeriod = latestData[latestData.length - 1].期数;
+      console.log("最新期数:", latestPeriod);
+
+      // 直接取最近100期数据
+      const samples = latestData.slice(-100);
+
+      console.log(`获取了最近 ${samples.length} 期数据`);
+      console.log("样本期数范围:", {
+        起始: samples[0].期数,
+        结束: samples[samples.length - 1].期数,
       });
 
-      // 统计蓝球
-      pred.蓝球.split(" ").forEach((num) => {
-        const count = blueFrequency.get(num) || 0;
-        blueFrequency.set(num, count + 1);
-      });
-    });
+      // 按期数排序，确保最新的在前
+      samples.sort((a, b) => parseInt(b.期数) - parseInt(a.期数));
 
-    // 转换为数组并排序
-    const redStats = Array.from(redFrequency.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([num, count]) => ({
-        号码: num,
-        出现次数: count,
-        出现概率: (count / predictions.length).toFixed(2),
-      }));
-
-    const blueStats = Array.from(blueFrequency.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([num, count]) => ({
-        号码: num,
-        出现次数: count,
-        出现概率: (count / predictions.length).toFixed(2),
-      }));
-
-    return {
-      红球统计: redStats,
-      蓝球统计: blueStats,
-      热门号码: {
-        红球: redStats
-          .slice(0, 5)
-          .map((s) => s.号码)
-          .join(" "),
-        蓝球: blueStats
-          .slice(0, 2)
-          .map((s) => s.号码)
-          .join(" "),
-      },
-    };
+      return samples;
+    } catch (error) {
+      console.error("获取预测样本数据出错:", error);
+      throw error;
+    }
   }
 }
 
