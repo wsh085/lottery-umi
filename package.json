@@ -13,7 +13,6 @@
     "获取双色球历史数据": "",
     "getAllSsq": "node ./script/getAllSsqHistoryData.js",
     "yuce": "node ./script/yuce.js",
-    "yuce2": "node ./script/lotteryYuCe/index.js",
     "yuce3": "node ./script/ssq/index.js"
   },
   "dependencies": {
