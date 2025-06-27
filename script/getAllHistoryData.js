@@ -14,6 +14,13 @@ const url = "https://tb.tuganjue.com/tgj-dlt-kjfb.html";
   // 等待 `historyData` 元素加载，设置超时可以避免无限等待
   await page.waitForSelector("#tb_body", { timeout: 200000 });
 
+  // 设置localStorage
+  await page.evaluate(() => {
+    localStorage.setItem("limit", 50);
+  });
+
+  await page.reload();
+
   // 监听页面的 console 事件来捕获日志
   page.on("console", (msg) => {
     for (let i = 0; i < msg.args().length; ++i)
