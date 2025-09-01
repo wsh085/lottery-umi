@@ -12,7 +12,7 @@
     "getAll": "node ./script/getAllHistoryData.js",
     "获取双色球历史数据": "",
     "getAllSsq": "node ./script/getAllSsqHistoryData.js",
-    "getAllData": "pnpm run getAll && pnpm run getAllSsq",
+    "getAllData": "pnpm run getAll && pnpm run getAllSsq && node ./script/syncDataAdvanced.js",
     "yuce": "node ./script/yuce.js",
     "yuce3": "node ./script/ssq/index.js"
   },
@@ -21,6 +21,7 @@
     "@ant-design/plots": "^2.3.1",
     "@tensorflow/tfjs": "^4.22.0",
     "antd": "^5.20.5",
+    "docx": "^9.5.1",
     "lodash-es": "^4.17.21",
     "puppeteer": "^23.2.2",
     "umi": "^4.3.18"
