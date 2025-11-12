@@ -1,4 +1,3 @@
-import historyData from "data/history_data.json";
 import analysisData from "data/analysis_data.json";
 import allHistoryData from "data/all_history_data.json";
 
@@ -11,9 +10,9 @@ import allHistoryData from "data/all_history_data.json";
  */
 export const getHistoryData = (count?: number): any[] => {
   if (count) {
-    return historyData.slice(-count);
+    return allHistoryData.slice(-count);
   }
-  return historyData;
+  return allHistoryData;
 };
 
 /**
