@@ -1,10 +1,10 @@
 // 弹窗表单的布局
 export const FORM_ITEM_LAYOUT = {
   labelCol: {
-    sm: { span: 5, offset: 0 },
+    sm: { span: 8, offset: 0 },
   },
   wrapperCol: {
-    sm: { span: 18, offset: 0 },
+    sm: { span: 16, offset: 0 },
   },
 };
 

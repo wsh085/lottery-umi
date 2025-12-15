@@ -8,6 +8,7 @@ export default defineConfig({
     { path: "/preshahao", component: "preshahao" },
     { path: "/piantaifenxi", component: "piantaifenxi" },
     { path: "/lishichaxun", component: "lishichaxun" },
+    { path: "/weilanfenxi", component: "weilanfenxi" },
   ],
   alias: {
     data: '/data',
