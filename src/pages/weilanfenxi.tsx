@@ -8,6 +8,7 @@ import tempData from "data/temp_all_history_data.json";
 
 type Period = { 期数: string; 蓝球: string };
 type BluePeriod = { 期数: string; 蓝: number[] };
+type BacktestResult = { total: number; hitAtLeast1: number; hitBoth: number; candidateHit: number; avgDeviation: number };
 
 const nums = Array.from({ length: 12 }, (_, i) => i + 1);
 
@@ -126,6 +127,106 @@ const normalizeWeights = (w: Record<string, number>) => {
   return r;
 };
 
+type WeilanParams = {
+  window: number;
+  candidate: number;
+  intervalTarget: number;
+  intervalSigma: number;
+  oddEven: string;
+  size: string;
+  hotCold: "balanced" | "hot" | "cold";
+  neighborWindow: number;
+};
+
+type WeilanWeights = {
+  wFreq: number;
+  wInterval: number;
+  wNeighbor: number;
+  wOddEven: number;
+  wSize: number;
+  wHotCold: number;
+};
+
+const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+
+const normalizeWeilanWeights = (w: WeilanWeights): WeilanWeights => {
+  const n = normalizeWeights(w as Record<string, number>) as Partial<WeilanWeights>;
+  return {
+    wFreq: Number(n.wFreq ?? 0),
+    wInterval: Number(n.wInterval ?? 0),
+    wNeighbor: Number(n.wNeighbor ?? 0),
+    wOddEven: Number(n.wOddEven ?? 0),
+    wSize: Number(n.wSize ?? 0),
+    wHotCold: Number(n.wHotCold ?? 0),
+  };
+};
+
+const computeProbabilities = (periods: BluePeriod[], params: WeilanParams, weights: WeilanWeights) => {
+  const f = freqMap(periods, params.window);
+  const ints = lastIntervals(periods, params.window);
+  const intScore = intervalScore(ints, params.intervalTarget, params.intervalSigma, params.window);
+  const neigh = neighborScore(periods, params.window, params.neighborWindow);
+  const oe = oddEvenScore(params.oddEven);
+  const sz = sizeScore(params.size);
+  const hc = hotColdScore(f.raw, params.hotCold);
+  const w = normalizeWeilanWeights(weights);
+
+  const scores: Record<number, number> = {};
+  nums.forEach((n) => {
+    scores[n] =
+      w.wFreq * (f.norm[n] || 0) +
+      w.wInterval * (intScore[n] || 0) +
+      w.wNeighbor * (neigh.norm[n] || 0) +
+      w.wOddEven * (oe[n] || 0) +
+      w.wSize * (sz[n] || 0) +
+      w.wHotCold * (hc[n] || 0);
+  });
+
+  const max = Math.max(...Object.values(scores), 1);
+  const prob: Record<number, number> = {};
+  nums.forEach((n) => (prob[n] = scores[n] / max));
+
+  const sorted = nums
+    .map((n) => ({ n, p: prob[n] }))
+    .sort((a, b) => b.p - a.p)
+    .map((e) => e.n);
+
+  return { prob, sorted };
+};
+
+const backtest = (periods: BluePeriod[], params: WeilanParams, weights: WeilanWeights): BacktestResult => {
+  const window = params.window;
+  let total = 0;
+  let hitAtLeast1 = 0;
+  let hitBoth = 0;
+  let candidateHit = 0;
+  const deviations: number[] = [];
+
+  for (let i = window; i < periods.length; i++) {
+    const sub = periods.slice(0, i);
+    const { sorted } = computeProbabilities(sub, params, weights);
+    const candidates = sorted.slice(0, params.candidate);
+    const pair = sorted.slice(0, 2);
+
+    const actual = periods[i].蓝;
+    total += 1;
+
+    const anyHitPair = pair.some((n) => actual.includes(n));
+    const anyHitCandidates = candidates.some((n) => actual.includes(n));
+    const bothHit = pair.every((n) => actual.includes(n));
+
+    if (anyHitPair) hitAtLeast1 += 1;
+    if (bothHit) hitBoth += 1;
+    if (anyHitCandidates) candidateHit += 1;
+
+    const dev = Math.min(...actual.map((a) => Math.min(...candidates.map((c) => Math.abs(c - a)))));
+    deviations.push(dev);
+  }
+
+  const avgDeviation = deviations.length ? deviations.reduce((s, v) => s + v, 0) / deviations.length : 0;
+  return { total, hitAtLeast1, hitBoth, candidateHit, avgDeviation };
+};
+
 const WeilanFenxi = () => {
   const bluePeriods = useMemo(() => parseBluePeriods(tempData as Period[]), []);
 
@@ -141,7 +242,7 @@ const WeilanFenxi = () => {
   };
   const savedParams = typeof window !== "undefined" ? localStorage.getItem("weilan_params") : null;
   const initialParams = savedParams ? { ...defaultParams, ...JSON.parse(savedParams) } : defaultParams;
-  const [params, updateParams] = useObjectState<typeof defaultParams>(initialParams);
+  const [params, updateParams] = useObjectState<WeilanParams>(initialParams as WeilanParams);
 
   const defaultWeights = {
     wFreq: 0.35,
@@ -153,42 +254,12 @@ const WeilanFenxi = () => {
   };
   const savedWeights = typeof window !== "undefined" ? localStorage.getItem("weilan_weights") : null;
   const initialWeights = savedWeights ? { ...defaultWeights, ...JSON.parse(savedWeights) } : defaultWeights;
-  const [weights, setWeights] = useObjectState<typeof defaultWeights>(initialWeights);
+  const [weights, setWeights] = useObjectState<WeilanWeights>(initialWeights as WeilanWeights);
 
   const freq = useMemo(() => freqMap(bluePeriods, params.window), [bluePeriods, params.window]);
-  const intervals = useMemo(() => lastIntervals(bluePeriods, params.window), [bluePeriods, params.window]);
-  const intervalScoreNorm = useMemo(
-    () => intervalScore(intervals, params.intervalTarget, params.intervalSigma, params.window),
-    [intervals, params.intervalTarget, params.intervalSigma, params.window]
-  );
-  const neighbor = useMemo(
-    () => neighborScore(bluePeriods, params.window, params.neighborWindow),
-    [bluePeriods, params.window, params.neighborWindow]
-  );
-  const oddEven = useMemo(() => oddEvenScore(params.oddEven), [params.oddEven]);
-  const size = useMemo(() => sizeScore(params.size), [params.size]);
-  const hotCold = useMemo(() => hotColdScore(freq.raw, params.hotCold), [freq.raw, params.hotCold]);
-
-  const computeScores = () => {
-    const w = normalizeWeights(weights);
-    const scores: Record<number, number> = {};
-    nums.forEach((n) => {
-      scores[n] =
-        w.wFreq * (freq.norm[n] || 0) +
-        w.wInterval * (intervalScoreNorm[n] || 0) +
-        w.wNeighbor * (neighbor.norm[n] || 0) +
-        w.wOddEven * (oddEven[n] || 0) +
-        w.wSize * (size[n] || 0) +
-        w.wHotCold * (hotCold[n] || 0);
-    });
-    const max = Math.max(...Object.values(scores), 1);
-    const prob: Record<number, number> = {};
-    nums.forEach((n) => (prob[n] = scores[n] / max));
-    return prob;
-  };
 
   const [result, setResult] = useState<{ candidates: number[]; pair: number[]; probs: Record<number, number> } | null>(null);
-  const [bt, setBt] = useState<{ total: number; hitAtLeast1: number; hitBoth: number; candidateHit: number; avgDeviation: number } | null>(null);
+  const [bt, setBt] = useState<BacktestResult | null>(null);
 
   useEffect(() => { try { localStorage.setItem("weilan_params", JSON.stringify(params)); } catch {} }, [params]);
   useEffect(() => { try { localStorage.setItem("weilan_weights", JSON.stringify(weights)); } catch {} }, [weights]);
@@ -197,94 +268,39 @@ const WeilanFenxi = () => {
   useEffect(() => { try { const r = localStorage.getItem("weilan_result"); if (r) setResult(JSON.parse(r)); const b = localStorage.getItem("weilan_backtest"); if (b) setBt(JSON.parse(b)); } catch {} }, []);
 
   const predict = () => {
-    const probs = computeScores();
-    const sorted = nums.map((n) => ({ n, p: probs[n] })).sort((a, b) => b.p - a.p).map((e) => e.n);
+    const { prob: probs, sorted } = computeProbabilities(bluePeriods, params, weights);
     const candidates = sorted.slice(0, params.candidate);
     const pair = sorted.slice(0, 2);
     setResult({ candidates, pair, probs });
   };
 
   const runBacktest = () => {
-    const window = params.window;
-    let total = 0;
-    let hitAtLeast1 = 0;
-    let hitBoth = 0;
-    let candidateHit = 0;
-    let deviations: number[] = [];
-    for (let i = window; i < bluePeriods.length; i++) {
-      const sub = bluePeriods.slice(0, i);
-      const f = freqMap(sub, window);
-      const ints = lastIntervals(sub, window);
-      const intScore = intervalScore(ints, params.intervalTarget, params.intervalSigma, window);
-      const neigh = neighborScore(sub, window, params.neighborWindow);
-      const oe = oddEvenScore(params.oddEven);
-      const sz = sizeScore(params.size);
-      const hc = hotColdScore(f.raw, params.hotCold);
-      const w = normalizeWeights(weights);
-      const scores: Record<number, number> = {};
-      nums.forEach((n) => {
-        scores[n] =
-          w.wFreq * (f.norm[n] || 0) +
-          w.wInterval * (intScore[n] || 0) +
-          w.wNeighbor * (neigh.norm[n] || 0) +
-          w.wOddEven * (oe[n] || 0) +
-          w.wSize * (sz[n] || 0) +
-          w.wHotCold * (hc[n] || 0);
-      });
-      const max = Math.max(...Object.values(scores), 1);
-      const sorted = nums.map((n) => ({ n, p: scores[n] / max })).sort((a, b) => b.p - a.p).map((e) => e.n);
-      const candidates = sorted.slice(0, params.candidate);
-      const pair = sorted.slice(0, 2);
-      const actual = bluePeriods[i].蓝;
-      total += 1;
-      const anyHitPair = pair.some((n) => actual.includes(n));
-      const anyHitCandidates = candidates.some((n) => actual.includes(n));
-      const bothHit = pair.every((n) => actual.includes(n));
-      if (anyHitPair) hitAtLeast1 += 1;
-      if (bothHit) hitBoth += 1;
-      if (anyHitCandidates) candidateHit += 1;
-      const dev = Math.min(
-        ...actual.map((a) => Math.min(...candidates.map((c) => Math.abs(c - a))))
-      );
-      deviations.push(dev);
-    }
-    const avgDeviation = deviations.length ? deviations.reduce((s, v) => s + v, 0) / deviations.length : 0;
-    setBt({ total, hitAtLeast1, hitBoth, candidateHit, avgDeviation });
+    setBt(backtest(bluePeriods, params, weights));
   };
 
   const optimizeWeights = () => {
-    const base = { ...weights };
-    let best = { ...weights };
-    let bestScore = -1;
-    const evalBt = () => {
-      return bt ? bt.candidateHit / Math.max(bt.total, 1) : 0;
-    };
+    const base = normalizeWeilanWeights(weights);
+    let best = base;
+    let bestBt = backtest(bluePeriods, params, best);
+    let bestScore = bestBt.candidateHit / Math.max(bestBt.total, 1);
     const deltas = [0.1, -0.1];
-    const keys = Object.keys(base);
+    const keys: (keyof WeilanWeights)[] = ["wFreq", "wInterval", "wNeighbor", "wOddEven", "wSize", "wHotCold"];
+
     keys.forEach((k) => {
       deltas.forEach((d) => {
-        const w = { ...base } as any;
-        w[k] = Math.min(Math.max(w[k] + d, 0.01), 1);
-        const norm = normalizeWeights(w);
-        const normW = {
-          wFreq: norm.wFreq,
-          wInterval: norm.wInterval,
-          wNeighbor: norm.wNeighbor,
-          wOddEven: norm.wOddEven,
-          wSize: norm.wSize,
-          wHotCold: norm.wHotCold,
-        };
-        setWeights(normW);
-        runBacktest();
-        const score = evalBt();
+        const candidate = normalizeWeilanWeights({ ...base, [k]: clamp(base[k] + d, 0.01, 1) });
+        const btCandidate = backtest(bluePeriods, params, candidate);
+        const score = btCandidate.candidateHit / Math.max(btCandidate.total, 1);
         if (score > bestScore) {
           bestScore = score;
-          best = normW;
+          best = candidate;
+          bestBt = btCandidate;
         }
       });
     });
+
     setWeights(best);
-    runBacktest();
+    setBt(bestBt);
   };
 
   const tableData = useMemo(() => {
@@ -351,22 +367,22 @@ const WeilanFenxi = () => {
         <Row gutter={16}>
           <Col span={6}>
             <Form.Item label={<span>窗口期<Tooltip title="用于统计的历史期数窗口，越大越平滑但可能滞后"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
-              <InputNumber min={10} max={50} defaultValue={params.window} onChange={(v) => updateParams({ window: Number(v) })} className="w-1-1" />
+              <InputNumber min={10} max={50} value={params.window} onChange={(v) => updateParams({ window: typeof v === "number" ? v : params.window })} className="w-1-1" />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item label={<span>围蓝集大小<Tooltip title="预测候选蓝球数量，越大覆盖面越宽但命中率可能下降"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
-              <InputNumber min={2} max={12} defaultValue={params.candidate} onChange={(v) => updateParams({ candidate: Number(v) })} className="w-1-1" />
+              <InputNumber min={2} max={12} value={params.candidate} onChange={(v) => updateParams({ candidate: typeof v === "number" ? v : params.candidate })} className="w-1-1" />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item label={<span>间隔目标<Tooltip title="目标遗漏间隔（期），实际间隔越接近得分越高"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
-              <InputNumber min={1} max={50} defaultValue={params.intervalTarget} onChange={(v) => updateParams({ intervalTarget: Number(v) })} className="w-1-1" />
+              <InputNumber min={1} max={50} value={params.intervalTarget} onChange={(v) => updateParams({ intervalTarget: typeof v === "number" ? v : params.intervalTarget })} className="w-1-1" />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item label={<span>间隔平滑<Tooltip title="对间隔差异的容忍度，数值越大评分曲线越平缓"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
-              <InputNumber min={1} max={10} defaultValue={params.intervalSigma} onChange={(v) => updateParams({ intervalSigma: Number(v) })} className="w-1-1" />
+              <InputNumber min={1} max={10} value={params.intervalSigma} onChange={(v) => updateParams({ intervalSigma: typeof v === "number" ? v : params.intervalSigma })} className="w-1-1" />
             </Form.Item>
           </Col>
         </Row>
@@ -374,7 +390,7 @@ const WeilanFenxi = () => {
           <Col span={6}>
             <Form.Item label={<span>奇偶偏好<Tooltip title="奇/偶号码权重比例，影响奇偶评分"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
               <Select
-                defaultValue={params.oddEven}
+                value={params.oddEven}
                 options={[{ value: "1:1", label: "均衡" }, { value: "2:0", label: "偏奇" }, { value: "0:2", label: "偏偶" }]}
                 onChange={(v) => updateParams({ oddEven: v })}
                 className="w-1-1"
@@ -384,7 +400,7 @@ const WeilanFenxi = () => {
           <Col span={6}>
             <Form.Item label={<span>大小偏好<Tooltip title="小号(1-6)/大号(7-12)权重比例，影响大小评分"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
               <Select
-                defaultValue={params.size}
+                value={params.size}
                 options={[{ value: "1:1", label: "均衡" }, { value: "2:0", label: "偏小(1-6)" }, { value: "0:2", label: "偏大(7-12)" }]}
                 onChange={(v) => updateParams({ size: v })}
                 className="w-1-1"
@@ -394,7 +410,7 @@ const WeilanFenxi = () => {
           <Col span={6}>
             <Form.Item label={<span>冷热倾向<Tooltip title="对历史热号/冷号的偏好，影响冷热评分"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
               <Select
-                defaultValue={params.hotCold}
+                value={params.hotCold}
                 options={[{ value: "balanced", label: "均衡" }, { value: "hot", label: "偏热" }, { value: "cold", label: "偏冷" }]}
                 onChange={(v) => updateParams({ hotCold: v as any })}
                 className="w-1-1"
@@ -403,7 +419,7 @@ const WeilanFenxi = () => {
           </Col>
           <Col span={6}>
             <Form.Item label={<span>邻号窗口<Tooltip title="统计邻号影响的期数窗口，考虑前后相邻号码的活跃度"><QuestionCircleOutlined className="ml-4" /></Tooltip></span>}>
-              <InputNumber min={3} max={10} defaultValue={params.neighborWindow} onChange={(v) => updateParams({ neighborWindow: Number(v) })} className="w-1-1" />
+              <InputNumber min={3} max={10} value={params.neighborWindow} onChange={(v) => updateParams({ neighborWindow: typeof v === "number" ? v : params.neighborWindow })} className="w-1-1" />
             </Form.Item>
           </Col>
         </Row>

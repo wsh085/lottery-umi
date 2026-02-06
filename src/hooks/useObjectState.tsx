@@ -62,7 +62,11 @@ const useObjectState = <T extends Record<string, any>>(
    * @param path 对象或者方法
    * @param callback 更新后的回调，参数为最新的值
    */
-  const update = useCallback((patch, callback) => {
+  const update = useCallback(
+    (
+      patch: Partial<T> | ((prev: T) => Partial<T>),
+      callback?: (currentState: T) => void
+    ) => {
     setState((prevState) => {
       const updateState =
         typeof patch === "function" ? patch(prevState) : patch;
@@ -74,7 +78,9 @@ const useObjectState = <T extends Record<string, any>>(
       callback && callback(newState);
       return newState;
     });
-  }, []);
+    },
+    []
+  );
 
   /**
    * 重置对象

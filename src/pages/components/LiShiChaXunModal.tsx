@@ -15,7 +15,7 @@ interface LiShiChaXunModalProps extends Omit<ModalProps, "onOk" | "onCancel"> {
  */
 const LiShiChaXunModal = (props: LiShiChaXunModalProps) => {
   const [xuanhao, setXuanhao] = useState<number[]>([]);
-  const currentShaHao = useMemo(() => [], [props.open]);
+  const currentShaHao = useMemo(() => "", [props.open]);
 
   /**
    * 随机获取数组的值
@@ -97,7 +97,7 @@ const LiShiChaXunModal = (props: LiShiChaXunModalProps) => {
   const onFinish = (values: any) => {
     console.info(currentShaHao);
     console.log("Success:", values);
-    const currentShaHaoNumber = currentShaHao.split(" ")?.map((v) => Number(v));
+    const currentShaHaoNumber = currentShaHao.split(" ")?.map((v: string) => Number(v));
     // 热号
     let rehao = values.rehao?.split(",")?.map((v: string) => Number(v));
     // 温号
