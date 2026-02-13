@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Alert, Button, Col, Form, Input, Row, Space, Table } from "antd";
+import { Alert, Button, Col, Form, Input, Row, Select, Space, Table } from "antd";
 import { FORM_ITEM_LAYOUT } from "@/utils/constants";
 import useObjectState from "@/hooks/useObjectState";
 
@@ -73,13 +73,14 @@ const normalizeAndValidateSingleBall = (
 const HistorySearch = () => {
   const [dataSource, setDataSource] = useState<HistoryRow[]>([]);
   const [error, setError] = useState<string>("");
+  const [repeatSort, setRepeatSort] = useState<"number" | "count">("number");
 
   const [params, updateParams] = useObjectState<{
     qishu?: string;
     red?: string;
     blue?: string;
   }>({
-    qishu: "50",
+    qishu: undefined,
     red: undefined,
     blue: undefined,
   });
@@ -179,6 +180,34 @@ const HistorySearch = () => {
     return { red, redCount, blue, blueCount };
   }, [dataSource]);
 
+  const sortedRepeatRed = useMemo(() => {
+    const list = [...chongfuNumber.red];
+    if (repeatSort === "count") {
+      list.sort((a, b) => {
+        const diff = (chongfuNumber.redCount[b] || 0) - (chongfuNumber.redCount[a] || 0);
+        if (diff !== 0) return diff;
+        return Number(a) - Number(b);
+      });
+      return list;
+    }
+    list.sort((a, b) => Number(a) - Number(b));
+    return list;
+  }, [chongfuNumber.red, chongfuNumber.redCount, repeatSort]);
+
+  const sortedRepeatBlue = useMemo(() => {
+    const list = [...chongfuNumber.blue];
+    if (repeatSort === "count") {
+      list.sort((a, b) => {
+        const diff = (chongfuNumber.blueCount[b] || 0) - (chongfuNumber.blueCount[a] || 0);
+        if (diff !== 0) return diff;
+        return Number(a) - Number(b);
+      });
+      return list;
+    }
+    list.sort((a, b) => Number(a) - Number(b));
+    return list;
+  }, [chongfuNumber.blue, chongfuNumber.blueCount, repeatSort]);
+
   return (
     <div>
       <Form {...FORM_ITEM_LAYOUT}>
@@ -188,7 +217,7 @@ const HistorySearch = () => {
               <Input
                 className="w-1-1"
                 allowClear
-                placeholder="近 N 期（默认50，清空全量）"
+                placeholder="近 N 期（不填默认查所有数据）"
                 onChange={(e) => updateParams({ qishu: e.target.value })}
               />
             </Form.Item>
@@ -219,6 +248,21 @@ const HistorySearch = () => {
                 查询
               </Button>
             </Space>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={6}>
+            <Form.Item label="排序">
+              <Select
+                className="w-1-1"
+                value={repeatSort}
+                onChange={(v) => setRepeatSort(v)}
+                options={[
+                  { value: "number", label: "按号码大小" },
+                  { value: "count", label: "按出现次数" },
+                ]}
+              />
+            </Form.Item>
           </Col>
         </Row>
       </Form>
@@ -264,7 +308,7 @@ const HistorySearch = () => {
         <div className="mt-24">
           <div>下一期红球重复出现的号码：</div>
           <div>
-            {chongfuNumber.red.map((n) => {
+            {sortedRepeatRed.map((n) => {
               const count = chongfuNumber.redCount[n];
               return count > 2 ? (
                 <span key={n} className="mr-8">
@@ -284,7 +328,7 @@ const HistorySearch = () => {
         <div className="mt-24">
           <div>下一期蓝球重复出现的号码：</div>
           <div>
-            {chongfuNumber.blue.map((n) => {
+            {sortedRepeatBlue.map((n) => {
               const count = chongfuNumber.blueCount[n];
               return count > 2 ? (
                 <span key={n} className="mr-8">

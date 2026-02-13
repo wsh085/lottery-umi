@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Alert, Button, Col, Form, Input, Row, Space, Table } from "antd";
+import { Alert, Button, Col, Form, Input, Row, Select, Space, Table } from "antd";
 import { getAllHistoryData } from "@/utils";
 import { FORM_ITEM_LAYOUT } from "@/utils/constants";
 import useObjectState from "@/hooks/useObjectState";
@@ -12,6 +12,7 @@ import LiShiChaXunModal from "./components/LiShiChaXunModal";
  */
 const LiShiChaXun = () => {
   const [dataSource, setDataSource] = useState([]);
+  const [repeatSort, setRepeatSort] = useState<"number" | "count">("number");
 
   const [params, updateParams] = useObjectState<{
     qishu?: string;
@@ -108,6 +109,37 @@ const LiShiChaXun = () => {
     };
   }, [dataSource]);
 
+  const sortedRepeatRed = useMemo(() => {
+    const list = [...(chongfuNumber.red || [])];
+    if (repeatSort === "count") {
+      list.sort((a, b) => {
+        const diff =
+          (chongfuNumber.redCount?.[b] || 0) - (chongfuNumber.redCount?.[a] || 0);
+        if (diff !== 0) return diff;
+        return Number(a) - Number(b);
+      });
+      return list;
+    }
+    list.sort((a, b) => Number(a) - Number(b));
+    return list;
+  }, [chongfuNumber.red, chongfuNumber.redCount, repeatSort]);
+
+  const sortedRepeatBlue = useMemo(() => {
+    const list = [...(chongfuNumber.blue || [])];
+    if (repeatSort === "count") {
+      list.sort((a, b) => {
+        const diff =
+          (chongfuNumber.blueCount?.[b] || 0) -
+          (chongfuNumber.blueCount?.[a] || 0);
+        if (diff !== 0) return diff;
+        return Number(a) - Number(b);
+      });
+      return list;
+    }
+    list.sort((a, b) => Number(a) - Number(b));
+    return list;
+  }, [chongfuNumber.blue, chongfuNumber.blueCount, repeatSort]);
+
   // #region 渲染DOM
   return (
     <div>
@@ -167,6 +199,19 @@ const LiShiChaXun = () => {
                 方法验证
               </Button>
             </Space>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="排序">
+              <Select
+                className="w-1-1"
+                value={repeatSort}
+                onChange={(v) => setRepeatSort(v)}
+                options={[
+                  { value: "number", label: "按号码大小" },
+                  { value: "count", label: "按出现次数" },
+                ]}
+              />
+            </Form.Item>
           </Col>
           <Col span={6}>
             <Input.TextArea
@@ -254,10 +299,10 @@ const LiShiChaXun = () => {
           <div className="mt-24">
             <div>红球重复出现的号码：</div>
             <div>
-              {chongfuNumber.red?.map((number) => {
+              {sortedRepeatRed.map((number) => {
                 if (chongfuNumber.redCount[number] > 2) {
                   return (
-                    <span className="mr-8">
+                    <span key={number} className="mr-8">
                       {number}(
                       <span className="text-blue">
                         {chongfuNumber.redCount[number]}
@@ -266,7 +311,11 @@ const LiShiChaXun = () => {
                     </span>
                   );
                 }
-                return <span className="mr-8">{number}</span>;
+                return (
+                  <span key={number} className="mr-8">
+                    {number}
+                  </span>
+                );
               })}
             </div>
           </div>
@@ -278,10 +327,10 @@ const LiShiChaXun = () => {
           <div className="mt-24">
             <div>蓝球重复出现的号码：</div>
             <div>
-              {chongfuNumber.blue?.map((number) => {
+              {sortedRepeatBlue.map((number) => {
                 if (chongfuNumber.blueCount[number] > 2) {
                   return (
-                    <span className="mr-8">
+                    <span key={number} className="mr-8">
                       {number}(
                       <span className="text-blue">
                         {chongfuNumber.blueCount[number]}
@@ -290,7 +339,11 @@ const LiShiChaXun = () => {
                     </span>
                   );
                 }
-                return <span className="mr-8">{number}</span>;
+                return (
+                  <span key={number} className="mr-8">
+                    {number}
+                  </span>
+                );
               })}
             </div>
           </div>
