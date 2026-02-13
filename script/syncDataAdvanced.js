@@ -140,7 +140,7 @@ function createWordDocument(newData, title) {
       new Paragraph({
         children: [new TextRun({ text: `大中小: ${item.大中小}`, size: 20 })],
       }),
-      new Paragraph({ text: "" }) // 空行分隔
+      new Paragraph({ text: "" }), // 空行分隔
     );
   });
 
@@ -176,7 +176,7 @@ async function updateWordDoc(docPath, newData, title) {
       const newDocPath = docPath.replace(".docx", `_update_${Date.now()}.docx`);
       fs.writeFileSync(newDocPath, buffer);
       console.log(
-        `📄 Word文档创建成功: ${newDocPath} (添加了 ${newData.length} 条新记录)`
+        `📄 Word文档创建成功: ${newDocPath} (添加了 ${newData.length} 条新记录)`,
       );
     } else {
       // 备用方案：创建文本文件
@@ -202,7 +202,7 @@ async function updateWordDoc(docPath, newData, title) {
       const txtPath = docPath.replace(".docx", "_update.txt");
       fs.appendFileSync(txtPath, appendText, "utf8");
       console.log(
-        `📄 文本文档更新成功: ${txtPath} (添加了 ${newData.length} 条新记录)`
+        `📄 文本文档更新成功: ${txtPath} (添加了 ${newData.length} 条新记录)`,
       );
     }
   } catch (error) {
@@ -218,8 +218,8 @@ async function syncDaLeTouData() {
 
   const tempPath = "./data/temp_all_history_data.json";
   const allHistoryPath = "./data/all_history_data.json";
-  const da2025Path = "./data/da_2025_data.json";
-  const docPath = "./data/da_2025_data.docx";
+  const da2026Path = "./data/da_2026_data.json";
+  const docPath = "./data/da_2026_data.docx";
 
   // 读取temp数据
   const tempData = readJsonFile(tempPath);
@@ -238,22 +238,19 @@ async function syncDaLeTouData() {
     console.log("📋 all_history_data.json - 无新增数据");
   }
 
-  // 同步到da_2025_data.json（只同步2025年的数据）
-  const da2025Data = readJsonFile(da2025Path);
-  const temp2025Data = tempData.filter((item) => item.期数.startsWith("2025"));
-  const newDataFor2025 = detectNewData(temp2025Data, da2025Data);
-  if (newDataFor2025.length > 0) {
-    const updated2025Data = [...da2025Data, ...newDataFor2025];
-    writeJsonFile(da2025Path, updated2025Data);
+  // 同步到da_2026_data.json（只同步2026年的数据）
+  const da2026Data = readJsonFile(da2026Path);
+  const temp2026Data = tempData.filter((item) => item.期数.startsWith("2026"));
+  const newDataFor2026 = detectNewData(temp2026Data, da2026Data);
+  if (newDataFor2026.length > 0) {
+    const updated2026Data = [...da2026Data, ...newDataFor2026];
+    writeJsonFile(da2026Path, updated2026Data);
   } else {
-    console.log("📋 da_2025_data.json - 无新增数据");
+    console.log("📋 da_2026_data.json - 无新增数据");
   }
 
-  // 更新Word文档
-  // await updateWordDoc(docPath, newDataFor2025, '大乐透2025年新增数据');
-
   console.log(
-    `✨ 大乐透数据同步完成！新增 ${newDataForAll.length} 条历史数据，${newDataFor2025.length} 条2025年数据`
+    `✨ 大乐透数据同步完成！新增 ${newDataForAll.length} 条历史数据，${newDataFor2026.length} 条2026年数据`,
   );
 }
 
@@ -265,8 +262,8 @@ async function syncShuangSeQiuData() {
 
   const tempPath = "./dSsq/temp_all_history_data.json";
   const allHistoryPath = "./dSsq/all_history_data.json";
-  const shuang2025Path = "./dSsq/shuang_2025_data.json";
-  const docPath = "./dSsq/shuang_2025_data.docx";
+  const shuang2026Path = "./dSsq/shuang_2026_data.json";
+  const docPath = "./dSsq/shuang_2026_data.docx";
 
   // 读取temp数据
   const tempData = readJsonFile(tempPath);
@@ -285,22 +282,19 @@ async function syncShuangSeQiuData() {
     console.log("📋 all_history_data.json - 无新增数据");
   }
 
-  // 同步到shuang_2025_data.json（只同步2025年的数据）
-  const shuang2025Data = readJsonFile(shuang2025Path);
-  const temp2025Data = tempData.filter((item) => item.期数.startsWith("2025"));
-  const newDataFor2025 = detectNewData(temp2025Data, shuang2025Data);
-  if (newDataFor2025.length > 0) {
-    const updated2025Data = [...shuang2025Data, ...newDataFor2025];
-    writeJsonFile(shuang2025Path, updated2025Data);
+  // 同步到shuang_2026_data.json（只同步2025年的数据）
+  const shuang2026Data = readJsonFile(shuang2026Path);
+  const temp2026Data = tempData.filter((item) => item.期数.startsWith("2026"));
+  const newDataFor2026 = detectNewData(temp2026Data, shuang2026Data);
+  if (newDataFor2026.length > 0) {
+    const updated2026Data = [...shuang2026Data, ...newDataFor2026];
+    writeJsonFile(shuang2026Path, updated2026Data);
   } else {
-    console.log("📋 shuang_2025_data.json - 无新增数据");
+    console.log("📋 shuang_2026_data.json - 无新增数据");
   }
 
-  // 更新Word文档
-  // await updateWordDoc(docPath, newDataFor2025, '双色球2025年新增数据');
-
   console.log(
-    `✨ 双色球数据同步完成！新增 ${newDataForAll.length} 条历史数据，${newDataFor2025.length} 条2025年数据`
+    `✨ 双色球数据同步完成！新增 ${newDataForAll.length} 条历史数据，${newDataFor2026.length} 条2026年数据`,
   );
 }
 
