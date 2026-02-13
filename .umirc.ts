@@ -9,9 +9,11 @@ export default defineConfig({
     { path: "/piantaifenxi", component: "piantaifenxi" },
     { path: "/lishichaxun", component: "lishichaxun" },
     { path: "/weilanfenxi", component: "weilanfenxi" },
+    { path: "/ssq/historySearch", component: "ssq/historySearch" },
   ],
   alias: {
     data: '/data',
+    dSsq: '/dSsq',
     src: '/src',
     styles: '/src/styles'
   },

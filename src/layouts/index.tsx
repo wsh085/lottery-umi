@@ -30,6 +30,9 @@ export default function Layout() {
           <li>
             <Link to="/weilanfenxi">围蓝预测</Link>
           </li>
+          <li>
+            <Link to="/ssq/historySearch">双色球_历史查询</Link>
+          </li>
           {/* <li>
           <Link to="/tensorflow">学习预测</Link>
         </li> */}
