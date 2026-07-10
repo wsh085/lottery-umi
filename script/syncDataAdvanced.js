@@ -219,7 +219,6 @@ async function syncDaLeTouData() {
   const tempPath = "./data/temp_all_history_data.json";
   const allHistoryPath = "./data/all_history_data.json";
   const da2026Path = "./data/da_2026_data.json";
-  const docPath = "./data/da_2026_data.docx";
 
   // 读取temp数据
   const tempData = readJsonFile(tempPath);

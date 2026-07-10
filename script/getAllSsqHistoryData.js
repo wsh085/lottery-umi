@@ -16,7 +16,7 @@ const url = "https://tb.tuganjue.com/tgj-ssq-kjfb.html";
 
   // 设置localStorage
   await page.evaluate(() => {
-    localStorage.setItem("limit", 50);
+    localStorage.setItem("limit", 200);
   });
 
   await page.reload();
