@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import math
+import statistics
+from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -18,12 +21,20 @@ BLUE_DEFAULT_PRIOR_STRENGTH = 4.0
 BLUE_DEFAULT_ML_WEIGHT = 0.15
 BLUE_DEFAULT_TEMPERATURE = 0.9
 BLUE_PARAMETER_SWITCH_MARGIN = 0.09
+ML_TRAINING_TARGET_LOOKBACK = 72
+RED_CHAMPION_STRATEGY_NAMES = (
+    "hot",
+    "omission",
+    "hybrid",
+    "repeat",
+    "zone_rebound",
+    "balanced",
+)
 BLUE_PARAMETER_GRID = tuple(
-    (bayes_window, prior_strength, ml_weight, temperature)
+    (bayes_window, prior_strength, ml_weight)
     for bayes_window in (24, 30, 36)
     for prior_strength in (4.0, 6.0, 8.0)
     for ml_weight in (0.15, 0.22, 0.3)
-    for temperature in (0.75, 0.9, 1.05, 1.2)
 )
 
 
@@ -32,6 +43,39 @@ class Draw:
     issue: str
     reds: tuple[int, ...]
     blue: int
+
+    @property
+    def odd_even(self) -> tuple[int, int]:
+        odd = sum(number % 2 for number in self.reds)
+        return odd, 6 - odd
+
+    @property
+    def zones(self) -> tuple[int, int, int]:
+        return (
+            sum(1 <= number <= 11 for number in self.reds),
+            sum(12 <= number <= 22 for number in self.reds),
+            sum(23 <= number <= 33 for number in self.reds),
+        )
+
+
+@dataclass(frozen=True)
+class RedChampionParams:
+    short_window: int = 5
+    medium_window: int = 10
+    long_window: int = 20
+    short_weight: float = 1.0
+    medium_weight: float = 0.8
+    long_weight: float = 0.4
+    gap_target: int = 4
+    gap_weight: float = 0.5
+    repeat_weight: float = 0.2
+    zone_weight: float = 0.3
+    parity_weight: float = 0.2
+    pair_zone_bonus: float = 0.08
+    pair_parity_bonus: float = 0.05
+
+
+RED_CHAMPION_PARAMS = RedChampionParams()
 
 
 class SimpleLogisticModel:
@@ -187,10 +231,24 @@ def load_draws(path: str | Path) -> list[Draw]:
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     draws: list[Draw] = []
     for item in raw:
-        reds = tuple(sorted(int(value) for value in item["红球"].split()))
+        # 保留源文件顺序，让校验函数能够发现未升序的原始数据。
+        reds = tuple(int(value) for value in item["红球"].split())
         blue = int(item["蓝球"])
         draws.append(Draw(issue=str(item["期数"]), reds=reds, blue=blue))
     return draws
+
+
+def file_sha256(path: str | Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def next_issue_id(issue: str, *, year_last_issue: int | None = None) -> str:
+    """生成下一期号；跨年时必须显式提供当年官方末期号。"""
+    year = int(issue[:4])
+    sequence = int(issue[4:])
+    if year_last_issue is not None and sequence == year_last_issue:
+        return f"{year + 1}001"
+    return f"{year}{sequence + 1:03d}"
 
 
 def validate_draws(draws: list[Draw]) -> dict[str, int]:
@@ -420,7 +478,7 @@ def build_training_samples(
     history: list[Draw],
     *,
     blue: bool,
-    lookback_targets: int = 72,
+    lookback_targets: int = ML_TRAINING_TARGET_LOOKBACK,
     min_history: int = 24,
 ) -> tuple[list[list[float]], list[int]]:
     start = max(min_history, len(history) - lookback_targets)
@@ -443,7 +501,7 @@ def build_training_samples(
 def build_blue_grouped_training_samples(
     history: list[Draw],
     *,
-    lookback_targets: int = 72,
+    lookback_targets: int = ML_TRAINING_TARGET_LOOKBACK,
     min_history: int = 24,
 ) -> tuple[list[list[list[float]]], list[int]]:
     start = max(min_history, len(history) - lookback_targets)
@@ -519,6 +577,160 @@ def select_with_zone_coverage(scores: dict[int, float], count: int) -> list[int]
         if len(chosen) == count:
             break
     return sorted(chosen)
+
+
+def red_champion_omission(history: list[Draw], number: int) -> int:
+    for gap, draw in enumerate(reversed(history)):
+        if number in draw.reds:
+            return gap
+    return len(history)
+
+
+def red_champion_pressure_features(history: list[Draw]) -> tuple[list[float], list[float]]:
+    short = history[-min(4, len(history)) :]
+    long = history[-min(20, len(history)) :]
+    short_zone = [statistics.fmean(draw.zones[index] for draw in short) for index in range(3)]
+    long_zone = [statistics.fmean(draw.zones[index] for draw in long) for index in range(3)]
+    zone_pressure = [(long_zone[index] - short_zone[index]) / 2 for index in range(3)]
+    short_odd = statistics.fmean(draw.odd_even[0] for draw in short)
+    long_odd = statistics.fmean(draw.odd_even[0] for draw in long)
+    odd_pressure = (long_odd - short_odd) / 3
+    return zone_pressure, [odd_pressure, -odd_pressure]
+
+
+def red_champion_number_scores(history: list[Draw]) -> dict[int, float]:
+    params = RED_CHAMPION_PARAMS
+    zone_pressure, parity_pressure = red_champion_pressure_features(history)
+    scores: dict[int, float] = {}
+    for number in RED_NUMBERS:
+        gap = red_champion_omission(history, number)
+        scores[number] = (
+            params.short_weight * window_frequency(history, number, window=params.short_window)
+            + params.medium_weight * window_frequency(history, number, window=params.medium_window)
+            + params.long_weight * window_frequency(history, number, window=params.long_window)
+            + params.gap_weight * math.exp(-abs(gap - params.gap_target) / 3)
+            + params.repeat_weight * float(number in history[-1].reds)
+            + params.zone_weight * zone_pressure[red_zone(number)]
+            + params.parity_weight * parity_pressure[0 if number % 2 else 1]
+        )
+    return scores
+
+
+def red_champion_balanced(history: list[Draw]) -> list[int]:
+    params = RED_CHAMPION_PARAMS
+    scores = red_champion_number_scores(history)
+    first = max(scores, key=lambda number: (scores[number], -number))
+    adjusted = dict(scores)
+    for number in adjusted:
+        if number == first:
+            adjusted[number] = -math.inf
+            continue
+        if red_zone(number) != red_zone(first):
+            adjusted[number] += params.pair_zone_bonus
+        if number % 2 != first % 2:
+            adjusted[number] += params.pair_parity_bonus
+    second = max(adjusted, key=lambda number: (adjusted[number], -number))
+    return sorted((first, second))
+
+
+def predict_red_champion_base(history: list[Draw], strategy_name: str) -> list[int]:
+    if strategy_name not in RED_CHAMPION_STRATEGY_NAMES:
+        raise ValueError(f"未知Champion基础策略: {strategy_name}")
+    hot_scores = {
+        number: window_frequency(history, number, window=5)
+        + 0.7 * window_frequency(history, number, window=10)
+        + 0.3 * window_frequency(history, number, window=20)
+        for number in RED_NUMBERS
+    }
+    omission_scores = {
+        number: math.exp(-abs(red_champion_omission(history, number) - 4) / 3)
+        + 0.2 * window_frequency(history, number, window=20)
+        for number in RED_NUMBERS
+    }
+    if strategy_name == "hot":
+        return sorted(sorted_numbers(hot_scores)[:2])
+    if strategy_name == "omission":
+        return sorted(sorted_numbers(omission_scores)[:2])
+    if strategy_name == "hybrid":
+        first = min(RED_NUMBERS, key=lambda number: (-hot_scores[number], number))
+        second = min(
+            (number for number in RED_NUMBERS if number != first),
+            key=lambda number: (
+                -(omission_scores[number] + 0.05 * (red_zone(number) != red_zone(first))),
+                number,
+            ),
+        )
+        return sorted((first, second))
+    if strategy_name == "repeat":
+        repeat_scores = {
+            number: window_frequency(history, number, window=10)
+            + 0.5 * window_frequency(history, number, window=20)
+            for number in history[-1].reds
+        }
+        return sorted(sorted_numbers(repeat_scores)[:2])
+    if strategy_name == "zone_rebound":
+        zone_pressure, _ = red_champion_pressure_features(history)
+        selected_zone = max(range(3), key=lambda zone: (zone_pressure[zone], -zone))
+        zone_scores = {
+            number: window_frequency(history, number, window=10)
+            + 0.5 * math.exp(-abs(red_champion_omission(history, number) - 4) / 3)
+            for number in RED_NUMBERS
+            if red_zone(number) == selected_zone
+        }
+        return sorted(sorted_numbers(zone_scores)[:2])
+    return red_champion_balanced(history)
+
+
+def rank_red_champion_strategies(draws: list[Draw], target_index: int) -> list[dict[str, float | int | str]]:
+    long_indices = list(range(max(20, target_index - 24), target_index))
+    short_indices = long_indices[-12:]
+    rows: list[dict[str, float | int | str]] = []
+    for order, name in enumerate(RED_CHAMPION_STRATEGY_NAMES):
+        long_hits = sum(
+            bool(set(predict_red_champion_base(draws[:index], name)) & set(draws[index].reds))
+            for index in long_indices
+        )
+        short_hits = sum(
+            bool(set(predict_red_champion_base(draws[:index], name)) & set(draws[index].reds))
+            for index in short_indices
+        )
+        rows.append(
+            {
+                "name": name,
+                "score": 0.7 * short_hits / len(short_indices) + 0.3 * long_hits / len(long_indices),
+                "short_hits": short_hits,
+                "long_hits": long_hits,
+                "order": order,
+            }
+        )
+    return sorted(
+        rows,
+        key=lambda row: (-float(row["score"]), -int(row["short_hits"]), -int(row["long_hits"]), int(row["order"])),
+    )
+
+
+def predict_red_champion(draws: list[Draw], target_index: int) -> dict[str, object]:
+    history = draws[:target_index]
+    ranking = rank_red_champion_strategies(draws, target_index)
+    votes: Counter[int] = Counter()
+    for row, weight in zip(ranking[:3], (3, 2, 1)):
+        for number in predict_red_champion_base(history, str(row["name"])):
+            votes[number] += weight
+    fallback = red_champion_number_scores(history)
+    ranked = sorted(
+        votes,
+        key=lambda number: (
+            -votes[number],
+            -fallback[number],
+            abs(red_champion_omission(history, number) - 4),
+            number,
+        ),
+    )
+    return {
+        "numbers": sorted(ranked[:2]),
+        "strategy_ranking": ranking,
+        "votes": dict(votes),
+    }
 
 
 def red_base_scores(history: list[Draw]) -> tuple[dict[int, float], dict[int, float], dict[int, float]]:
@@ -980,7 +1192,6 @@ def search_blue_parameters(history: list[Draw]) -> dict[str, float]:
         BLUE_DEFAULT_BAYES_WINDOW,
         BLUE_DEFAULT_PRIOR_STRENGTH,
         BLUE_DEFAULT_ML_WEIGHT,
-        BLUE_DEFAULT_TEMPERATURE,
     )
     best_gain = 0.0
     default_cv_score = evaluate_blue_parameter_set(
@@ -990,12 +1201,11 @@ def search_blue_parameters(history: list[Draw]) -> dict[str, float]:
         ml_weight=BLUE_DEFAULT_ML_WEIGHT,
         temperature=BLUE_DEFAULT_TEMPERATURE,
     )
-    for recent_window, prior_strength, ml_weight, temperature in BLUE_PARAMETER_GRID:
+    for recent_window, prior_strength, ml_weight in BLUE_PARAMETER_GRID:
         if (
             recent_window == BLUE_DEFAULT_BAYES_WINDOW
             and prior_strength == BLUE_DEFAULT_PRIOR_STRENGTH
             and ml_weight == BLUE_DEFAULT_ML_WEIGHT
-            and temperature == BLUE_DEFAULT_TEMPERATURE
         ):
             continue
         score = evaluate_blue_parameter_set(
@@ -1003,7 +1213,7 @@ def search_blue_parameters(history: list[Draw]) -> dict[str, float]:
             recent_window=recent_window,
             prior_strength=prior_strength,
             ml_weight=ml_weight,
-            temperature=temperature,
+            temperature=BLUE_DEFAULT_TEMPERATURE,
         )
         if score < default_cv_score:
             continue
@@ -1013,7 +1223,7 @@ def search_blue_parameters(history: list[Draw]) -> dict[str, float]:
                 recent_window=recent_window,
                 prior_strength=prior_strength,
                 ml_weight=ml_weight,
-                temperature=temperature,
+                temperature=BLUE_DEFAULT_TEMPERATURE,
                 evaluation_window=window,
             )
             for window in (12, 24, 36)
@@ -1026,13 +1236,13 @@ def search_blue_parameters(history: list[Draw]) -> dict[str, float]:
         gain = sum(candidate_rates[window] - default_rates[window] for window in (12, 24, 36))
         if gain > best_gain:
             best_gain = gain
-            best_params = (recent_window, prior_strength, ml_weight, temperature)
+            best_params = (recent_window, prior_strength, ml_weight)
 
     return {
         "recent_window": best_params[0],
         "prior_strength": best_params[1],
         "ml_weight": best_params[2],
-        "temperature": best_params[3],
+        "temperature": BLUE_DEFAULT_TEMPERATURE,
     }
 
 
@@ -1078,8 +1288,21 @@ def predict_blue_fusion(history: list[Draw]) -> dict[str, object]:
     )
     return {
         **result,
-        "model_name": "blue_multiclass_calibrated_auto_tuned",
+        "model_name": "blue_multiclass_softmax_normalized_auto_tuned",
+        "probability_status": "softmax_normalized_not_calibrated",
         "final_scores": result["multiclass_probabilities"],
+    }
+
+
+def predict_at(draws: list[Draw], target_idx: int) -> dict[str, object]:
+    """统一目标期入口，强制所有模型只能读取target_idx以前的数据。"""
+    if not 24 <= target_idx <= len(draws):
+        raise ValueError("目标索引必须至少保留24期历史且不能超过数据长度")
+    history = draws[:target_idx]
+    return {
+        "red_champion": predict_red_champion(draws, target_idx),
+        "red_challenger": predict_red_fusion(history),
+        "blue": predict_blue_fusion(history),
     }
 
 
@@ -1095,6 +1318,74 @@ def wilson_interval(hits: int, total: int, z: float = 1.96) -> tuple[float, floa
         / denominator
     )
     return (center - margin, center + margin)
+
+
+def binomial_upper_tail(hits: int, total: int, probability: float) -> float:
+    return sum(
+        math.comb(total, count)
+        * probability**count
+        * (1.0 - probability) ** (total - count)
+        for count in range(hits, total + 1)
+    )
+
+
+def paired_binary_comparison(
+    champion_rows: list[dict[str, object]], challenger_rows: list[dict[str, object]]
+) -> dict[str, float | int]:
+    pairs = list(zip(champion_rows, challenger_rows))
+    both = sum(bool(left["hit"]) and bool(right["hit"]) for left, right in pairs)
+    champion_only = sum(bool(left["hit"]) and not bool(right["hit"]) for left, right in pairs)
+    challenger_only = sum(not bool(left["hit"]) and bool(right["hit"]) for left, right in pairs)
+    neither = sum(not bool(left["hit"]) and not bool(right["hit"]) for left, right in pairs)
+    discordant = champion_only + challenger_only
+    if discordant:
+        lower = sum(
+            math.comb(discordant, count) * 0.5**discordant
+            for count in range(min(champion_only, challenger_only) + 1)
+        )
+        p_value = min(1.0, 2 * lower)
+    else:
+        p_value = 1.0
+    return {
+        "both": both,
+        "champion_only": champion_only,
+        "challenger_only": challenger_only,
+        "neither": neither,
+        "mcnemar_exact_two_sided": p_value,
+    }
+
+
+def backtest_red_champion(draws: list[Draw], *, window: int) -> dict[str, object]:
+    start = len(draws) - window
+    rows = []
+    hits = 0
+    for target_idx in range(start, len(draws)):
+        prediction = predict_red_champion(draws, target_idx)
+        actual = set(draws[target_idx].reds)
+        hit_numbers = sorted(actual & set(prediction["numbers"]))
+        hit = bool(hit_numbers)
+        hits += int(hit)
+        rows.append(
+            {
+                "issue": draws[target_idx].issue,
+                "prediction": prediction["numbers"],
+                "actual": list(draws[target_idx].reds),
+                "hit_numbers": hit_numbers,
+                "hit": hit,
+            }
+        )
+    low, high = wilson_interval(hits, window)
+    return {
+        "window": window,
+        "hits": hits,
+        "total": window,
+        "hit_rate": hits / window,
+        "baseline": RED_RANDOM_HIT_RATE,
+        "wilson_low": low,
+        "wilson_high": high,
+        "random_upper_tail_probability": binomial_upper_tail(hits, window, RED_RANDOM_HIT_RATE),
+        "rows": rows,
+    }
 
 
 def backtest_red(draws: list[Draw], *, window: int) -> dict[str, object]:
@@ -1126,6 +1417,7 @@ def backtest_red(draws: list[Draw], *, window: int) -> dict[str, object]:
         "baseline": RED_RANDOM_HIT_RATE,
         "wilson_low": low,
         "wilson_high": high,
+        "random_upper_tail_probability": binomial_upper_tail(hits, window, RED_RANDOM_HIT_RATE),
         "rows": rows,
     }
 
@@ -1134,16 +1426,29 @@ def backtest_blue(draws: list[Draw], *, window: int) -> dict[str, object]:
     start = len(draws) - window
     rows = []
     hits = 0
+    log_losses: list[float] = []
+    brier_scores: list[float] = []
     for target_idx in range(start, len(draws)):
         history = draws[:target_idx]
         prediction = predict_blue_fusion(history)
-        hit = draws[target_idx].blue in prediction["numbers"]
+        actual_blue = draws[target_idx].blue
+        probabilities = prediction["multiclass_probabilities"]
+        hit = actual_blue in prediction["numbers"]
         hits += int(hit)
+        actual_probability = float(probabilities[actual_blue])
+        log_losses.append(-math.log(max(actual_probability, 1e-15)))
+        brier_scores.append(
+            sum(
+                (float(probabilities[number]) - (1.0 if number == actual_blue else 0.0)) ** 2
+                for number in BLUE_NUMBERS
+            )
+        )
         rows.append(
             {
                 "issue": draws[target_idx].issue,
                 "prediction": prediction["numbers"],
-                "actual": draws[target_idx].blue,
+                "actual": actual_blue,
+                "actual_probability": actual_probability,
                 "hit": hit,
             }
         )
@@ -1156,6 +1461,11 @@ def backtest_blue(draws: list[Draw], *, window: int) -> dict[str, object]:
         "baseline": BLUE_RANDOM_HIT_RATE,
         "wilson_low": low,
         "wilson_high": high,
+        "random_upper_tail_probability": binomial_upper_tail(hits, window, BLUE_RANDOM_HIT_RATE),
+        "mean_log_loss": mean(log_losses),
+        "uniform_log_loss": math.log(len(BLUE_NUMBERS)),
+        "mean_brier_score": mean(brier_scores),
+        "uniform_brier_score": 1.0 - 1.0 / len(BLUE_NUMBERS),
         "rows": rows,
     }
 
@@ -1163,28 +1473,58 @@ def backtest_blue(draws: list[Draw], *, window: int) -> dict[str, object]:
 def run_full_analysis(data_path: str | Path) -> dict[str, object]:
     draws = load_draws(data_path)
     summary = validate_draws(draws)
-    red_prediction = predict_red_fusion(draws)
-    blue_prediction = predict_blue_fusion(draws)
+    summary["sha256"] = file_sha256(data_path)
+    predictions = predict_at(draws, len(draws))
+    champion_windows = {
+        str(window): backtest_red_champion(draws, window=window) for window in (20, 38, 60)
+    }
+    challenger_windows = {
+        str(window): backtest_red(draws, window=window) for window in (20, 38, 60)
+    }
+    blue_windows = {
+        str(window): backtest_blue(draws, window=window) for window in (20, 38, 60)
+    }
+    red_champion = predictions["red_champion"]
+    red_challenger = predictions["red_challenger"]
+    blue_prediction = predictions["blue"]
     return {
         "data_summary": summary,
-        "next_issue": str(int(draws[-1].issue) + 1),
+        "next_issue": next_issue_id(draws[-1].issue),
+        "next_issue_note": "年内按序号加1；年末需根据官方末期号显式触发跨年",
+        "metadata": {
+            "ml_training_target_lookback": ML_TRAINING_TARGET_LOOKBACK,
+            "blue_parameter_grid_size": len(BLUE_PARAMETER_GRID),
+            "blue_temperature_status": "固定为0.9，仅影响分布陡峭度，不参与Top4命中率搜索",
+            "parameter_freeze_issue": "2026079",
+            "evidence_status": "当前结果属于开发样本证据；冻结后新增开奖才构成真正前向审计",
+        },
         "red": {
-            "prediction": red_prediction["numbers"],
-            "strategy_ranking": red_prediction["strategy_ranking"],
-            "windows": {
-                "20": backtest_red(draws, window=20),
-                "38": backtest_red(draws, window=38),
-                "60": backtest_red(draws, window=60),
+            "prediction": red_champion["numbers"],
+            "model_status": "rule_champion_active; logistic_fusion_challenger_not_promoted",
+            "champion": {
+                "model_name": "strict_rule_adaptive_champion",
+                "prediction": red_champion["numbers"],
+                "strategy_ranking": red_champion["strategy_ranking"],
+                "windows": champion_windows,
             },
+            "challenger": {
+                "model_name": "logistic_rule_fusion_challenger",
+                "prediction": red_challenger["numbers"],
+                "strategy_ranking": red_challenger["strategy_ranking"],
+                "windows": challenger_windows,
+            },
+            "windows": champion_windows,
+            "paired_comparison_38": paired_binary_comparison(
+                champion_windows["38"]["rows"], challenger_windows["38"]["rows"]
+            ),
         },
         "blue": {
             "prediction": blue_prediction["numbers"],
+            "model_name": blue_prediction["model_name"],
+            "probability_status": blue_prediction["probability_status"],
+            "selected_params": blue_prediction["selected_params"],
             "strategy_ranking": blue_prediction["strategy_ranking"],
-            "windows": {
-                "20": backtest_blue(draws, window=20),
-                "38": backtest_blue(draws, window=38),
-                "60": backtest_blue(draws, window=60),
-            },
+            "windows": blue_windows,
         },
     }
 
