@@ -37,6 +37,87 @@ BLUE_PARAMETER_GRID = tuple(
     for ml_weight in (0.15, 0.22, 0.3)
 )
 
+# 命令行展示使用中文字段；内部分析结构继续保留原键名，避免破坏既有调用方。
+OUTPUT_KEY_TRANSLATIONS = {
+    "data_summary": "数据摘要",
+    "draw_count": "开奖期数",
+    "first_issue": "首期",
+    "last_issue": "末期",
+    "sha256": "数据指纹",
+    "next_issue": "下一期",
+    "next_issue_note": "下一期说明",
+    "metadata": "运行元数据",
+    "ml_training_target_lookback": "机器学习训练目标回看期数",
+    "blue_parameter_grid_size": "蓝球参数网格数量",
+    "blue_temperature_status": "蓝球温度参数状态",
+    "parameter_freeze_issue": "参数冻结期",
+    "evidence_status": "证据状态",
+    "red": "红球",
+    "blue": "蓝球",
+    "red_champion": "红球主模型",
+    "red_challenger": "红球候选模型",
+    "prediction": "预测号码",
+    "model_status": "模型状态",
+    "champion": "主模型",
+    "challenger": "候选模型",
+    "model_name": "模型名称",
+    "probability_status": "概率状态",
+    "selected_params": "已选参数",
+    "strategy_ranking": "策略排名",
+    "windows": "回测窗口",
+    "paired_comparison_38": "近38期逐期配对比较",
+    "numbers": "号码",
+    "name": "名称",
+    "score": "评分",
+    "short_hits": "近12期命中次数",
+    "long_hits": "近24期命中次数",
+    "order": "原始顺序",
+    "window": "窗口期数",
+    "hits": "命中次数",
+    "total": "总期数",
+    "hit_rate": "命中率",
+    "baseline": "随机基线",
+    "wilson_low": "威尔逊区间下限",
+    "wilson_high": "威尔逊区间上限",
+    "random_upper_tail_probability": "随机上尾概率",
+    "rows": "逐期明细",
+    "issue": "期号",
+    "actual": "实际号码",
+    "actual_probability": "实际号码归一化分数",
+    "hit_numbers": "命中号码",
+    "hit": "是否命中",
+    "both": "两者都命中",
+    "champion_only": "仅主模型命中",
+    "challenger_only": "仅候选模型命中",
+    "neither": "两者都未命中",
+    "mcnemar_exact_two_sided": "麦克尼马尔双侧精确检验",
+    "mean_log_loss": "平均对数损失",
+    "uniform_log_loss": "均匀分布对数损失",
+    "mean_brier_score": "平均布里尔评分",
+    "uniform_brier_score": "均匀分布布里尔评分",
+    "recent_window": "近期窗口",
+    "prior_strength": "先验强度",
+    "ml_weight": "机器学习权重",
+    "temperature": "温度参数",
+    "bayes_weight": "贝叶斯权重",
+    "legacy_weight": "规则权重",
+}
+
+OUTPUT_VALUE_TRANSLATIONS = {
+    "rule_champion_active; logistic_fusion_challenger_not_promoted": "规则自适应主模型启用；逻辑回归融合候选模型未晋级",
+    "strict_rule_adaptive_champion": "严格规则自适应主模型",
+    "logistic_rule_fusion_challenger": "逻辑回归规则融合候选模型",
+    "blue_multiclass_softmax_normalized_auto_tuned": "蓝球多分类指数归一化自动选参模型",
+    "softmax_normalized_not_calibrated": "指数归一化分数，未经概率校准",
+    "固定为0.9，仅影响分布陡峭度，不参与Top4命中率搜索": "固定为0.9，仅影响分布陡峭度，不参与四码命中率搜索",
+    "hot": "近期热号",
+    "omission": "适中遗漏",
+    "hybrid": "冷热混合",
+    "repeat": "重号延续",
+    "zone_rebound": "分区回补",
+    "balanced": "结构均衡",
+}
+
 
 @dataclass(frozen=True)
 class Draw:
@@ -635,7 +716,7 @@ def red_champion_balanced(history: list[Draw]) -> list[int]:
 
 def predict_red_champion_base(history: list[Draw], strategy_name: str) -> list[int]:
     if strategy_name not in RED_CHAMPION_STRATEGY_NAMES:
-        raise ValueError(f"未知Champion基础策略: {strategy_name}")
+        raise ValueError(f"未知主模型基础策略: {strategy_name}")
     hot_scores = {
         number: window_frequency(history, number, window=5)
         + 0.7 * window_frequency(history, number, window=10)
@@ -1529,11 +1610,31 @@ def run_full_analysis(data_path: str | Path) -> dict[str, object]:
     }
 
 
+def localize_output(value: object) -> object:
+    """把命令行展示结构递归转换为中文，不修改内部分析结果。"""
+    if isinstance(value, dict):
+        return {
+            OUTPUT_KEY_TRANSLATIONS.get(str(key), str(key)): localize_output(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [localize_output(item) for item in value]
+    if isinstance(value, tuple):
+        return [localize_output(item) for item in value]
+    if isinstance(value, bool):
+        return "是" if value else "否"
+    if value is None:
+        return "无"
+    if isinstance(value, str):
+        return OUTPUT_VALUE_TRANSLATIONS.get(value, value)
+    return value
+
+
 def main() -> None:
     base = Path("/Users/pupu/wsh_github/lottery-umi")
     data_path = base / "dSsq" / "all_history_data.json"
     result = run_full_analysis(data_path)
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(localize_output(result), ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,148 @@
+{
+  "status": "VALIDATION_OPENED_ONCE",
+  "generatedAt": "2026-07-16T07:34:36.564Z",
+  "data": {
+    "rows2025": 150,
+    "range2025": "2025001-2025150",
+    "rows2026": 79,
+    "range2026": "2026001-2026079",
+    "allRows": 229,
+    "developmentRows": 191,
+    "developmentTargets": 153,
+    "blockRows": [51, 51, 51],
+    "sealedValidationRows": 38,
+    "targetIssue": 2026080
+  },
+  "candidateCount": 131,
+  "candidateFamilyCounts": {
+    "FREQUENCY": 108,
+    "GAP_SHAPE": 4,
+    "ZONE_REBOUND": 2,
+    "ZONE_BLEND": 1,
+    "PARITY_REBOUND": 2,
+    "ZONE_PARITY_BLEND": 1,
+    "STATE_FREQUENCY": 3,
+    "COOCCURRENCE": 9,
+    "BALANCED_V2": 1
+  },
+  "baseRankingIds": [
+    "C039", "C081", "C087", "C086", "C105", "C102", "C101", "C048", "C050", "C041", "C042", "C053", "C054", "C047", "C029", "C038", "C045", "C018", "C004", "C007", "C084", "C104", "C100", "C021", "C107", "C002", "C066", "C027", "C028", "C083", "C010", "C072", "C009", "C030", "C024", "C013", "C005", "C008", "C001", "C016", "C017", "C093", "C049", "C046", "C110", "C040", "C051", "C037", "C119", "C043", "C052", "C131", "C098", "C082", "C015", "C036", "C077", "C091", "C090", "C044", "C103", "C097", "C012", "C094", "C032", "C035", "C025", "C022", "C026", "C116", "C117", "C003", "C011", "C033", "C085", "C088", "C031", "C106", "C078", "C095", "C019", "C020", "C099", "C023", "C034", "C089", "C092", "C014", "C006", "C096", "C059", "C062", "C079", "C064", "C118", "C073", "C063", "C080", "C058", "C061", "C065", "C070", "C108", "C071", "C074", "C055", "C075", "C057", "C109", "C112", "C121", "C120", "C113", "C115", "C067", "C068", "C076", "C056", "C069", "C114", "C126", "C127", "C125", "C124", "C129", "C130", "C128", "C122", "C123", "C060", "C111"
+  ],
+  "ensembles": [
+    {
+      "ensembleSize": 3,
+      "baseIds": ["C039", "C081", "C087"],
+      "overall": {"rows": 153, "danAny": 54, "danGe2": 8, "coverGe1": 117, "coverGe2": 53, "coverGe3": 21, "totalCover": 193, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "blocks": {"D1": {"rows": 51, "coverGe3": 8, "totalCover": 69}, "D2": {"rows": 51, "coverGe3": 6, "totalCover": 59}, "D3": {"rows": 51, "coverGe3": 7, "totalCover": 65}},
+      "key": {"minBlock": 6, "blockVariance": 0.6666666666666666}
+    },
+    {
+      "ensembleSize": 5,
+      "baseIds": ["C039", "C081", "C087", "C086", "C105"],
+      "overall": {"rows": 153, "danAny": 58, "danGe2": 8, "coverGe1": 116, "coverGe2": 55, "coverGe3": 20, "totalCover": 193, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "blocks": {"D1": {"rows": 51, "coverGe3": 7, "totalCover": 69}, "D2": {"rows": 51, "coverGe3": 6, "totalCover": 59}, "D3": {"rows": 51, "coverGe3": 7, "totalCover": 65}},
+      "key": {"minBlock": 6, "blockVariance": 0.22222222222222224}
+    },
+    {
+      "ensembleSize": 7,
+      "baseIds": ["C039", "C081", "C087", "C086", "C105", "C102", "C101"],
+      "overall": {"rows": 153, "danAny": 60, "danGe2": 9, "coverGe1": 116, "coverGe2": 56, "coverGe3": 20, "totalCover": 194, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "blocks": {"D1": {"rows": 51, "coverGe3": 7, "totalCover": 71}, "D2": {"rows": 51, "coverGe3": 6, "totalCover": 60}, "D3": {"rows": 51, "coverGe3": 7, "totalCover": 63}},
+      "key": {"minBlock": 6, "blockVariance": 0.22222222222222224}
+    },
+    {
+      "ensembleSize": 9,
+      "baseIds": ["C039", "C081", "C087", "C086", "C105", "C102", "C101", "C048", "C050"],
+      "overall": {"rows": 153, "danAny": 57, "danGe2": 8, "coverGe1": 114, "coverGe2": 54, "coverGe3": 19, "totalCover": 188, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "blocks": {"D1": {"rows": 51, "coverGe3": 8, "totalCover": 69}, "D2": {"rows": 51, "coverGe3": 6, "totalCover": 57}, "D3": {"rows": 51, "coverGe3": 5, "totalCover": 62}},
+      "key": {"minBlock": 5, "blockVariance": 1.5555555555555554}
+    }
+  ],
+  "champion": {
+    "algorithm": "time_block_reciprocal_rank_v1",
+    "ensembleSize": 7,
+    "baseStrategies": [
+      {"id": "C039", "family": "FREQUENCY", "params": {"short": 8, "medium": 20, "long": 38, "weights": [0.3, 0.3, 0.4]}, "complexity": 4},
+      {"id": "C081", "family": "FREQUENCY", "params": {"short": 12, "medium": 20, "long": 100, "weights": [0.3, 0.3, 0.4]}, "complexity": 4},
+      {"id": "C087", "family": "FREQUENCY", "params": {"short": 12, "medium": 30, "long": 60, "weights": [0.3, 0.3, 0.4]}, "complexity": 4},
+      {"id": "C086", "family": "FREQUENCY", "params": {"short": 12, "medium": 30, "long": 60, "weights": [0.4, 0.4, 0.2]}, "complexity": 4},
+      {"id": "C105", "family": "FREQUENCY", "params": {"short": 15, "medium": 30, "long": 60, "weights": [0.3, 0.3, 0.4]}, "complexity": 4},
+      {"id": "C102", "family": "FREQUENCY", "params": {"short": 15, "medium": 30, "long": 38, "weights": [0.3, 0.3, 0.4]}, "complexity": 4},
+      {"id": "C101", "family": "FREQUENCY", "params": {"short": 15, "medium": 30, "long": 38, "weights": [0.4, 0.4, 0.2]}, "complexity": 4}
+    ],
+    "selection": {"danCount": 3, "dragCount": 5, "danRepeatCap": 1, "allRepeatCap": 2, "tieBreak": "number_ascending"},
+    "vote": "mean(1/(1+zero_based_rank))",
+    "developmentBoundary": {"seed": "2025001-2025038", "targets": "2025039-2026041", "blocks": ["2025039-2025089", "2025090-2025140", "2025141-2026041"]}
+  },
+  "championDevelopment": {
+    "ensembleSize": 7,
+    "baseIds": ["C039", "C081", "C087", "C086", "C105", "C102", "C101"],
+    "overall": {"rows": 153, "danAny": 60, "danGe2": 9, "coverGe1": 116, "coverGe2": 56, "coverGe3": 20, "totalCover": 194, "maxDanRepeat": 1, "maxAllRepeat": 2},
+    "blocks": {
+      "D1": {"rows": 51, "danAny": 23, "danGe2": 3, "coverGe1": 41, "coverGe2": 23, "coverGe3": 7, "totalCover": 71, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "D2": {"rows": 51, "danAny": 15, "danGe2": 3, "coverGe1": 36, "coverGe2": 17, "coverGe3": 6, "totalCover": 60, "maxDanRepeat": 1, "maxAllRepeat": 2},
+      "D3": {"rows": 51, "danAny": 22, "danGe2": 3, "coverGe1": 39, "coverGe2": 16, "coverGe3": 7, "totalCover": 63, "maxDanRepeat": 1, "maxAllRepeat": 2}
+    }
+  },
+  "championSha256": "d9368639e29eee84987a9de56a55549c8159f92769c0c8b12ed444f8073445ee",
+  "validationOpenedAt": "2026-07-16T07:36:01.697Z",
+  "validation": {
+    "range": "2026042-2026079",
+    "rows": [
+      {"issue": 2026042, "state": "X", "dan": [9, 26, 34], "drag": [3, 12, 13, 22, 27], "blues": [1, 12], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026043, "state": "L", "dan": [12, 26, 34], "drag": [3, 7, 9, 13, 27], "blues": [1, 12], "danHits": 1, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 2},
+      {"issue": 2026044, "state": "L", "dan": [12, 13, 26], "drag": [3, 7, 9, 27, 34], "blues": [1, 10], "danHits": 1, "cover": 2, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 1},
+      {"issue": 2026045, "state": "M", "dan": [12, 13, 26], "drag": [7, 9, 22, 27, 34], "blues": [1, 4], "danHits": 1, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026046, "state": "H", "dan": [8, 12, 26], "drag": [9, 13, 22, 29, 34], "blues": [6, 8], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 1, "allRepeat": 1},
+      {"issue": 2026047, "state": "H", "dan": [12, 13, 26], "drag": [3, 8, 22, 33, 34], "blues": [6, 8], "danHits": 0, "cover": 0, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026048, "state": "H", "dan": [12, 13, 26], "drag": [8, 9, 21, 27, 33], "blues": [1, 9], "danHits": 0, "cover": 0, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 2},
+      {"issue": 2026049, "state": "X", "dan": [12, 13, 26], "drag": [8, 21, 22, 27, 33], "blues": [6, 8], "danHits": 0, "cover": 0, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 0},
+      {"issue": 2026050, "state": "L", "dan": [13, 21, 26], "drag": [8, 9, 12, 22, 33], "blues": [8, 9], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 0},
+      {"issue": 2026051, "state": "M", "dan": [13, 21, 26], "drag": [8, 9, 12, 27, 33], "blues": [5, 9], "danHits": 1, "cover": 2, "blueHits": 0, "unionHit": 1, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026052, "state": "X", "dan": [13, 21, 26], "drag": [9, 12, 23, 27, 33], "blues": [7, 12], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026053, "state": "M", "dan": [13, 26, 33], "drag": [8, 21, 23, 27, 28], "blues": [2, 5], "danHits": 0, "cover": 0, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026054, "state": "M", "dan": [13, 26, 33], "drag": [14, 20, 21, 23, 28], "blues": [2, 8], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 2},
+      {"issue": 2026055, "state": "L", "dan": [13, 14, 33], "drag": [2, 9, 20, 26, 28], "blues": [4, 7], "danHits": 1, "cover": 3, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026056, "state": "X", "dan": [2, 14, 33], "drag": [6, 13, 20, 22, 26], "blues": [1, 7], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026057, "state": "M", "dan": [14, 20, 33], "drag": [2, 6, 9, 13, 28], "blues": [7, 11], "danHits": 0, "cover": 0, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026058, "state": "X", "dan": [14, 20, 33], "drag": [2, 6, 9, 23, 26], "blues": [7, 8], "danHits": 0, "cover": 0, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 2},
+      {"issue": 2026059, "state": "M", "dan": [20, 26, 33], "drag": [2, 6, 9, 14, 23], "blues": [6, 7], "danHits": 1, "cover": 2, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 0},
+      {"issue": 2026060, "state": "M", "dan": [6, 20, 33], "drag": [2, 9, 13, 14, 18], "blues": [5, 6], "danHits": 0, "cover": 0, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026061, "state": "X", "dan": [6, 13, 33], "drag": [2, 14, 20, 26, 34], "blues": [2, 11], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026062, "state": "X", "dan": [6, 26, 33], "drag": [2, 13, 14, 20, 34], "blues": [5, 11], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 1, "allRepeat": 1},
+      {"issue": 2026063, "state": "H", "dan": [6, 26, 33], "drag": [2, 13, 18, 20, 34], "blues": [9, 11], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026064, "state": "H", "dan": [20, 26, 33], "drag": [2, 6, 7, 13, 34], "blues": [6, 11], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 1, "allRepeat": 1},
+      {"issue": 2026065, "state": "L", "dan": [20, 26, 33], "drag": [6, 7, 13, 31, 34], "blues": [9, 11], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026066, "state": "L", "dan": [13, 20, 26], "drag": [6, 12, 15, 33, 34], "blues": [5, 11], "danHits": 1, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026067, "state": "H", "dan": [13, 20, 26], "drag": [6, 12, 15, 21, 33], "blues": [6, 11], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026068, "state": "M", "dan": [13, 20, 26], "drag": [6, 12, 15, 21, 34], "blues": [4, 6], "danHits": 0, "cover": 2, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026069, "state": "L", "dan": [12, 13, 26], "drag": [6, 15, 20, 21, 34], "blues": [1, 3], "danHits": 1, "cover": 2, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026070, "state": "H", "dan": [3, 13, 21], "drag": [6, 12, 15, 20, 26], "blues": [1, 12], "danHits": 1, "cover": 2, "blueHits": 0, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026071, "state": "M", "dan": [12, 13, 21], "drag": [3, 6, 15, 19, 20], "blues": [9, 10], "danHits": 1, "cover": 1, "blueHits": 0, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026072, "state": "H", "dan": [12, 13, 21], "drag": [3, 15, 19, 20, 26], "blues": [1, 4], "danHits": 1, "cover": 2, "blueHits": 0, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026073, "state": "H", "dan": [12, 13, 21], "drag": [3, 15, 19, 22, 26], "blues": [1, 12], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 1, "allRepeat": 2},
+      {"issue": 2026074, "state": "H", "dan": [13, 21, 26], "drag": [12, 15, 19, 22, 29], "blues": [4, 7], "danHits": 0, "cover": 0, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026075, "state": "L", "dan": [12, 13, 21], "drag": [10, 15, 22, 26, 29], "blues": [4, 8], "danHits": 0, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026076, "state": "L", "dan": [13, 21, 26], "drag": [4, 10, 12, 22, 29], "blues": [5, 8], "danHits": 0, "cover": 0, "blueHits": 0, "unionHit": 0, "danRepeat": 1, "allRepeat": 1},
+      {"issue": 2026077, "state": "X", "dan": [13, 21, 26], "drag": [4, 10, 12, 15, 22], "blues": [2, 11], "danHits": 0, "cover": 1, "blueHits": 0, "unionHit": 0, "danRepeat": 0, "allRepeat": 1},
+      {"issue": 2026078, "state": "M", "dan": [13, 21, 26], "drag": [4, 10, 15, 19, 22], "blues": [5, 8], "danHits": 1, "cover": 1, "blueHits": 1, "unionHit": 1, "danRepeat": 0, "allRepeat": 2},
+      {"issue": 2026079, "state": "H", "dan": [13, 21, 26], "drag": [4, 10, 15, 19, 22], "blues": [2, 3], "danHits": 1, "cover": 1, "blueHits": 0, "unionHit": 1, "danRepeat": 1, "allRepeat": 1}
+    ],
+    "summary": {"rows": 38, "danAny": 13, "danGe2": 0, "coverGe1": 29, "coverGe2": 8, "coverGe3": 1, "totalCover": 38, "blueAny": 21, "union": 26, "maxDanRepeat": 1, "maxAllRepeat": 2},
+    "threshold": {"minimumCount": 14, "denominator": 38, "minimumRate": 36.8},
+    "decision": "FAIL_KEEP_V2"
+  },
+  "finalPrediction": {
+    "issue": 2026080,
+    "state": "M",
+    "dan": [4, 13, 26],
+    "drag": [10, 19, 20, 21, 22],
+    "all": [4, 10, 13, 19, 20, 21, 22, 26],
+    "blues": [2, 11],
+    "selectedRepeats": [26],
+    "danDeferred": [],
+    "skippedRepeat": [],
+    "danRepeat": 1,
+    "allRepeat": 1
+  }
+}
