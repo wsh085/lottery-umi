@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -14,6 +15,7 @@ from ssq_scheme_optimizer import (
     RED_NUMBERS,
     blue_multiclass_probabilities,
     blue_zone,
+    build_analysis_metadata,
     load_draws,
     localize_output,
     next_issue_id,
@@ -26,6 +28,7 @@ from ssq_scheme_optimizer import (
 
 
 DATA_PATH = Path("/Users/pupu/wsh_github/lottery-umi/dSsq/all_history_data.json")
+GUIDE_PATH = Path("/Users/pupu/wsh_github/lottery-umi/docs/ssq/双色球最新预测与复用指南.md")
 
 
 class TestSsqSchemeOptimizer(unittest.TestCase):
@@ -35,9 +38,9 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
 
     def test_validate_draws(self) -> None:
         summary = validate_draws(self.draws)
-        self.assertEqual(summary["draw_count"], 202)
+        self.assertEqual(summary["draw_count"], 203)
         self.assertEqual(summary["first_issue"], 2025030)
-        self.assertEqual(summary["last_issue"], 2026080)
+        self.assertEqual(summary["last_issue"], 2026081)
 
         with self.assertRaisesRegex(ValueError, "红球未升序排列"):
             validate_draws([Draw(issue="2026001", reds=(2, 1, 3, 4, 5, 6), blue=1)])
@@ -109,6 +112,17 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
         self.assertEqual(next_issue_id("2026079"), "2026080")
         self.assertEqual(next_issue_id("2025151", year_last_issue=151), "2026001")
 
+    def test_parameter_freeze_follows_latest_data(self) -> None:
+        metadata = build_analysis_metadata(self.draws)
+        latest_issue = self.draws[-1].issue
+        following_issue = next_issue_id(latest_issue)
+
+        self.assertEqual(metadata["parameter_freeze_issue"], latest_issue)
+        self.assertEqual(
+            metadata["evidence_status"],
+            f"当前模型版本冻结于{latest_issue}；{following_issue}及以后新增开奖才构成前向审计",
+        )
+
     def test_user_facing_output_uses_chinese_labels(self) -> None:
         localized = localize_output(
             {
@@ -133,44 +147,60 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
         for english_label in ("champion", "challenger", "softmax", "calibrated", "model_name"):
             self.assertNotIn(english_label, rendered)
 
-    def test_first_frozen_forward_audit(self) -> None:
-        # 2026080 是参数冻结于 2026079 后的首个真实前向审计点，预测必须来自前201期。
+    def test_latest_completed_forward_audit_before_refreeze(self) -> None:
+        # 2026081 的预测必须只来自前202期；本次重算后再把模型版本冻结于2026081。
         history = self.draws[:-1]
         actual = self.draws[-1]
         prediction = predict_at(history, len(history))
 
-        self.assertEqual(actual.issue, "2026080")
-        self.assertEqual(prediction["red_champion"]["numbers"], [1, 24])
-        self.assertEqual(prediction["red_challenger"]["numbers"], [9, 24])
+        self.assertEqual(actual.issue, "2026081")
+        self.assertEqual(prediction["red_champion"]["numbers"], [11, 19])
+        self.assertEqual(prediction["red_challenger"]["numbers"], [11, 23])
         self.assertEqual(prediction["blue"]["numbers"], [1, 2, 4, 8])
         self.assertFalse(set(prediction["red_champion"]["numbers"]) & set(actual.reds))
         self.assertFalse(set(prediction["red_challenger"]["numbers"]) & set(actual.reds))
-        self.assertIn(actual.blue, prediction["blue"]["numbers"])
+        self.assertNotIn(actual.blue, prediction["blue"]["numbers"])
+
+    def test_reuse_guide_matches_current_snapshot(self) -> None:
+        # 复用指南必须和当前数据快照、预测号码及38期逐期明细保持同步。
+        guide = GUIDE_PATH.read_text(encoding="utf-8")
+        self.assertIn("当前数据：2025030—2026081，共203期", guide)
+        self.assertIn(
+            "13019a64bb8a91ab0c6c5e98d8bdc9979500a959b9355053f763fca5c605a049",
+            guide,
+        )
+        self.assertIn("当前预测目标：2026082期", guide)
+        self.assertIn("| 红球主模型 | `24、27` |", guide)
+        self.assertIn("| 红球候选模型 | `24、33` |", guide)
+        self.assertIn("| 蓝球四码模型 | `01、02、04、07` |", guide)
+        paired_rows = re.findall(r"^\| 2026\d{3} \|", guide, flags=re.MULTILINE)
+        self.assertEqual(len(paired_rows), 38)
 
     def test_analysis_windows_are_consistent(self) -> None:
         result = run_full_analysis(DATA_PATH)
         self.assertEqual(result["data_summary"]["draw_count"], len(self.draws))
         self.assertEqual(
             result["data_summary"]["sha256"],
-            "2a216a63e38da9dbac343a96ff5804684f4ef569934c19b902ec3285d5226dd8",
+            "13019a64bb8a91ab0c6c5e98d8bdc9979500a959b9355053f763fca5c605a049",
         )
-        self.assertEqual(result["next_issue"], "2026081")
-        self.assertEqual(result["red"]["prediction"], [11, 19])
-        self.assertEqual(result["red"]["champion"]["prediction"], [11, 19])
-        self.assertEqual(result["red"]["challenger"]["prediction"], [11, 23])
-        self.assertEqual(result["red"]["champion"]["windows"]["38"]["hits"], 19)
+        self.assertEqual(result["next_issue"], "2026082")
+        self.assertEqual(result["metadata"]["parameter_freeze_issue"], "2026081")
+        self.assertEqual(result["red"]["prediction"], [24, 27])
+        self.assertEqual(result["red"]["champion"]["prediction"], [24, 27])
+        self.assertEqual(result["red"]["challenger"]["prediction"], [24, 33])
+        self.assertEqual(result["red"]["champion"]["windows"]["38"]["hits"], 18)
         self.assertEqual(result["red"]["challenger"]["windows"]["38"]["hits"], 15)
         self.assertEqual(
             result["red"]["paired_comparison_38"],
             {
                 "both": 12,
-                "champion_only": 7,
+                "champion_only": 6,
                 "challenger_only": 3,
-                "neither": 16,
-                "mcnemar_exact_two_sided": 0.34375,
+                "neither": 17,
+                "mcnemar_exact_two_sided": 0.5078125,
             },
         )
-        self.assertEqual(result["blue"]["prediction"], [1, 2, 4, 8])
+        self.assertEqual(result["blue"]["prediction"], [1, 2, 4, 7])
         self.assertEqual(result["blue"]["windows"]["38"]["hits"], 14)
         self.assertEqual(result["blue"]["probability_status"], "softmax_normalized_not_calibrated")
         self.assertEqual(result["metadata"]["ml_training_target_lookback"], 72)

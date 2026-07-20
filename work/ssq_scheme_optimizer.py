@@ -1551,6 +1551,24 @@ def backtest_blue(draws: list[Draw], *, window: int) -> dict[str, object]:
     }
 
 
+def build_analysis_metadata(draws: list[Draw]) -> dict[str, object]:
+    """根据当前数据末期生成模型版本冻结信息，避免继续沿用旧快照期号。"""
+    if not draws:
+        raise ValueError("生成分析元数据前至少需要1期开奖数据")
+    latest_issue = draws[-1].issue
+    following_issue = next_issue_id(latest_issue)
+    return {
+        "ml_training_target_lookback": ML_TRAINING_TARGET_LOOKBACK,
+        "blue_parameter_grid_size": len(BLUE_PARAMETER_GRID),
+        "blue_temperature_status": "固定为0.9，仅影响分布陡峭度，不参与Top4命中率搜索",
+        "parameter_freeze_issue": latest_issue,
+        "evidence_status": (
+            f"当前模型版本冻结于{latest_issue}；"
+            f"{following_issue}及以后新增开奖才构成前向审计"
+        ),
+    }
+
+
 def run_full_analysis(data_path: str | Path) -> dict[str, object]:
     draws = load_draws(data_path)
     summary = validate_draws(draws)
@@ -1572,13 +1590,7 @@ def run_full_analysis(data_path: str | Path) -> dict[str, object]:
         "data_summary": summary,
         "next_issue": next_issue_id(draws[-1].issue),
         "next_issue_note": "年内按序号加1；年末需根据官方末期号显式触发跨年",
-        "metadata": {
-            "ml_training_target_lookback": ML_TRAINING_TARGET_LOOKBACK,
-            "blue_parameter_grid_size": len(BLUE_PARAMETER_GRID),
-            "blue_temperature_status": "固定为0.9，仅影响分布陡峭度，不参与Top4命中率搜索",
-            "parameter_freeze_issue": "2026079",
-            "evidence_status": "当前结果属于开发样本证据；冻结后新增开奖才构成真正前向审计",
-        },
+        "metadata": build_analysis_metadata(draws),
         "red": {
             "prediction": red_champion["numbers"],
             "model_status": "rule_champion_active; logistic_fusion_challenger_not_promoted",

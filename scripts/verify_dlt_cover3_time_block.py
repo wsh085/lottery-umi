@@ -13,11 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_2025 = ROOT / "data" / "da_2025_data.json"
 DATA_2026 = ROOT / "data" / "da_2026_data.json"
-FREEZE = ROOT / "docs" / "lottery" / "大乐透8红三球覆盖开发冻结记录_2026080.json"
-FREEZE_MD = ROOT / "docs" / "lottery" / "大乐透8红三球覆盖开发冻结记录_2026080.md"
-FAIL_MD = ROOT / "docs" / "lottery" / "大乐透8红三球覆盖独立验证失败报告_2026080.md"
+FREEZE = ROOT / "docs" / "lottery" / "archive" / "大乐透8红三球覆盖开发冻结记录_2026080.json"
 CANONICAL_MD = ROOT / "docs" / "lottery" / "大乐透3胆5拖2蓝_预测方案综合复用版.md"
-ISSUE_MD = ROOT / "docs" / "lottery" / "大乐透2026080期_3胆5拖2蓝_严格滚动预测.md"
 
 DEV_END = 2026041
 DEV_TARGET_START = 2025039
@@ -383,16 +380,17 @@ def main() -> None:
     require(final_selected["dan"] == final["dan"] and final_selected["drag"] == final["drag"] and final_selected["all"] == final["all"], "失败候选2026080前区不一致")
     require(predict_blue(draws) == final["blues"], "失败候选2026080后区不一致")
 
-    freeze_md = FREEZE_MD.read_text(encoding="utf-8")
-    fail_md = FAIL_MD.read_text(encoding="utf-8")
+    markdown_files = sorted((ROOT / "docs" / "lottery").rglob("*.md"))
+    require(markdown_files == [CANONICAL_MD], f"docs/lottery应只保留唯一Markdown：{markdown_files}")
     canonical_md = CANONICAL_MD.read_text(encoding="utf-8")
-    issue_md = ISSUE_MD.read_text(encoding="utf-8")
-    require("VALIDATION_OPENED_ONCE" in freeze_md and "FAIL_KEEP_V2" in fail_md, "冻结/失败文档标记缺失")
-    require(sum(f"| {row['issue']} |" in fail_md for row in stored_rows) == 38, "失败报告未包含38期")
+    require(freeze["status"] == "VALIDATION_OPENED_ONCE"
+            and freeze["validation"]["decision"] == "FAIL_KEEP_V2", "冻结JSON失败分支标记缺失")
+    require("TOP7_VALIDATION_CONSUMED" in canonical_md and "decision=FAIL_KEEP_V2" in canonical_md,
+            "唯一综合文档缺少Top 7失败审计标记")
     require("当前正式方案：** **重号均衡V2" in canonical_md, "综合文档被错误晋级")
-    require("红球胆码（3个）：04、25、27" in canonical_md and "红球胆码（3个）：04、25、27" in issue_md, "正式V2预测被错误替换")
+    require("红球胆码（3个）：04、25、27" in canonical_md, "正式V2预测被错误替换")
     require("红球8码全集：01、04、13、20、25、26、27、32" in canonical_md, "正式V2 8红被错误替换")
-    print("PROMOTION_BRANCH_OK canonical=V2 issue_report=V2 fail_report=created")
+    print("PROMOTION_BRANCH_OK canonical=V2 freeze_json=FAIL_KEEP_V2 single_markdown=1")
     print("INDEPENDENT_VERIFY_OK data=229 dev_targets=153 candidates=131 validation_rows=38 row_match=38/38 prediction_branch=V2")
 
 
