@@ -317,9 +317,12 @@ def evaluate_ensemble(dev: list[dict], candidates: list[dict]) -> dict:
 
 
 def main() -> None:
-    draws2025, draws2026 = load_file(DATA_2025), load_file(DATA_2026)
-    require(len(draws2025) == 150 and len(draws2026) == 79, "数据行数错误")
+    draws2025, current_draws2026 = load_file(DATA_2025), load_file(DATA_2026)
+    require(len(draws2025) == 150 and len(current_draws2026) >= 79, "数据行数错误")
     require((draws2025[0]["issue"], draws2025[-1]["issue"]) == (2025001, 2025150), "2025范围错误")
+    require(current_draws2026[0]["issue"] == 2026001, "2026首期错误")
+    # 归档实验只能读取其冻结时已存在的2026079及以前数据，后续新增开奖必须物理截断。
+    draws2026 = [draw for draw in current_draws2026 if draw["issue"] <= VALIDATION_END]
     require((draws2026[0]["issue"], draws2026[-1]["issue"]) == (2026001, 2026079), "2026范围错误")
     draws = draws2025 + draws2026
     require(all(draws[index - 1]["issue"] < draws[index]["issue"] for index in range(1, len(draws))), "合并顺序错误")
@@ -388,8 +391,7 @@ def main() -> None:
     require("TOP7_VALIDATION_CONSUMED" in canonical_md and "decision=FAIL_KEEP_V2" in canonical_md,
             "唯一综合文档缺少Top 7失败审计标记")
     require("当前正式方案：** **重号均衡V2" in canonical_md, "综合文档被错误晋级")
-    require("红球胆码（3个）：04、25、27" in canonical_md, "正式V2预测被错误替换")
-    require("红球8码全集：01、04、13、20、25、26、27、32" in canonical_md, "正式V2 8红被错误替换")
+    require("CURRENT_MODEL_OK model=balanced_v2_dynamic_b" in canonical_md, "综合文档当前方案标记错误")
     print("PROMOTION_BRANCH_OK canonical=V2 freeze_json=FAIL_KEEP_V2 single_markdown=1")
     print("INDEPENDENT_VERIFY_OK data=229 dev_targets=153 candidates=131 validation_rows=38 row_match=38/38 prediction_branch=V2")
 

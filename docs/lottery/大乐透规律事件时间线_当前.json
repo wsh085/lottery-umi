@@ -1,8 +1,10 @@
 {
   "meta": {
     "lottery": "大乐透",
-    "rows": 100,
-    "range": "2025130-2026079",
+    "rows": 101,
+    "range": "2025130-2026080",
+    "fixedGateRows": 100,
+    "fixedGateRange": "2025130-2026079",
     "trainRange": "2025130-2026049",
     "validationRange": "2026050-2026079",
     "omissionWarmupRange": "2025001-2025129",
@@ -69,7 +71,8 @@
         "matched": true
       }
     ],
-    "dataHash": "295a4fa24caf3d40a57923643c2965e727c1ff404a0c6be1fa5ce19256125112"
+    "dataHash": "d9b80a5b014f63e610ee8b40a693eb32a113be46aa9c458cfe4956bf51079bd5",
+    "fixedGateDataHash": "295a4fa24caf3d40a57923643c2965e727c1ff404a0c6be1fa5ce19256125112"
   },
   "rows": [
     {
@@ -125,7 +128,7 @@
       "redSum": 86,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025131,
@@ -180,7 +183,7 @@
       "redSum": 97,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:0:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025132,
@@ -235,7 +238,7 @@
       "redSum": 51,
       "oddEvenRatio": "3:2",
       "zoneRatio": "4:1:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025133,
@@ -290,7 +293,7 @@
       "redSum": 100,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025134,
@@ -345,7 +348,7 @@
       "redSum": 97,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025135,
@@ -400,7 +403,7 @@
       "redSum": 88,
       "oddEvenRatio": "0:5",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025136,
@@ -455,7 +458,7 @@
       "redSum": 72,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025137,
@@ -510,7 +513,7 @@
       "redSum": 57,
       "oddEvenRatio": "3:2",
       "zoneRatio": "4:1:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025138,
@@ -565,7 +568,7 @@
       "redSum": 67,
       "oddEvenRatio": "5:0",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025139,
@@ -620,7 +623,7 @@
       "redSum": 113,
       "oddEvenRatio": "1:4",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025140,
@@ -675,7 +678,7 @@
       "redSum": 74,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025141,
@@ -730,7 +733,7 @@
       "redSum": 94,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025142,
@@ -785,7 +788,7 @@
       "redSum": 89,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025143,
@@ -840,7 +843,7 @@
       "redSum": 78,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025144,
@@ -895,7 +898,7 @@
       "redSum": 63,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025145,
@@ -950,7 +953,7 @@
       "redSum": 79,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025146,
@@ -1005,7 +1008,7 @@
       "redSum": 68,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025147,
@@ -1060,7 +1063,7 @@
       "redSum": 101,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025148,
@@ -1115,7 +1118,7 @@
       "redSum": 83,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025149,
@@ -1170,7 +1173,7 @@
       "redSum": 143,
       "oddEvenRatio": "1:4",
       "zoneRatio": "0:1:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2025150,
@@ -1225,7 +1228,7 @@
       "redSum": 101,
       "oddEvenRatio": "3:2",
       "zoneRatio": "0:3:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026001,
@@ -1280,7 +1283,7 @@
       "redSum": 98,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026002,
@@ -1335,7 +1338,7 @@
       "redSum": 78,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026003,
@@ -1390,7 +1393,7 @@
       "redSum": 53,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:2:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026004,
@@ -1445,7 +1448,7 @@
       "redSum": 103,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026005,
@@ -1500,7 +1503,7 @@
       "redSum": 80,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026006,
@@ -1555,7 +1558,7 @@
       "redSum": 93,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026007,
@@ -1610,7 +1613,7 @@
       "redSum": 63,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026008,
@@ -1665,7 +1668,7 @@
       "redSum": 80,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026009,
@@ -1720,7 +1723,7 @@
       "redSum": 77,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026010,
@@ -1775,7 +1778,7 @@
       "redSum": 62,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026011,
@@ -1830,7 +1833,7 @@
       "redSum": 120,
       "oddEvenRatio": "4:1",
       "zoneRatio": "0:3:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026012,
@@ -1885,7 +1888,7 @@
       "redSum": 59,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026013,
@@ -1940,7 +1943,7 @@
       "redSum": 63,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026014,
@@ -1995,7 +1998,7 @@
       "redSum": 126,
       "oddEvenRatio": "2:3",
       "zoneRatio": "0:3:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026015,
@@ -2050,7 +2053,7 @@
       "redSum": 45,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:2:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026016,
@@ -2105,7 +2108,7 @@
       "redSum": 72,
       "oddEvenRatio": "2:3",
       "zoneRatio": "3:2:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026017,
@@ -2160,7 +2163,7 @@
       "redSum": 73,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026018,
@@ -2215,7 +2218,7 @@
       "redSum": 104,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026019,
@@ -2270,7 +2273,7 @@
       "redSum": 86,
       "oddEvenRatio": "2:3",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026020,
@@ -2325,7 +2328,7 @@
       "redSum": 84,
       "oddEvenRatio": "4:1",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026021,
@@ -2380,7 +2383,7 @@
       "redSum": 56,
       "oddEvenRatio": "2:3",
       "zoneRatio": "3:2:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026022,
@@ -2435,7 +2438,7 @@
       "redSum": 68,
       "oddEvenRatio": "2:3",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026023,
@@ -2490,7 +2493,7 @@
       "redSum": 115,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:0:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026024,
@@ -2545,7 +2548,7 @@
       "redSum": 45,
       "oddEvenRatio": "1:4",
       "zoneRatio": "4:1:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026025,
@@ -2600,7 +2603,7 @@
       "redSum": 99,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026026,
@@ -2655,7 +2658,7 @@
       "redSum": 101,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026027,
@@ -2710,7 +2713,7 @@
       "redSum": 58,
       "oddEvenRatio": "2:3",
       "zoneRatio": "4:1:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026028,
@@ -2765,7 +2768,7 @@
       "redSum": 135,
       "oddEvenRatio": "3:2",
       "zoneRatio": "0:1:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026029,
@@ -2820,7 +2823,7 @@
       "redSum": 93,
       "oddEvenRatio": "5:0",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026030,
@@ -2875,7 +2878,7 @@
       "redSum": 99,
       "oddEvenRatio": "1:4",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026031,
@@ -2930,7 +2933,7 @@
       "redSum": 99,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026032,
@@ -2985,7 +2988,7 @@
       "redSum": 84,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026033,
@@ -3040,7 +3043,7 @@
       "redSum": 42,
       "oddEvenRatio": "4:1",
       "zoneRatio": "4:1:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026034,
@@ -3095,7 +3098,7 @@
       "redSum": 101,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:0:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026035,
@@ -3150,7 +3153,7 @@
       "redSum": 121,
       "oddEvenRatio": "1:4",
       "zoneRatio": "1:1:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026036,
@@ -3205,7 +3208,7 @@
       "redSum": 85,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026037,
@@ -3260,7 +3263,7 @@
       "redSum": 92,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026038,
@@ -3315,7 +3318,7 @@
       "redSum": 114,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026039,
@@ -3370,7 +3373,7 @@
       "redSum": 93,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026040,
@@ -3425,7 +3428,7 @@
       "redSum": 86,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026041,
@@ -3480,7 +3483,7 @@
       "redSum": 139,
       "oddEvenRatio": "3:2",
       "zoneRatio": "0:1:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026042,
@@ -3535,7 +3538,7 @@
       "redSum": 65,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026043,
@@ -3590,7 +3593,7 @@
       "redSum": 75,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026044,
@@ -3645,7 +3648,7 @@
       "redSum": 88,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026045,
@@ -3700,7 +3703,7 @@
       "redSum": 96,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026046,
@@ -3755,7 +3758,7 @@
       "redSum": 92,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026047,
@@ -3810,7 +3813,7 @@
       "redSum": 101,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026048,
@@ -3865,7 +3868,7 @@
       "redSum": 106,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026049,
@@ -3920,7 +3923,7 @@
       "redSum": 53,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026050,
@@ -3975,7 +3978,7 @@
       "redSum": 86,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026051,
@@ -4030,7 +4033,7 @@
       "redSum": 124,
       "oddEvenRatio": "2:3",
       "zoneRatio": "0:2:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026052,
@@ -4085,7 +4088,7 @@
       "redSum": 86,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026053,
@@ -4140,7 +4143,7 @@
       "redSum": 76,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026054,
@@ -4195,7 +4198,7 @@
       "redSum": 68,
       "oddEvenRatio": "0:5",
       "zoneRatio": "2:3:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026055,
@@ -4250,7 +4253,7 @@
       "redSum": 107,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026056,
@@ -4305,7 +4308,7 @@
       "redSum": 82,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026057,
@@ -4360,7 +4363,7 @@
       "redSum": 135,
       "oddEvenRatio": "3:2",
       "zoneRatio": "0:1:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026058,
@@ -4415,7 +4418,7 @@
       "redSum": 84,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026059,
@@ -4470,7 +4473,7 @@
       "redSum": 81,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026060,
@@ -4525,7 +4528,7 @@
       "redSum": 145,
       "oddEvenRatio": "1:4",
       "zoneRatio": "0:1:4",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026061,
@@ -4580,7 +4583,7 @@
       "redSum": 114,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:0:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026062,
@@ -4635,7 +4638,7 @@
       "redSum": 95,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026063,
@@ -4690,7 +4693,7 @@
       "redSum": 98,
       "oddEvenRatio": "4:1",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026064,
@@ -4745,7 +4748,7 @@
       "redSum": 69,
       "oddEvenRatio": "5:0",
       "zoneRatio": "1:4:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026065,
@@ -4800,7 +4803,7 @@
       "redSum": 65,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026066,
@@ -4855,7 +4858,7 @@
       "redSum": 93,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026067,
@@ -4910,7 +4913,7 @@
       "redSum": 87,
       "oddEvenRatio": "1:4",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026068,
@@ -4965,7 +4968,7 @@
       "redSum": 69,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:2:0",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026069,
@@ -5020,7 +5023,7 @@
       "redSum": 105,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026070,
@@ -5075,7 +5078,7 @@
       "redSum": 77,
       "oddEvenRatio": "3:2",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026071,
@@ -5130,7 +5133,7 @@
       "redSum": 98,
       "oddEvenRatio": "2:3",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026072,
@@ -5185,7 +5188,7 @@
       "redSum": 99,
       "oddEvenRatio": "3:2",
       "zoneRatio": "1:1:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026073,
@@ -5240,7 +5243,7 @@
       "redSum": 92,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026074,
@@ -5295,7 +5298,7 @@
       "redSum": 63,
       "oddEvenRatio": "3:2",
       "zoneRatio": "3:1:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026075,
@@ -5350,7 +5353,7 @@
       "redSum": 67,
       "oddEvenRatio": "1:4",
       "zoneRatio": "2:2:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026076,
@@ -5405,7 +5408,7 @@
       "redSum": 125,
       "oddEvenRatio": "3:2",
       "zoneRatio": "0:2:3",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026077,
@@ -5460,7 +5463,7 @@
       "redSum": 88,
       "oddEvenRatio": "2:3",
       "zoneRatio": "1:3:1",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026078,
@@ -5515,7 +5518,7 @@
       "redSum": 92,
       "oddEvenRatio": "2:3",
       "zoneRatio": "1:2:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
     },
     {
       "issue": 2026079,
@@ -5570,7 +5573,62 @@
       "redSum": 90,
       "oddEvenRatio": "2:3",
       "zoneRatio": "2:1:2",
-      "sourceRange": "2025130-2026079"
+      "sourceRange": "2025130-2026080"
+    },
+    {
+      "issue": 2026080,
+      "reds": [
+        5,
+        10,
+        15,
+        21,
+        23
+      ],
+      "blues": [
+        7,
+        8
+      ],
+      "redOmissionBefore": {
+        "10": 5,
+        "11": 11,
+        "12": 10,
+        "13": 1,
+        "14": 2,
+        "15": 3,
+        "16": 4,
+        "17": 15,
+        "18": 4,
+        "19": 2,
+        "20": 1,
+        "21": 9,
+        "22": 6,
+        "23": 0,
+        "24": 2,
+        "25": 1,
+        "26": 0,
+        "27": 0,
+        "28": 3,
+        "29": 7,
+        "30": 7,
+        "31": 16,
+        "32": 1,
+        "33": 6,
+        "34": 19,
+        "35": 3,
+        "01": 4,
+        "02": 1,
+        "03": 11,
+        "04": 2,
+        "05": 8,
+        "06": 0,
+        "07": 17,
+        "08": 0,
+        "09": 24
+      },
+      "redSum": 74,
+      "oddEvenRatio": "4:1",
+      "zoneRatio": "2:3:0",
+      "sourceRange": "2025130-2026080"
     }
   ]
 }

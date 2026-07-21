@@ -14,6 +14,7 @@ import {
   longGapCandidates,
   loadAllDraws,
   matchOutcomeBlindControls,
+  nextIssue,
   passesGate,
   recentMetricsFromPairs,
   rollingDynamicBacktest,
@@ -236,9 +237,29 @@ test('动态最近38期严格滚动行数和权重上限', () => {
   const rows = standardizeRange(draws);
   const rolling = rollingDynamicBacktest(draws, rows);
   assert.equal(rolling.rows.length, 38);
-  assert.equal(rolling.rows[0].issue, 2026042);
-  assert.equal(rolling.rows.at(-1).issue, 2026079);
+  assert.equal(rolling.range, '2026043-2026080');
+  assert.equal(rolling.rows[0].issue, 2026043);
+  assert.equal(rolling.rows.at(-1).issue, 2026080);
   assert.ok(rolling.rows.every((item) => item.ruleHistoryEnd < item.issue));
   assert.ok(rolling.rows.every((item) => item.trialWeight <= 0.05 + 1e-12));
   assert.ok(rolling.rows.every((item) => item.totalRuleWeight <= 0.15 + 1e-12));
+  for (const model of ['baselineV2', 'dynamic']) {
+    assert.equal(Object.values(rolling.diagnostics.repeatDistributions[model].dan).reduce((sum, value) => sum + value, 0), 38);
+    assert.equal(Object.values(rolling.diagnostics.repeatDistributions[model].all).reduce((sum, value) => sum + value, 0), 38);
+    assert.ok(rolling.diagnostics.repeatDistributions[model].maxDan <= 1);
+    assert.ok(rolling.diagnostics.repeatDistributions[model].maxAll <= 2);
+  }
+});
+
+test('新增开奖后目标期自动推导且规律时间线扩展但固定门槛范围不滑动', () => {
+  const draws = loadAllDraws();
+  const rows = standardizeRange(draws);
+  assert.equal(draws.length, 230);
+  assert.equal(draws.at(-1).issue, 2026080);
+  assert.equal(nextIssue(draws.at(-1).issue), 2026081);
+  assert.equal(rows.length, 101);
+  assert.equal(rows[0].issue, 2025130);
+  assert.equal(rows.at(-1).issue, 2026080);
+  assert.equal(rows.filter((item) => item.issue <= 2026049).length, 70);
+  assert.equal(rows.filter((item) => item.issue >= 2026050 && item.issue <= 2026079).length, 30);
 });

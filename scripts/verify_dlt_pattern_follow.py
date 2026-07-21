@@ -12,15 +12,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_2025 = ROOT / "data" / "da_2025_data.json"
 DATA_2026 = ROOT / "data" / "da_2026_data.json"
-DATABASE = ROOT / "docs" / "lottery" / "大乐透近100期号码分布_2025130-2026079.json"
-ANALYSIS = ROOT / "docs" / "lottery" / "大乐透近100期号码规律验证_2026080.json"
+DATABASE = ROOT / "docs" / "lottery" / "大乐透规律事件时间线_当前.json"
+ANALYSIS = ROOT / "docs" / "lottery" / "大乐透预测机器审计_当前.json"
 CANONICAL = ROOT / "docs" / "lottery" / "大乐透3胆5拖2蓝_预测方案综合复用版.md"
 
-RANGE_START = 2025130
+TIMELINE_START = 2025130
 TRAIN_END = 2026049
 VALIDATION_START = 2026050
-RANGE_END = 2026079
-TARGET_ISSUE = 2026080
+FIXED_RANGE_END = 2026079
 
 RULES = (
     ("GAP_MIDDLE", "间隔号补中", (1, 2)),
@@ -88,10 +87,12 @@ def load_all() -> list[dict]:
     rows_2025 = load_file(DATA_2025)
     rows_2026 = load_file(DATA_2026)
     require(len(rows_2025) == 150 and rows_2025[0]["issue"] == 2025001 and rows_2025[-1]["issue"] == 2025150, "2025范围错误")
-    require(len(rows_2026) == 79 and rows_2026[0]["issue"] == 2026001 and rows_2026[-1]["issue"] == RANGE_END, "2026范围错误")
+    require(rows_2026 and rows_2026[0]["issue"] == 2026001, "2026首期范围错误")
+    for label, source_rows in (("2025", rows_2025), ("2026", rows_2026)):
+        require(all(source_rows[index - 1]["issue"] + 1 == source_rows[index]["issue"]
+                    for index in range(1, len(source_rows))), f"{label}期号不连续或未按时间升序")
     rows = rows_2025 + rows_2026
     require(all(rows[index - 1]["issue"] < rows[index]["issue"] for index in range(1, len(rows))), "期号未递增")
-    require(all(row["issue"] != TARGET_ISSUE for row in rows), "目标期已存在")
     return rows
 
 
@@ -113,7 +114,7 @@ def standardize(draws: list[dict]) -> list[dict]:
             f"{number:02d}": omission_values[number]
             for number in (*range(10, 36), *range(1, 10))
         }
-        if RANGE_START <= draw["issue"] <= RANGE_END:
+        if draw["issue"] >= TIMELINE_START:
             odd = sum(number % 2 for number in draw["reds"])
             zones = [0, 0, 0]
             for number in draw["reds"]:
@@ -126,11 +127,12 @@ def standardize(draws: list[dict]) -> list[dict]:
                 "redSum": sum(draw["reds"]),
                 "oddEvenRatio": f"{odd}:{5 - odd}",
                 "zoneRatio": ":".join(map(str, zones)),
-                "sourceRange": f"{RANGE_START}-{RANGE_END}",
+                "sourceRange": f"{TIMELINE_START}-{draws[-1]['issue']}",
             })
         for number in draw["reds"]:
             last_seen[number] = index
-    require(len(output) == 100 and output[0]["issue"] == RANGE_START and output[-1]["issue"] == RANGE_END, "100期标准化范围错误")
+    require(output and output[0]["issue"] == TIMELINE_START and output[-1]["issue"] == draws[-1]["issue"],
+            "规律事件时间线范围错误")
     return output
 
 
@@ -555,7 +557,7 @@ def prediction_hits(selection: dict, actual: dict) -> dict:
 
 
 def rolling_dynamic(all_draws: list[dict], rows: list[dict]) -> dict:
-    targets = [draw for draw in all_draws if 2026042 <= draw["issue"] <= RANGE_END]
+    targets = all_draws[-38:]
     require(len(targets) == 38, "独立动态滚动目标不是38期")
     rolling_rows = []
     for target in targets:
@@ -573,11 +575,15 @@ def rolling_dynamic(all_draws: list[dict], rows: list[dict]) -> dict:
             "trialWeight": prediction["trialWeight"], "coreWeight": prediction["coreWeight"],
             "totalRuleWeight": prediction["totalRuleWeight"], "v2Weight": prediction["v2Weight"],
             "changedFromV2": prediction["changedFromV2"], "ruleStates": prediction["ruleStates"],
-            "baselineV2": {**{key: prediction["baselineV2"][key] for key in ("dan", "drag", "all", "blues")}, **baseline_hits},
-            "dynamic": {**{key: prediction["final"][key] for key in ("dan", "drag", "all", "blues")}, **dynamic_hits},
+            "baselineV2": {**{key: prediction["baselineV2"][key] for key in (
+                "dan", "drag", "all", "blues", "danRepeats", "selectedRepeats", "danRepeat", "allRepeat"
+            )}, **baseline_hits},
+            "dynamic": {**{key: prediction["final"][key] for key in (
+                "dan", "drag", "all", "blues", "danRepeats", "selectedRepeats", "danRepeat", "allRepeat"
+            )}, **dynamic_hits},
             "actualReds": target["reds"], "actualBlues": target["blues"],
         })
-    return {"rows": rolling_rows}
+    return {"range": f"{targets[0]['issue']}-{targets[-1]['issue']}", "rows": rolling_rows}
 
 
 def compare_dynamic_state(local: dict, remote: dict, label: str) -> None:
@@ -599,18 +605,29 @@ def compare_float(actual: float, expected: float, label: str) -> None:
 
 def main() -> None:
     all_draws = load_all()
+    latest_issue = all_draws[-1]["issue"]
+    target_issue = latest_issue + 1
     rows = standardize(all_draws)
     database = json.loads(DATABASE.read_text(encoding="utf-8"))
     analysis = json.loads(ANALYSIS.read_text(encoding="utf-8"))
-    require(database["rows"] == rows, "标准化100期数据库与独立重建不一致")
+    require(database["rows"] == rows, "规律事件时间线与独立重建不一致")
     compact_rows = json.dumps(rows, ensure_ascii=False, separators=(",", ":"))
     data_hash = hashlib.sha256(compact_rows.encode()).hexdigest()
-    require(data_hash == database["meta"]["dataHash"] == analysis["data"]["dataHash"], "100期数据哈希不一致")
+    require(data_hash == database["meta"]["dataHash"] == analysis["data"]["dataHash"], "规律事件时间线数据哈希不一致")
     require(long_gap([1, 9, 20, 25, 35]) == [13, 14, 15, 16], "双中点四码复核失败")
     require(diagonal([10], [9, 11]) == [7, 8, 12, 13], "双向斜连复核失败")
 
-    train_rows = [row for row in rows if row["issue"] <= TRAIN_END]
-    validation_rows = [row for row in rows if row["issue"] >= VALIDATION_START]
+    fixed_rows = [row for row in rows if row["issue"] <= FIXED_RANGE_END]
+    require(len(fixed_rows) == 100 and fixed_rows[0]["issue"] == TIMELINE_START
+            and fixed_rows[-1]["issue"] == FIXED_RANGE_END, "固定100期总体门槛范围发生滑动")
+    fixed_hash_rows = [{**row, "sourceRange": f"{TIMELINE_START}-{FIXED_RANGE_END}"} for row in fixed_rows]
+    fixed_hash = hashlib.sha256(json.dumps(
+        fixed_hash_rows, ensure_ascii=False, separators=(",", ":")
+    ).encode()).hexdigest()
+    require(fixed_hash == database["meta"]["fixedGateDataHash"] == analysis["data"]["fixedGateDataHash"],
+            "固定100期数据哈希不一致")
+    train_rows = [row for row in fixed_rows if row["issue"] <= TRAIN_END]
+    validation_rows = [row for row in fixed_rows if VALIDATION_START <= row["issue"] <= FIXED_RANGE_END]
     require(len(train_rows) == 70 and len(validation_rows) == 30, "70/30切分错误")
     node_rules = {item["id"]: item for item in analysis["rules"]}
     accepted = []
@@ -655,7 +672,10 @@ def main() -> None:
     remote_prediction = analysis["prediction"]["final"]
     for key in ("dan", "drag", "all", "selectedRepeats", "danRepeats", "danDeferred", "skippedRepeat", "danRepeat", "allRepeat", "blues"):
         require(prediction[key] == remote_prediction[key], f"最终预测{key}不一致")
-    require(state(all_draws) == analysis["prediction"]["state"] == "M", "目标状态不一致")
+    require(state(all_draws) == analysis["prediction"]["state"] == "L", "目标状态不一致")
+    require(analysis["data"]["latestIssue"] == latest_issue
+            and analysis["data"]["targetIssue"] == analysis["prediction"]["issue"] == target_issue,
+            "最新期或自动推导目标期不一致")
 
     # 独立重算当前动态权重与最终号码。
     local_dynamic = dynamic_predict(all_draws, rows, accepted)
@@ -676,6 +696,7 @@ def main() -> None:
     # 最近38期逐期重建：历史截止期、权重、号码和命中均逐行比对。
     local_rolling = rolling_dynamic(all_draws, rows)
     remote_rolling = analysis["dynamicGate"]["rolling38"]
+    require(local_rolling["range"] == remote_rolling["range"], "38期滚动范围不一致")
     require(len(local_rolling["rows"]) == len(remote_rolling["rows"]) == 38, "动态滚动行数不一致")
     baseline_summary = {key: 0 for key in ("danAny", "danGe2", "coverGe1", "coverGe2", "coverGe3", "totalCover", "blueAny", "union")}
     dynamic_summary = dict(baseline_summary)
@@ -692,7 +713,8 @@ def main() -> None:
                 activation_counts[local_state["id"]] += 1
         for selection_name, summary in (("baselineV2", baseline_summary), ("dynamic", dynamic_summary)):
             local_selection, remote_selection = local_row[selection_name], remote_row[selection_name]
-            for key in ("dan", "drag", "all", "blues", "danHits", "cover", "blueHits", "unionHit"):
+            for key in ("dan", "drag", "all", "blues", "danRepeats", "selectedRepeats", "danRepeat",
+                        "allRepeat", "danHits", "cover", "blueHits", "unionHit"):
                 require(local_selection[key] == remote_selection[key], f"rolling.{issue}.{selection_name}.{key}不一致")
             summary["danAny"] += int(local_selection["danHits"] >= 1)
             summary["danGe2"] += int(local_selection["danHits"] >= 2)
@@ -713,25 +735,45 @@ def main() -> None:
             "38期换号期数不一致")
     compare_float(sum(weights) / len(weights), remote_rolling["diagnostics"]["averageRuleWeight"], "rolling.averageRuleWeight")
     compare_float(max(weights), remote_rolling["diagnostics"]["maximumRuleWeight"], "rolling.maximumRuleWeight")
+    repeat_distributions = {}
+    for label in ("baselineV2", "dynamic"):
+        dan_distribution: dict[str, int] = {}
+        all_distribution: dict[str, int] = {}
+        for row in local_rolling["rows"]:
+            dan_key = str(row[label]["danRepeat"])
+            all_key = str(row[label]["allRepeat"])
+            dan_distribution[dan_key] = dan_distribution.get(dan_key, 0) + 1
+            all_distribution[all_key] = all_distribution.get(all_key, 0) + 1
+        repeat_distributions[label] = {
+            "dan": dan_distribution,
+            "all": all_distribution,
+            "maxDan": max(row[label]["danRepeat"] for row in local_rolling["rows"]),
+            "maxAll": max(row[label]["allRepeat"] for row in local_rolling["rows"]),
+        }
+    require(repeat_distributions == remote_rolling["diagnostics"]["repeatDistributions"],
+            "38期重号分布不一致")
+    require(all(item["baselineV2"]["danRepeat"] <= 1 and item["baselineV2"]["allRepeat"] <= 2
+                and item["dynamic"]["danRepeat"] <= 1 and item["dynamic"]["allRepeat"] <= 2
+                for item in local_rolling["rows"]), "38期重号上限被突破")
 
     markdown_files = sorted((ROOT / "docs" / "lottery").rglob("*.md"))
     require(markdown_files == [CANONICAL], f"docs/lottery应只保留唯一Markdown：{markdown_files}")
     canonical_text = CANONICAL.read_text(encoding="utf-8")
-    marker = f"PATTERN_GATE_OK range={RANGE_START}-{RANGE_END} train={RANGE_START}-{TRAIN_END} validation={VALIDATION_START}-{RANGE_END} rules=8 accepted={len(accepted)} active={len(active)} decision=KEEP_V2"
+    marker = f"PATTERN_GATE_OK range={TIMELINE_START}-{FIXED_RANGE_END} train={TIMELINE_START}-{TRAIN_END} validation={VALIDATION_START}-{FIXED_RANGE_END} rules=8 accepted={len(accepted)} active={len(active)} decision=KEEP_V2"
     require(marker in canonical_text, "唯一综合文档缺少规律门控审计标记")
     independent_marker = f"INDEPENDENT_VERIFY_OK rows={len(rows)} rules={len(RULES)} accepted={len(accepted)} prediction_match=1 data_hash={data_hash}"
     require(independent_marker in canonical_text, "唯一综合文档缺少固定层独立复核标记")
     dynamic_marker = (f"DYNAMIC_INDEPENDENT_VERIFY_OK rows=38 active={len(local_dynamic['activeRules'])} "
                       f"prediction_match=1 data_hash={data_hash}")
     require(dynamic_marker in canonical_text, "唯一综合文档缺少动态独立复核标记")
-    require("红球胆码（3个）：04、25、27" in canonical_text, "综合复用文档胆码不一致")
-    require("红球拖码（5个）：01、13、20、26、32" in canonical_text, "综合复用文档拖码不一致")
-    require("蓝球（2个）：02、11" in canonical_text, "综合复用文档蓝球不一致")
+    require("红球胆码（3个）：04、23、26" in canonical_text, "综合复用文档胆码不一致")
+    require("红球拖码（5个）：06、13、21、27、32" in canonical_text, "综合复用文档拖码不一致")
+    require("蓝球（2个）：02、03" in canonical_text, "综合复用文档蓝球不一致")
 
     print(f"DATA_REBUILD_OK rows={len(rows)} range={rows[0]['issue']}-{rows[-1]['issue']} hash={data_hash}")
     print(f"RULE_RECALC_OK rules={len(RULES)} accepted={len(accepted)} active={len(active)}")
     print("EVENT_DEFINITION_OK diagonal=bidirectional long_gap=missing>=10 even_midpoint=4")
-    print(f"PREDICTION_RECALC_OK issue={TARGET_ISSUE} dan={','.join(f'{n:02d}' for n in prediction['dan'])} drag={','.join(f'{n:02d}' for n in prediction['drag'])} blue={','.join(f'{n:02d}' for n in prediction['blues'])}")
+    print(f"PREDICTION_RECALC_OK issue={target_issue} dan={','.join(f'{n:02d}' for n in prediction['dan'])} drag={','.join(f'{n:02d}' for n in prediction['drag'])} blue={','.join(f'{n:02d}' for n in prediction['blues'])}")
     print(f"DYNAMIC_RECALC_OK rows=38 active={len(local_dynamic['activeRules'])} enabled={remote_rolling['diagnostics']['enabledPeriods']} changed={remote_rolling['diagnostics']['changedPeriods']}")
     print("DOCUMENT_MATCH_OK canonical=1 analysis_json=1 single_markdown=1")
     print("DYNAMIC_INDEPENDENT_VERIFY_OK")

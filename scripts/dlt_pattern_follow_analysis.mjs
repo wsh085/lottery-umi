@@ -10,14 +10,17 @@ const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(SCRIPT_PATH), '..');
 const DATA_2025 = path.join(ROOT, 'data', 'da_2025_data.json');
 const DATA_2026 = path.join(ROOT, 'data', 'da_2026_data.json');
-const DATABASE_JSON = path.join(ROOT, 'docs', 'lottery', '大乐透近100期号码分布_2025130-2026079.json');
-const ANALYSIS_JSON = path.join(ROOT, 'docs', 'lottery', '大乐透近100期号码规律验证_2026080.json');
+const DATABASE_JSON = path.join(ROOT, 'docs', 'lottery', '大乐透规律事件时间线_当前.json');
+const ANALYSIS_JSON = path.join(ROOT, 'docs', 'lottery', '大乐透预测机器审计_当前.json');
+const LEGACY_ARTIFACTS = [
+  path.join(ROOT, 'docs', 'lottery', '大乐透近100期号码分布_2025130-2026079.json'),
+  path.join(ROOT, 'docs', 'lottery', '大乐透近100期号码规律验证_2026080.json'),
+];
 
-const RANGE_START = 2025130;
+const TIMELINE_START = 2025130;
+const FIXED_RANGE_END = 2026079;
 const TRAIN_END = 2026049;
 const VALIDATION_START = 2026050;
-const RANGE_END = 2026079;
-const TARGET_ISSUE = 2026080;
 
 const V2_RED_PARAMS = {
   L: { short: 12, long: 15, shortWeight: 0.3, longWeight: 0.2, gapWeight: -0.2, zoneWeight: 0.05, repeatWeight: 0 },
@@ -51,6 +54,11 @@ function sha256(value) {
   return crypto.createHash('sha256').update(text).digest('hex');
 }
 
+export function nextIssue(latestIssue) {
+  require(Number.isInteger(latestIssue) && latestIssue > 0, `最新期号无效：${latestIssue}`);
+  return latestIssue + 1;
+}
+
 function parseNumbers(text, expected, min, max, label, issue) {
   const values = String(text).trim().split(/\s+/).map(Number);
   require(values.length === expected, `${issue}${label}数量错误`);
@@ -76,12 +84,15 @@ export function loadAllDraws() {
   const draws2025 = loadFile(DATA_2025);
   const draws2026 = loadFile(DATA_2026);
   require(draws2025.length === 150, `2025期数错误：${draws2025.length}`);
-  require(draws2026.length === 79, `2026期数错误：${draws2026.length}`);
   require(draws2025[0].issue === 2025001 && draws2025.at(-1).issue === 2025150, '2025范围错误');
-  require(draws2026[0].issue === 2026001 && draws2026.at(-1).issue === RANGE_END, '2026范围错误');
+  require(draws2026.length > 0 && draws2026[0].issue === 2026001, '2026首期范围错误');
+  for (const [label, rows] of [['2025', draws2025], ['2026', draws2026]]) {
+    require(rows.every((draw, index) => index === 0 || rows[index - 1].issue + 1 === draw.issue), `${label}期号不连续或未按时间升序`);
+  }
   const draws = [...draws2025, ...draws2026];
   require(draws.every((draw, index) => index === 0 || draws[index - 1].issue < draw.issue), '合并期号未严格递增');
-  require(!draws.some((draw) => draw.issue === TARGET_ISSUE), '目标期已存在，禁止继续按2026080预测');
+  const targetIssue = nextIssue(draws.at(-1).issue);
+  require(!draws.some((draw) => draw.issue === targetIssue), `自动推导目标期${targetIssue}已存在`);
   return draws;
 }
 
@@ -100,7 +111,7 @@ export function standardizeRange(draws) {
     for (let number = 1; number <= 35; number += 1) {
       redOmissionBefore[pad(number)] = lastSeen.has(number) ? index - lastSeen.get(number) - 1 : index;
     }
-    if (draw.issue >= RANGE_START && draw.issue <= RANGE_END) {
+    if (draw.issue >= TIMELINE_START) {
       const odd = draw.reds.filter((number) => number % 2 === 1).length;
       const zones = [0, 0, 0];
       for (const number of draw.reds) zones[zoneOf(number)] += 1;
@@ -112,13 +123,13 @@ export function standardizeRange(draws) {
         redSum: draw.reds.reduce((sum, number) => sum + number, 0),
         oddEvenRatio: `${odd}:${5 - odd}`,
         zoneRatio: zones.join(':'),
-        sourceRange: `${RANGE_START}-${RANGE_END}`,
+        sourceRange: `${TIMELINE_START}-${draws.at(-1).issue}`,
       });
     }
     for (const number of draw.reds) lastSeen.set(number, index);
   }
-  require(rows.length === 100, `近100期数量错误：${rows.length}`);
-  require(rows[0].issue === RANGE_START && rows.at(-1).issue === RANGE_END, '近100期首末范围错误');
+  require(rows.length > 0, '规律事件时间线为空');
+  require(rows[0].issue === TIMELINE_START && rows.at(-1).issue === draws.at(-1).issue, '规律事件时间线首末范围错误');
   return rows;
 }
 
@@ -762,7 +773,7 @@ function metricWithoutRows(metrics) {
 }
 
 export function rollingDynamicBacktest(allDraws, standardizedRows, coreRuleIds = []) {
-  const targets = allDraws.filter((draw) => draw.issue >= 2026042 && draw.issue <= RANGE_END);
+  const targets = allDraws.slice(-38);
   require(targets.length === 38, `动态滚动目标不是38期：${targets.length}`);
   const baselineMetrics = emptyPredictionMetrics();
   const dynamicMetrics = emptyPredictionMetrics();
@@ -795,6 +806,10 @@ export function rollingDynamicBacktest(allDraws, standardizedRows, coreRuleIds =
         drag: prediction.baselineV2.drag,
         all: prediction.baselineV2.all,
         blues: prediction.baselineV2.blues,
+        danRepeats: prediction.baselineV2.danRepeats,
+        selectedRepeats: prediction.baselineV2.selectedRepeats,
+        danRepeat: prediction.baselineV2.danRepeat,
+        allRepeat: prediction.baselineV2.allRepeat,
         ...baselineHits,
       },
       dynamic: {
@@ -802,6 +817,10 @@ export function rollingDynamicBacktest(allDraws, standardizedRows, coreRuleIds =
         drag: prediction.final.drag,
         all: prediction.final.all,
         blues: prediction.final.blues,
+        danRepeats: prediction.final.danRepeats,
+        selectedRepeats: prediction.final.selectedRepeats,
+        danRepeat: prediction.final.danRepeat,
+        allRepeat: prediction.final.allRepeat,
         ...dynamicHits,
       },
       actualReds: target.reds,
@@ -809,8 +828,25 @@ export function rollingDynamicBacktest(allDraws, standardizedRows, coreRuleIds =
     });
   }
   const weightValues = rows.map((row) => row.totalRuleWeight);
+  const repeatDistributions = Object.fromEntries([
+    ['baselineV2', 'baselineV2'],
+    ['dynamic', 'dynamic'],
+  ].map(([label, key]) => {
+    const dan = {};
+    const all = {};
+    for (const row of rows) {
+      dan[row[key].danRepeat] = (dan[row[key].danRepeat] ?? 0) + 1;
+      all[row[key].allRepeat] = (all[row[key].allRepeat] ?? 0) + 1;
+    }
+    return [label, {
+      dan,
+      all,
+      maxDan: Math.max(...rows.map((row) => row[key].danRepeat)),
+      maxAll: Math.max(...rows.map((row) => row[key].allRepeat)),
+    }];
+  }));
   return {
-    range: '2026042-2026079',
+    range: `${targets[0].issue}-${targets.at(-1).issue}`,
     rows,
     baseline: metricWithoutRows(baselineMetrics),
     dynamic: metricWithoutRows(dynamicMetrics),
@@ -824,16 +860,17 @@ export function rollingDynamicBacktest(allDraws, standardizedRows, coreRuleIds =
       averageRuleWeight: weightValues.reduce((sum, value) => sum + value, 0) / rows.length,
       maximumRuleWeight: Math.max(...weightValues),
       activationCounts,
+      repeatDistributions,
     },
   };
 }
 
 function fixedNumberRows() {
   return {
-    [RANGE_START]: { reds: [1, 13, 16, 27, 29], blues: [2, 11] },
+    [TIMELINE_START]: { reds: [1, 13, 16, 27, 29], blues: [2, 11] },
     2025150: { reds: [13, 14, 15, 28, 31], blues: [1, 5] },
     2026001: { reds: [7, 9, 23, 27, 32], blues: [2, 8] },
-    [RANGE_END]: { reds: [6, 8, 23, 26, 27], blues: [5, 12] },
+    [FIXED_RANGE_END]: { reds: [6, 8, 23, 26, 27], blues: [5, 12] },
   };
 }
 
@@ -885,10 +922,15 @@ function scoreTable(baseScores, fusedScores, activeRules) {
 
 function buildAnalysis() {
   const allDraws = loadAllDraws();
+  const latestIssue = allDraws.at(-1).issue;
+  const targetIssue = nextIssue(latestIssue);
   const rows = standardizeRange(allDraws);
-  const screenshotSpotChecks = verifyScreenshotSpotChecks(rows);
-  const trainRows = rows.filter((row) => row.issue <= TRAIN_END);
-  const validationRows = rows.filter((row) => row.issue >= VALIDATION_START);
+  const fixedRows = rows.filter((row) => row.issue <= FIXED_RANGE_END);
+  require(fixedRows.length === 100, `固定总体门槛样本不是100期：${fixedRows.length}`);
+  require(fixedRows[0].issue === TIMELINE_START && fixedRows.at(-1).issue === FIXED_RANGE_END, '固定总体门槛范围发生滑动');
+  const screenshotSpotChecks = verifyScreenshotSpotChecks(fixedRows);
+  const trainRows = fixedRows.filter((row) => row.issue <= TRAIN_END);
+  const validationRows = fixedRows.filter((row) => row.issue >= VALIDATION_START && row.issue <= FIXED_RANGE_END);
   require(trainRows.length === 70, `训练段不是70期：${trainRows.length}`);
   require(validationRows.length === 30, `验证段不是30期：${validationRows.length}`);
   require(trainRows.at(-1).issue === TRAIN_END && validationRows[0].issue === VALIDATION_START, '70/30边界错误');
@@ -909,7 +951,7 @@ function buildAnalysis() {
   const fusedSelection = selectDanDrag(fusedScores, allDraws);
   const blues = predictBlue(allDraws);
   const prediction = {
-    issue: TARGET_ISSUE,
+    issue: targetIssue,
     state: stateOf(allDraws),
     baselineV2: { ...baseSelection, blues },
     final: { ...fusedSelection, blues },
@@ -923,9 +965,9 @@ function buildAnalysis() {
   const dynamicGate = {
     status: 'B_DYNAMIC_TRIAL_GATE',
     config: DYNAMIC_CONFIG,
-    historicalTierPolicy: '2026042-2026079全部规律仅竞争试用层；正式层身份不追溯',
+    historicalTierPolicy: '固定总体门槛仍冻结于2025130-2026079且通过0项；滚动38期全部规律仅竞争试用层，正式层身份不追溯',
     current: {
-      issue: TARGET_ISSUE,
+      issue: targetIssue,
       ...currentDynamic,
     },
     rolling38: rollingDynamic,
@@ -935,9 +977,11 @@ function buildAnalysis() {
     meta: {
       lottery: '大乐透',
       rows: rows.length,
-      range: `${RANGE_START}-${RANGE_END}`,
-      trainRange: `${RANGE_START}-${TRAIN_END}`,
-      validationRange: `${VALIDATION_START}-${RANGE_END}`,
+      range: `${TIMELINE_START}-${latestIssue}`,
+      fixedGateRows: fixedRows.length,
+      fixedGateRange: `${TIMELINE_START}-${FIXED_RANGE_END}`,
+      trainRange: `${TIMELINE_START}-${TRAIN_END}`,
+      validationRange: `${VALIDATION_START}-${FIXED_RANGE_END}`,
       omissionWarmupRange: '2025001-2025129',
       screenshotReference: '/var/folders/nj/9psk20z931n44010ssdzh03w0000gn/T/codex-clipboard-a4b7f412-ebde-448d-a4ae-b50ef1b5ceb5.png',
       screenshotSpotChecks,
@@ -945,18 +989,44 @@ function buildAnalysis() {
     rows,
   };
   database.meta.dataHash = sha256(database.rows);
+  database.meta.fixedGateDataHash = sha256(fixedRows.map((row) => ({
+    ...row,
+    sourceRange: `${TIMELINE_START}-${FIXED_RANGE_END}`,
+  })));
 
   const analysisCore = {
     status: 'FIXED_TIME_SPLIT_BACKTEST',
     data: {
       rows: rows.length,
-      range: `${RANGE_START}-${RANGE_END}`,
+      range: `${TIMELINE_START}-${latestIssue}`,
+      latestIssue,
+      targetIssue,
+      sourceFiles: {
+        da2025: { rows: 150, firstIssue: 2025001, lastIssue: 2025150 },
+        da2026: {
+          rows: allDraws.filter((draw) => draw.issue >= 2026001).length,
+          firstIssue: 2026001,
+          lastIssue: latestIssue,
+        },
+      },
+      validationChecks: {
+        rows: true,
+        firstLastIssue: true,
+        strictOrder: true,
+        numberCounts: true,
+        ranges: true,
+        uniqueness: true,
+        ascending: true,
+        redSum: true,
+      },
+      fixedGateRows: fixedRows.length,
+      fixedGateRange: `${TIMELINE_START}-${FIXED_RANGE_END}`,
       trainRows: trainRows.length,
-      trainRange: `${RANGE_START}-${TRAIN_END}`,
+      trainRange: `${TIMELINE_START}-${TRAIN_END}`,
       validationRows: validationRows.length,
-      validationRange: `${VALIDATION_START}-${RANGE_END}`,
-      targetIssue: TARGET_ISSUE,
+      validationRange: `${VALIDATION_START}-${FIXED_RANGE_END}`,
       dataHash: database.meta.dataHash,
+      fixedGateDataHash: database.meta.fixedGateDataHash,
       screenshotSpotChecks,
     },
     gate: {
@@ -1110,6 +1180,10 @@ function markdownReport(analysis) {
 }
 
 function writeArtifacts(database, analysis) {
+  // 当前机器审计使用稳定文件名，移除已失效的旧目标期产物，避免下次误读。
+  for (const legacyPath of LEGACY_ARTIFACTS) {
+    if (fs.existsSync(legacyPath)) fs.unlinkSync(legacyPath);
+  }
   fs.writeFileSync(DATABASE_JSON, `${JSON.stringify(database, null, 2)}\n`);
   fs.writeFileSync(ANALYSIS_JSON, `${JSON.stringify(analysis, null, 2)}\n`);
 }
