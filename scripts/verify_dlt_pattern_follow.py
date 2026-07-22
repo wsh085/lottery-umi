@@ -672,7 +672,7 @@ def main() -> None:
     remote_prediction = analysis["prediction"]["final"]
     for key in ("dan", "drag", "all", "selectedRepeats", "danRepeats", "danDeferred", "skippedRepeat", "danRepeat", "allRepeat", "blues"):
         require(prediction[key] == remote_prediction[key], f"最终预测{key}不一致")
-    require(state(all_draws) == analysis["prediction"]["state"] == "L", "目标状态不一致")
+    require(state(all_draws) == analysis["prediction"]["state"], "目标状态不一致")
     require(analysis["data"]["latestIssue"] == latest_issue
             and analysis["data"]["targetIssue"] == analysis["prediction"]["issue"] == target_issue,
             "最新期或自动推导目标期不一致")
@@ -766,9 +766,10 @@ def main() -> None:
     dynamic_marker = (f"DYNAMIC_INDEPENDENT_VERIFY_OK rows=38 active={len(local_dynamic['activeRules'])} "
                       f"prediction_match=1 data_hash={data_hash}")
     require(dynamic_marker in canonical_text, "唯一综合文档缺少动态独立复核标记")
-    require("红球胆码（3个）：04、23、26" in canonical_text, "综合复用文档胆码不一致")
-    require("红球拖码（5个）：06、13、21、27、32" in canonical_text, "综合复用文档拖码不一致")
-    require("蓝球（2个）：02、03" in canonical_text, "综合复用文档蓝球不一致")
+    format_numbers = lambda values: "、".join(f"{number:02d}" for number in values)
+    require(f"红球胆码（3个）：{format_numbers(prediction['dan'])}" in canonical_text, "综合复用文档胆码不一致")
+    require(f"红球拖码（5个）：{format_numbers(prediction['drag'])}" in canonical_text, "综合复用文档拖码不一致")
+    require(f"蓝球（2个）：{format_numbers(prediction['blues'])}" in canonical_text, "综合复用文档蓝球不一致")
 
     print(f"DATA_REBUILD_OK rows={len(rows)} range={rows[0]['issue']}-{rows[-1]['issue']} hash={data_hash}")
     print(f"RULE_RECALC_OK rules={len(RULES)} accepted={len(accepted)} active={len(active)}")

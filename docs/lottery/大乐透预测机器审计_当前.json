@@ -1,10 +1,10 @@
 {
   "status": "FIXED_TIME_SPLIT_BACKTEST",
   "data": {
-    "rows": 101,
-    "range": "2025130-2026080",
-    "latestIssue": 2026080,
-    "targetIssue": 2026081,
+    "rows": 102,
+    "range": "2025130-2026081",
+    "latestIssue": 2026081,
+    "targetIssue": 2026082,
     "sourceFiles": {
       "da2025": {
         "rows": 150,
@@ -12,9 +12,9 @@
         "lastIssue": 2025150
       },
       "da2026": {
-        "rows": 80,
+        "rows": 81,
         "firstIssue": 2026001,
-        "lastIssue": 2026080
+        "lastIssue": 2026081
       }
     },
     "validationChecks": {
@@ -33,7 +33,7 @@
     "trainRange": "2025130-2026049",
     "validationRows": 30,
     "validationRange": "2026050-2026079",
-    "dataHash": "d9b80a5b014f63e610ee8b40a693eb32a113be46aa9c458cfe4956bf51079bd5",
+    "dataHash": "83d2de7dae5144e0accf6f36ff097453482ef817354e0c08005686b86bb93040",
     "fixedGateDataHash": "295a4fa24caf3d40a57923643c2965e727c1ff404a0c6be1fa5ce19256125112",
     "screenshotSpotChecks": [
       {
@@ -5450,58 +5450,59 @@
   ],
   "acceptedRuleIds": [],
   "prediction": {
-    "issue": 2026081,
-    "state": "L",
+    "issue": 2026082,
+    "state": "H",
     "baselineV2": {
       "dan": [
-        4,
-        23,
+        6,
+        10,
         26
       ],
       "drag": [
-        6,
-        13,
+        4,
+        5,
         21,
-        27,
-        32
+        23,
+        27
       ],
       "all": [
         4,
+        5,
         6,
-        13,
+        10,
         21,
         23,
         26,
-        27,
-        32
+        27
       ],
       "ranking": [
         26,
-        23,
-        4,
-        21,
         10,
-        27,
-        13,
-        5,
-        32,
         6,
+        21,
+        5,
+        23,
+        27,
+        4,
         15,
-        19,
-        25,
-        1,
-        20,
         8,
-        24,
-        2,
-        28,
-        14,
-        35,
-        22,
-        16,
+        32,
         18,
-        29,
+        13,
+        24,
+        34,
+        25,
+        16,
+        1,
+        2,
+        20,
+        28,
+        19,
+        35,
+        14,
         33,
+        22,
+        29,
         30,
         12,
         3,
@@ -5509,78 +5510,70 @@
         7,
         9,
         31,
-        34,
         17
       ],
-      "selectedRepeats": [
-        21,
-        23
-      ],
-      "danRepeats": [
-        23
-      ],
+      "selectedRepeats": [],
+      "danRepeats": [],
       "danDeferred": [],
-      "skippedRepeat": [
-        5,
-        10
-      ],
-      "danRepeat": 1,
-      "allRepeat": 2,
+      "skippedRepeat": [],
+      "danRepeat": 0,
+      "allRepeat": 0,
       "blues": [
         2,
-        3
+        11
       ]
     },
     "final": {
       "dan": [
-        4,
-        23,
+        6,
+        10,
         26
       ],
       "drag": [
-        6,
-        13,
+        4,
+        5,
         21,
-        27,
-        32
+        23,
+        27
       ],
       "all": [
         4,
+        5,
         6,
-        13,
+        10,
         21,
         23,
         26,
-        27,
-        32
+        27
       ],
       "ranking": [
         26,
-        23,
-        4,
-        21,
         10,
-        27,
-        13,
-        5,
-        32,
         6,
+        21,
+        5,
+        23,
+        27,
+        4,
         15,
-        19,
-        25,
-        1,
-        20,
         8,
-        24,
-        2,
-        28,
-        14,
-        35,
-        22,
-        16,
+        32,
         18,
-        29,
+        13,
+        24,
+        34,
+        25,
+        16,
+        1,
+        2,
+        20,
+        28,
+        19,
+        35,
+        14,
         33,
+        22,
+        29,
         30,
         12,
         3,
@@ -5588,26 +5581,17 @@
         7,
         9,
         31,
-        34,
         17
       ],
-      "selectedRepeats": [
-        21,
-        23
-      ],
-      "danRepeats": [
-        23
-      ],
+      "selectedRepeats": [],
+      "danRepeats": [],
       "danDeferred": [],
-      "skippedRepeat": [
-        5,
-        10
-      ],
-      "danRepeat": 1,
-      "allRepeat": 2,
+      "skippedRepeat": [],
+      "danRepeat": 0,
+      "allRepeat": 0,
       "blues": [
         2,
-        3
+        11
       ]
     },
     "activeRules": [],
@@ -5615,248 +5599,248 @@
     "scoreTable": [
       {
         "number": 1,
-        "baseRaw": 0.038144927536231894,
-        "baseNormalized": 0.7144072482878898,
+        "baseRaw": 0.009345181134654802,
+        "baseNormalized": 0.6939767178997167,
         "ruleMatch": 0,
-        "fused": 0.7144072482878898
+        "fused": 0.6939767178997167
       },
       {
         "number": 2,
-        "baseRaw": 0.011478260869565216,
-        "baseNormalized": 0.6361393508868944,
+        "baseRaw": 0.008818865345181129,
+        "baseNormalized": 0.6922943589265529,
         "ruleMatch": 0,
-        "fused": 0.6361393508868944
+        "fused": 0.6922943589265529
       },
       {
         "number": 3,
-        "baseRaw": -0.1801884057971015,
-        "baseNormalized": 0.07358883831724022,
+        "baseRaw": -0.13591797676008205,
+        "baseNormalized": 0.22964564130650103,
         "ruleMatch": 0,
-        "fused": 0.07358883831724022
+        "fused": 0.22964564130650103
       },
       {
         "number": 4,
-        "baseRaw": 0.10981159420289852,
-        "baseNormalized": 0.9247522225530647,
+        "baseRaw": 0.057415356573251315,
+        "baseNormalized": 0.8476321707820128,
         "ruleMatch": 0,
-        "fused": 0.9247522225530647
+        "fused": 0.8476321707820128
       },
       {
         "number": 5,
-        "baseRaw": 0.08564492753623187,
-        "baseNormalized": 0.8538219405334128,
+        "baseRaw": 0.07688904078377762,
+        "baseNormalized": 0.9098794527890743,
         "ruleMatch": 0,
-        "fused": 0.8538219405334128
+        "fused": 0.9098794527890743
       },
       {
         "number": 6,
-        "baseRaw": 0.07981159420289854,
-        "baseNormalized": 0.8367008379769452,
+        "baseRaw": 0.08653816359079516,
+        "baseNormalized": 0.940722700630411,
         "ruleMatch": 0,
-        "fused": 0.8367008379769452
+        "fused": 0.940722700630411
       },
       {
         "number": 7,
-        "baseRaw": -0.19352173913043483,
-        "baseNormalized": 0.034454889616742534,
+        "baseRaw": -0.16644429254955576,
+        "baseNormalized": 0.1320688208629991,
         "ruleMatch": 0,
-        "fused": 0.034454889616742534
+        "fused": 0.1320688208629991
       },
       {
         "number": 8,
-        "baseRaw": 0.028144927536231882,
-        "baseNormalized": 0.6850567867625166,
+        "baseRaw": 0.044257461836409204,
+        "baseNormalized": 0.8055731964529173,
         "ruleMatch": 0,
-        "fused": 0.6850567867625166
+        "fused": 0.8055731964529173
       },
       {
         "number": 9,
-        "baseRaw": -0.19352173913043483,
-        "baseNormalized": 0.034454889616742534,
+        "baseRaw": -0.16644429254955576,
+        "baseNormalized": 0.1320688208629991,
         "ruleMatch": 0,
-        "fused": 0.034454889616742534
+        "fused": 0.1320688208629991
       },
       {
         "number": 10,
-        "baseRaw": 0.09897826086956521,
-        "baseNormalized": 0.8929558892339106,
+        "baseRaw": 0.097941672362725,
+        "baseNormalized": 0.9771738117156273,
         "ruleMatch": 0,
-        "fused": 0.8929558892339106
+        "fused": 0.9771738117156273
       },
       {
         "number": 11,
-        "baseRaw": -0.1801884057971015,
-        "baseNormalized": 0.07358883831724022,
+        "baseRaw": -0.14644429254955577,
+        "baseNormalized": 0.19599846184322442,
         "ruleMatch": 0,
-        "fused": 0.07358883831724022
+        "fused": 0.19599846184322442
       },
       {
         "number": 12,
-        "baseRaw": -0.12518840579710147,
-        "baseNormalized": 0.2350163767067932,
+        "baseRaw": -0.11591797676008206,
+        "baseNormalized": 0.29357528228672636,
         "ruleMatch": 0,
-        "fused": 0.2350163767067932
+        "fused": 0.29357528228672636
       },
       {
         "number": 13,
-        "baseRaw": 0.08973913043478261,
-        "baseNormalized": 0.8658386149985112,
+        "baseRaw": 0.03381772613351558,
+        "baseNormalized": 0.7722027686821957,
         "ruleMatch": 0,
-        "fused": 0.8658386149985112
+        "fused": 0.7722027686821957
       },
       {
         "number": 14,
-        "baseRaw": -0.01692753623188407,
-        "baseNormalized": 0.5527670253945298,
+        "baseRaw": -0.04916473000683527,
+        "baseNormalized": 0.5069508372466993,
         "ruleMatch": 0,
-        "fused": 0.5527670253945298
+        "fused": 0.5069508372466993
       },
       {
         "number": 15,
-        "baseRaw": 0.07390579710144927,
-        "baseNormalized": 0.8193670509166703,
+        "baseRaw": 0.056624743677375244,
+        "baseNormalized": 0.8451049908526281,
         "ruleMatch": 0,
-        "fused": 0.8193670509166703
+        "fused": 0.8451049908526281
       },
       {
         "number": 16,
-        "baseRaw": -0.03692753623188406,
-        "baseNormalized": 0.49406610234378334,
+        "baseRaw": 0.01767737525632263,
+        "baseNormalized": 0.7206104268385052,
         "ruleMatch": 0,
-        "fused": 0.49406610234378334
+        "fused": 0.7206104268385052
       },
       {
         "number": 17,
-        "baseRaw": -0.20526086956521744,
+        "baseRaw": -0.20776122123490548,
         "baseNormalized": 0,
         "ruleMatch": 0,
         "fused": 0
       },
       {
         "number": 18,
-        "baseRaw": -0.03692753623188406,
-        "baseNormalized": 0.49406610234378334,
+        "baseRaw": 0.03873000683526999,
+        "baseNormalized": 0.7879047857650582,
         "ruleMatch": 0,
-        "fused": 0.49406610234378334
+        "fused": 0.7879047857650582
       },
       {
         "number": 19,
-        "baseRaw": 0.04807246376811593,
-        "baseNormalized": 0.743545025309456,
+        "baseRaw": -0.009164730006835275,
+        "baseNormalized": 0.63481011920715,
         "ruleMatch": 0,
-        "fused": 0.743545025309456
+        "fused": 0.63481011920715
       },
       {
         "number": 20,
-        "baseRaw": 0.03807246376811593,
-        "baseNormalized": 0.7141945637840827,
+        "baseRaw": 0.008554568238778756,
+        "baseNormalized": 0.6914495379703322,
         "ruleMatch": 0,
-        "fused": 0.7141945637840827
+        "fused": 0.6914495379703322
       },
       {
         "number": 21,
-        "baseRaw": 0.10057246376811595,
-        "baseNormalized": 0.8976349483176657,
+        "baseRaw": 0.08188790157211209,
+        "baseNormalized": 0.9258582215644918,
         "ruleMatch": 0,
-        "fused": 0.8976349483176657
+        "fused": 0.9258582215644918
       },
       {
         "number": 22,
-        "baseRaw": -0.03192753623188408,
-        "baseNormalized": 0.50874133310647,
+        "baseRaw": -0.0705682387787651,
+        "baseNormalized": 0.43853490567137043,
         "ruleMatch": 0,
-        "fused": 0.50874133310647
+        "fused": 0.43853490567137043
       },
       {
         "number": 23,
-        "baseRaw": 0.11223913043478263,
-        "baseNormalized": 0.9318771534306012,
+        "baseRaw": 0.07662474367737526,
+        "baseNormalized": 0.9090346318328535,
         "ruleMatch": 0,
-        "fused": 0.9318771534306012
+        "fused": 0.9090346318328535
       },
       {
         "number": 24,
-        "baseRaw": 0.02140579710144926,
-        "baseNormalized": 0.6652771279084606,
+        "baseRaw": 0.028203691045796304,
+        "baseNormalized": 0.7542576063017816,
         "ruleMatch": 0,
-        "fused": 0.6652771279084606
+        "fused": 0.7542576063017816
       },
       {
         "number": 25,
-        "baseRaw": 0.0421159420289855,
-        "baseNormalized": 0.7260623590965163,
+        "baseRaw": 0.02210025062656642,
+        "baseNormalized": 0.7347480685645035,
         "ruleMatch": 0,
-        "fused": 0.7260623590965163
+        "fused": 0.7347480685645035
       },
       {
         "number": 26,
-        "baseRaw": 0.13544927536231882,
+        "baseRaw": 0.1050827067669173,
         "baseNormalized": 1,
         "ruleMatch": 0,
         "fused": 1
       },
       {
         "number": 27,
-        "baseRaw": 0.09711594202898552,
-        "baseNormalized": 0.8874898974860692,
+        "baseRaw": 0.06403007518796992,
+        "baseNormalized": 0.8687760000932215,
         "ruleMatch": 0,
-        "fused": 0.8874898974860692
+        "fused": 0.8687760000932215
       },
       {
         "number": 28,
-        "baseRaw": -0.01621739130434783,
-        "baseNormalized": 0.554851333531839,
+        "baseRaw": -0.0007067669172932268,
+        "baseNormalized": 0.6618458463940711,
         "ruleMatch": 0,
-        "fused": 0.554851333531839
+        "fused": 0.6618458463940711
       },
       {
         "number": 29,
-        "baseRaw": -0.0578840579710145,
-        "baseNormalized": 0.43255774384278367,
+        "baseRaw": -0.07263659147869672,
+        "baseNormalized": 0.43192345339501503,
         "ruleMatch": 0,
-        "fused": 0.43255774384278367
+        "fused": 0.43192345339501503
       },
       {
         "number": 30,
-        "baseRaw": -0.08288405797101449,
-        "baseNormalized": 0.3591815900293506,
+        "baseRaw": -0.09789974937343357,
+        "baseNormalized": 0.3511702226831514,
         "ruleMatch": 0,
-        "fused": 0.3591815900293506
+        "fused": 0.3511702226831514
       },
       {
         "number": 31,
-        "baseRaw": -0.20121739130434788,
-        "baseNormalized": 0.011867795312433534,
+        "baseRaw": -0.1678997493734336,
+        "baseNormalized": 0.1274164792523626,
         "ruleMatch": 0,
-        "fused": 0.011867795312433534
+        "fused": 0.1274164792523626
       },
       {
         "number": 32,
-        "baseRaw": 0.08044927536231884,
-        "baseNormalized": 0.8385724616104471,
+        "baseRaw": 0.04210025062656641,
+        "baseNormalized": 0.7986777095447288,
         "ruleMatch": 0,
-        "fused": 0.8385724616104471
+        "fused": 0.7986777095447288
       },
       {
         "number": 33,
-        "baseRaw": -0.07955072463768117,
-        "baseNormalized": 0.36896507720447497,
+        "baseRaw": -0.06544360902255639,
+        "baseNormalized": 0.4549156926949206,
         "ruleMatch": 0,
-        "fused": 0.36896507720447497
+        "fused": 0.4549156926949206
       },
       {
         "number": 34,
-        "baseRaw": -0.20121739130434788,
-        "baseNormalized": 0.011867795312433534,
+        "baseRaw": 0.02280200501253133,
+        "baseNormalized": 0.7369912138620552,
         "ruleMatch": 0,
-        "fused": 0.011867795312433534
+        "fused": 0.7369912138620552
       },
       {
         "number": 35,
-        "baseRaw": -0.029550724637681165,
-        "baseNormalized": 0.5157173848313413,
+        "baseRaw": -0.031233082706766904,
+        "baseNormalized": 0.5642690259505693,
         "ruleMatch": 0,
-        "fused": 0.5157173848313413
+        "fused": 0.5642690259505693
       }
     ]
   },
@@ -5880,8 +5864,8 @@
     },
     "historicalTierPolicy": "固定总体门槛仍冻结于2025130-2026079且通过0项；滚动38期全部规律仅竞争试用层，正式层身份不追溯",
     "current": {
-      "issue": 2026081,
-      "state": "L",
+      "issue": 2026082,
+      "state": "H",
       "ruleStates": [
         {
           "id": "GAP_MIDDLE",
@@ -5990,7 +5974,7 @@
             ]
           },
           "candidates": [
-            7,
+            17,
             22
           ],
           "eligibility": {
@@ -6012,7 +5996,7 @@
           "label": "连号区间衍生",
           "tier": "TRIAL",
           "metrics": {
-            "completedPairCount": 48,
+            "completedPairCount": 49,
             "n12": 12,
             "hits12": 10,
             "controlHits12": 9,
@@ -6020,20 +6004,13 @@
             "c12": 0.6875,
             "l12": 0.0625,
             "n6": 6,
-            "hits6": 5,
+            "hits6": 4,
             "controlHits6": 5,
-            "a6": 0.7,
+            "a6": 0.6,
             "c6": 0.7,
-            "l6": 0,
-            "consecutiveMisses": 0,
+            "l6": -0.09999999999999998,
+            "consecutiveMisses": 1,
             "recentPairs": [
-              {
-                "triggerIssue": 2026055,
-                "controlIssue": 2026063,
-                "triggerIndex": 75,
-                "triggerSuccess": false,
-                "controlSuccess": true
-              },
               {
                 "triggerIssue": 2026056,
                 "controlIssue": 2026064,
@@ -6110,23 +6087,26 @@
                 "triggerIndex": 96,
                 "triggerSuccess": true,
                 "controlSuccess": true
+              },
+              {
+                "triggerIssue": 2026079,
+                "controlIssue": 2025134,
+                "triggerIndex": 99,
+                "triggerSuccess": false,
+                "controlSuccess": true
               }
             ]
           },
-          "candidates": [
-            25,
-            26,
-            27,
-            28
-          ],
+          "candidates": [],
           "eligibility": {
             "passed": false,
             "reasons": [
               "L12<10个百分点",
-              "L6<=0"
+              "L6<=0",
+              "当前无目标期候选"
             ]
           },
-          "quality": 0.6249999999999999,
+          "quality": 0.575,
           "rawWeight": 0,
           "weight": 0
         },
@@ -6254,28 +6234,21 @@
           "label": "小于30冷号间隔1期复开",
           "tier": "TRIAL",
           "metrics": {
-            "completedPairCount": 32,
+            "completedPairCount": 33,
             "n12": 12,
-            "hits12": 1,
+            "hits12": 2,
             "controlHits12": 5,
-            "a12": 0.1875,
+            "a12": 0.25,
             "c12": 0.4375,
-            "l12": -0.25,
+            "l12": -0.1875,
             "n6": 6,
-            "hits6": 1,
+            "hits6": 2,
             "controlHits6": 2,
-            "a6": 0.3,
+            "a6": 0.4,
             "c6": 0.4,
-            "l6": -0.10000000000000003,
-            "consecutiveMisses": 3,
+            "l6": 0,
+            "consecutiveMisses": 0,
             "recentPairs": [
-              {
-                "triggerIssue": 2026043,
-                "controlIssue": 2026042,
-                "triggerIndex": 63,
-                "triggerSuccess": false,
-                "controlSuccess": false
-              },
               {
                 "triggerIssue": 2026045,
                 "controlIssue": 2026044,
@@ -6352,12 +6325,17 @@
                 "triggerIndex": 98,
                 "triggerSuccess": false,
                 "controlSuccess": false
+              },
+              {
+                "triggerIssue": 2026079,
+                "controlIssue": 2026068,
+                "triggerIndex": 99,
+                "triggerSuccess": true,
+                "controlSuccess": false
               }
             ]
           },
-          "candidates": [
-            8
-          ],
+          "candidates": [],
           "eligibility": {
             "passed": false,
             "reasons": [
@@ -6365,10 +6343,10 @@
               "L12<10个百分点",
               "A6<55%",
               "L6<=0",
-              "连续失误>=3"
+              "当前无目标期候选"
             ]
           },
-          "quality": 0,
+          "quality": 0.2,
           "rawWeight": 0,
           "weight": 0
         },
@@ -6471,15 +6449,16 @@
               }
             ]
           },
-          "candidates": [],
+          "candidates": [
+            34
+          ],
           "eligibility": {
             "passed": false,
             "reasons": [
               "A12<60%",
               "L12<10个百分点",
               "A6<55%",
-              "L6<=0",
-              "当前无目标期候选"
+              "L6<=0"
             ]
           },
           "quality": 0.12222222222222222,
@@ -6593,8 +6572,10 @@
             ]
           },
           "candidates": [
-            3,
-            4
+            17,
+            18,
+            25,
+            26
           ],
           "eligibility": {
             "passed": false,
@@ -6614,7 +6595,7 @@
           "label": "长断区中点补位",
           "tier": "TRIAL",
           "metrics": {
-            "completedPairCount": 39,
+            "completedPairCount": 40,
             "n12": 12,
             "hits12": 5,
             "controlHits12": 6,
@@ -6622,20 +6603,13 @@
             "c12": 0.5,
             "l12": -0.0625,
             "n6": 6,
-            "hits6": 1,
-            "controlHits6": 3,
-            "a6": 0.3,
-            "c6": 0.5,
-            "l6": -0.2,
-            "consecutiveMisses": 4,
+            "hits6": 2,
+            "controlHits6": 2,
+            "a6": 0.4,
+            "c6": 0.4,
+            "l6": 0,
+            "consecutiveMisses": 0,
             "recentPairs": [
-              {
-                "triggerIssue": 2026020,
-                "controlIssue": 2026059,
-                "triggerIndex": 40,
-                "triggerSuccess": true,
-                "controlSuccess": false
-              },
               {
                 "triggerIssue": 2026023,
                 "controlIssue": 2026060,
@@ -6712,6 +6686,13 @@
                 "triggerIndex": 55,
                 "triggerSuccess": false,
                 "controlSuccess": true
+              },
+              {
+                "triggerIssue": 2026037,
+                "controlIssue": 2026080,
+                "triggerIndex": 57,
+                "triggerSuccess": true,
+                "controlSuccess": false
               }
             ]
           },
@@ -6723,11 +6704,10 @@
               "L12<10个百分点",
               "A6<55%",
               "L6<=0",
-              "连续失误>=3",
               "当前无目标期候选"
             ]
           },
-          "quality": 0,
+          "quality": 0.06250000000000003,
           "rawWeight": 0,
           "weight": 0
         },
@@ -6859,54 +6839,55 @@
       "v2Weight": 1,
       "baselineV2": {
         "dan": [
-          4,
-          23,
+          6,
+          10,
           26
         ],
         "drag": [
-          6,
-          13,
+          4,
+          5,
           21,
-          27,
-          32
+          23,
+          27
         ],
         "all": [
           4,
+          5,
           6,
-          13,
+          10,
           21,
           23,
           26,
-          27,
-          32
+          27
         ],
         "ranking": [
           26,
-          23,
-          4,
-          21,
           10,
-          27,
-          13,
-          5,
-          32,
           6,
+          21,
+          5,
+          23,
+          27,
+          4,
           15,
-          19,
-          25,
-          1,
-          20,
           8,
-          24,
-          2,
-          28,
-          14,
-          35,
-          22,
-          16,
+          32,
           18,
-          29,
+          13,
+          24,
+          34,
+          25,
+          16,
+          1,
+          2,
+          20,
+          28,
+          19,
+          35,
+          14,
           33,
+          22,
+          29,
           30,
           12,
           3,
@@ -6914,78 +6895,70 @@
           7,
           9,
           31,
-          34,
           17
         ],
-        "selectedRepeats": [
-          21,
-          23
-        ],
-        "danRepeats": [
-          23
-        ],
+        "selectedRepeats": [],
+        "danRepeats": [],
         "danDeferred": [],
-        "skippedRepeat": [
-          5,
-          10
-        ],
-        "danRepeat": 1,
-        "allRepeat": 2,
+        "skippedRepeat": [],
+        "danRepeat": 0,
+        "allRepeat": 0,
         "blues": [
           2,
-          3
+          11
         ]
       },
       "final": {
         "dan": [
-          4,
-          23,
+          6,
+          10,
           26
         ],
         "drag": [
-          6,
-          13,
+          4,
+          5,
           21,
-          27,
-          32
+          23,
+          27
         ],
         "all": [
           4,
+          5,
           6,
-          13,
+          10,
           21,
           23,
           26,
-          27,
-          32
+          27
         ],
         "ranking": [
           26,
-          23,
-          4,
-          21,
           10,
-          27,
-          13,
-          5,
-          32,
           6,
+          21,
+          5,
+          23,
+          27,
+          4,
           15,
-          19,
-          25,
-          1,
-          20,
           8,
-          24,
-          2,
-          28,
-          14,
-          35,
-          22,
-          16,
+          32,
           18,
-          29,
+          13,
+          24,
+          34,
+          25,
+          16,
+          1,
+          2,
+          20,
+          28,
+          19,
+          35,
+          14,
           33,
+          22,
+          29,
           30,
           12,
           3,
@@ -6993,1296 +6966,271 @@
           7,
           9,
           31,
-          34,
           17
         ],
-        "selectedRepeats": [
-          21,
-          23
-        ],
-        "danRepeats": [
-          23
-        ],
+        "selectedRepeats": [],
+        "danRepeats": [],
         "danDeferred": [],
-        "skippedRepeat": [
-          5,
-          10
-        ],
-        "danRepeat": 1,
-        "allRepeat": 2,
+        "skippedRepeat": [],
+        "danRepeat": 0,
+        "allRepeat": 0,
         "blues": [
           2,
-          3
+          11
         ]
       },
       "changedFromV2": false,
       "scoreTable": [
         {
           "number": 1,
-          "baseRaw": 0.038144927536231894,
-          "baseNormalized": 0.7144072482878898,
+          "baseRaw": 0.009345181134654802,
+          "baseNormalized": 0.6939767178997167,
           "ruleMatch": 0,
-          "fused": 0.7144072482878898
+          "fused": 0.6939767178997167
         },
         {
           "number": 2,
-          "baseRaw": 0.011478260869565216,
-          "baseNormalized": 0.6361393508868944,
+          "baseRaw": 0.008818865345181129,
+          "baseNormalized": 0.6922943589265529,
           "ruleMatch": 0,
-          "fused": 0.6361393508868944
+          "fused": 0.6922943589265529
         },
         {
           "number": 3,
-          "baseRaw": -0.1801884057971015,
-          "baseNormalized": 0.07358883831724022,
+          "baseRaw": -0.13591797676008205,
+          "baseNormalized": 0.22964564130650103,
           "ruleMatch": 0,
-          "fused": 0.07358883831724022
+          "fused": 0.22964564130650103
         },
         {
           "number": 4,
-          "baseRaw": 0.10981159420289852,
-          "baseNormalized": 0.9247522225530647,
+          "baseRaw": 0.057415356573251315,
+          "baseNormalized": 0.8476321707820128,
           "ruleMatch": 0,
-          "fused": 0.9247522225530647
+          "fused": 0.8476321707820128
         },
         {
           "number": 5,
-          "baseRaw": 0.08564492753623187,
-          "baseNormalized": 0.8538219405334128,
+          "baseRaw": 0.07688904078377762,
+          "baseNormalized": 0.9098794527890743,
           "ruleMatch": 0,
-          "fused": 0.8538219405334128
+          "fused": 0.9098794527890743
         },
         {
           "number": 6,
-          "baseRaw": 0.07981159420289854,
-          "baseNormalized": 0.8367008379769452,
+          "baseRaw": 0.08653816359079516,
+          "baseNormalized": 0.940722700630411,
           "ruleMatch": 0,
-          "fused": 0.8367008379769452
+          "fused": 0.940722700630411
         },
         {
           "number": 7,
-          "baseRaw": -0.19352173913043483,
-          "baseNormalized": 0.034454889616742534,
+          "baseRaw": -0.16644429254955576,
+          "baseNormalized": 0.1320688208629991,
           "ruleMatch": 0,
-          "fused": 0.034454889616742534
+          "fused": 0.1320688208629991
         },
         {
           "number": 8,
-          "baseRaw": 0.028144927536231882,
-          "baseNormalized": 0.6850567867625166,
+          "baseRaw": 0.044257461836409204,
+          "baseNormalized": 0.8055731964529173,
           "ruleMatch": 0,
-          "fused": 0.6850567867625166
+          "fused": 0.8055731964529173
         },
         {
           "number": 9,
-          "baseRaw": -0.19352173913043483,
-          "baseNormalized": 0.034454889616742534,
+          "baseRaw": -0.16644429254955576,
+          "baseNormalized": 0.1320688208629991,
           "ruleMatch": 0,
-          "fused": 0.034454889616742534
+          "fused": 0.1320688208629991
         },
         {
           "number": 10,
-          "baseRaw": 0.09897826086956521,
-          "baseNormalized": 0.8929558892339106,
+          "baseRaw": 0.097941672362725,
+          "baseNormalized": 0.9771738117156273,
           "ruleMatch": 0,
-          "fused": 0.8929558892339106
+          "fused": 0.9771738117156273
         },
         {
           "number": 11,
-          "baseRaw": -0.1801884057971015,
-          "baseNormalized": 0.07358883831724022,
+          "baseRaw": -0.14644429254955577,
+          "baseNormalized": 0.19599846184322442,
           "ruleMatch": 0,
-          "fused": 0.07358883831724022
+          "fused": 0.19599846184322442
         },
         {
           "number": 12,
-          "baseRaw": -0.12518840579710147,
-          "baseNormalized": 0.2350163767067932,
+          "baseRaw": -0.11591797676008206,
+          "baseNormalized": 0.29357528228672636,
           "ruleMatch": 0,
-          "fused": 0.2350163767067932
+          "fused": 0.29357528228672636
         },
         {
           "number": 13,
-          "baseRaw": 0.08973913043478261,
-          "baseNormalized": 0.8658386149985112,
+          "baseRaw": 0.03381772613351558,
+          "baseNormalized": 0.7722027686821957,
           "ruleMatch": 0,
-          "fused": 0.8658386149985112
+          "fused": 0.7722027686821957
         },
         {
           "number": 14,
-          "baseRaw": -0.01692753623188407,
-          "baseNormalized": 0.5527670253945298,
+          "baseRaw": -0.04916473000683527,
+          "baseNormalized": 0.5069508372466993,
           "ruleMatch": 0,
-          "fused": 0.5527670253945298
+          "fused": 0.5069508372466993
         },
         {
           "number": 15,
-          "baseRaw": 0.07390579710144927,
-          "baseNormalized": 0.8193670509166703,
+          "baseRaw": 0.056624743677375244,
+          "baseNormalized": 0.8451049908526281,
           "ruleMatch": 0,
-          "fused": 0.8193670509166703
+          "fused": 0.8451049908526281
         },
         {
           "number": 16,
-          "baseRaw": -0.03692753623188406,
-          "baseNormalized": 0.49406610234378334,
+          "baseRaw": 0.01767737525632263,
+          "baseNormalized": 0.7206104268385052,
           "ruleMatch": 0,
-          "fused": 0.49406610234378334
+          "fused": 0.7206104268385052
         },
         {
           "number": 17,
-          "baseRaw": -0.20526086956521744,
+          "baseRaw": -0.20776122123490548,
           "baseNormalized": 0,
           "ruleMatch": 0,
           "fused": 0
         },
         {
           "number": 18,
-          "baseRaw": -0.03692753623188406,
-          "baseNormalized": 0.49406610234378334,
+          "baseRaw": 0.03873000683526999,
+          "baseNormalized": 0.7879047857650582,
           "ruleMatch": 0,
-          "fused": 0.49406610234378334
+          "fused": 0.7879047857650582
         },
         {
           "number": 19,
-          "baseRaw": 0.04807246376811593,
-          "baseNormalized": 0.743545025309456,
+          "baseRaw": -0.009164730006835275,
+          "baseNormalized": 0.63481011920715,
           "ruleMatch": 0,
-          "fused": 0.743545025309456
+          "fused": 0.63481011920715
         },
         {
           "number": 20,
-          "baseRaw": 0.03807246376811593,
-          "baseNormalized": 0.7141945637840827,
+          "baseRaw": 0.008554568238778756,
+          "baseNormalized": 0.6914495379703322,
           "ruleMatch": 0,
-          "fused": 0.7141945637840827
+          "fused": 0.6914495379703322
         },
         {
           "number": 21,
-          "baseRaw": 0.10057246376811595,
-          "baseNormalized": 0.8976349483176657,
+          "baseRaw": 0.08188790157211209,
+          "baseNormalized": 0.9258582215644918,
           "ruleMatch": 0,
-          "fused": 0.8976349483176657
+          "fused": 0.9258582215644918
         },
         {
           "number": 22,
-          "baseRaw": -0.03192753623188408,
-          "baseNormalized": 0.50874133310647,
+          "baseRaw": -0.0705682387787651,
+          "baseNormalized": 0.43853490567137043,
           "ruleMatch": 0,
-          "fused": 0.50874133310647
+          "fused": 0.43853490567137043
         },
         {
           "number": 23,
-          "baseRaw": 0.11223913043478263,
-          "baseNormalized": 0.9318771534306012,
+          "baseRaw": 0.07662474367737526,
+          "baseNormalized": 0.9090346318328535,
           "ruleMatch": 0,
-          "fused": 0.9318771534306012
+          "fused": 0.9090346318328535
         },
         {
           "number": 24,
-          "baseRaw": 0.02140579710144926,
-          "baseNormalized": 0.6652771279084606,
+          "baseRaw": 0.028203691045796304,
+          "baseNormalized": 0.7542576063017816,
           "ruleMatch": 0,
-          "fused": 0.6652771279084606
+          "fused": 0.7542576063017816
         },
         {
           "number": 25,
-          "baseRaw": 0.0421159420289855,
-          "baseNormalized": 0.7260623590965163,
+          "baseRaw": 0.02210025062656642,
+          "baseNormalized": 0.7347480685645035,
           "ruleMatch": 0,
-          "fused": 0.7260623590965163
+          "fused": 0.7347480685645035
         },
         {
           "number": 26,
-          "baseRaw": 0.13544927536231882,
+          "baseRaw": 0.1050827067669173,
           "baseNormalized": 1,
           "ruleMatch": 0,
           "fused": 1
         },
         {
           "number": 27,
-          "baseRaw": 0.09711594202898552,
-          "baseNormalized": 0.8874898974860692,
+          "baseRaw": 0.06403007518796992,
+          "baseNormalized": 0.8687760000932215,
           "ruleMatch": 0,
-          "fused": 0.8874898974860692
+          "fused": 0.8687760000932215
         },
         {
           "number": 28,
-          "baseRaw": -0.01621739130434783,
-          "baseNormalized": 0.554851333531839,
+          "baseRaw": -0.0007067669172932268,
+          "baseNormalized": 0.6618458463940711,
           "ruleMatch": 0,
-          "fused": 0.554851333531839
+          "fused": 0.6618458463940711
         },
         {
           "number": 29,
-          "baseRaw": -0.0578840579710145,
-          "baseNormalized": 0.43255774384278367,
+          "baseRaw": -0.07263659147869672,
+          "baseNormalized": 0.43192345339501503,
           "ruleMatch": 0,
-          "fused": 0.43255774384278367
+          "fused": 0.43192345339501503
         },
         {
           "number": 30,
-          "baseRaw": -0.08288405797101449,
-          "baseNormalized": 0.3591815900293506,
+          "baseRaw": -0.09789974937343357,
+          "baseNormalized": 0.3511702226831514,
           "ruleMatch": 0,
-          "fused": 0.3591815900293506
+          "fused": 0.3511702226831514
         },
         {
           "number": 31,
-          "baseRaw": -0.20121739130434788,
-          "baseNormalized": 0.011867795312433534,
+          "baseRaw": -0.1678997493734336,
+          "baseNormalized": 0.1274164792523626,
           "ruleMatch": 0,
-          "fused": 0.011867795312433534
+          "fused": 0.1274164792523626
         },
         {
           "number": 32,
-          "baseRaw": 0.08044927536231884,
-          "baseNormalized": 0.8385724616104471,
+          "baseRaw": 0.04210025062656641,
+          "baseNormalized": 0.7986777095447288,
           "ruleMatch": 0,
-          "fused": 0.8385724616104471
+          "fused": 0.7986777095447288
         },
         {
           "number": 33,
-          "baseRaw": -0.07955072463768117,
-          "baseNormalized": 0.36896507720447497,
+          "baseRaw": -0.06544360902255639,
+          "baseNormalized": 0.4549156926949206,
           "ruleMatch": 0,
-          "fused": 0.36896507720447497
+          "fused": 0.4549156926949206
         },
         {
           "number": 34,
-          "baseRaw": -0.20121739130434788,
-          "baseNormalized": 0.011867795312433534,
+          "baseRaw": 0.02280200501253133,
+          "baseNormalized": 0.7369912138620552,
           "ruleMatch": 0,
-          "fused": 0.011867795312433534
+          "fused": 0.7369912138620552
         },
         {
           "number": 35,
-          "baseRaw": -0.029550724637681165,
-          "baseNormalized": 0.5157173848313413,
+          "baseRaw": -0.031233082706766904,
+          "baseNormalized": 0.5642690259505693,
           "ruleMatch": 0,
-          "fused": 0.5157173848313413
+          "fused": 0.5642690259505693
         }
       ]
     },
     "rolling38": {
-      "range": "2026043-2026080",
+      "range": "2026044-2026081",
       "rows": [
-        {
-          "issue": 2026043,
-          "state": "L",
-          "ruleHistoryEnd": 2026042,
-          "trialWeight": 0,
-          "coreWeight": 0,
-          "totalRuleWeight": 0,
-          "v2Weight": 1,
-          "changedFromV2": false,
-          "ruleStates": [
-            {
-              "id": "GAP_MIDDLE",
-              "label": "间隔号补中",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 27,
-                "n12": 12,
-                "hits12": 6,
-                "controlHits12": 5,
-                "a12": 0.5,
-                "c12": 0.4375,
-                "l12": 0.0625,
-                "n6": 6,
-                "hits6": 1,
-                "controlHits6": 4,
-                "a6": 0.3,
-                "c6": 0.6,
-                "l6": -0.3,
-                "consecutiveMisses": 1,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2026007,
-                    "controlIssue": 2026017,
-                    "triggerIndex": 27,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026009,
-                    "controlIssue": 2026022,
-                    "triggerIndex": 29,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026011,
-                    "controlIssue": 2026025,
-                    "triggerIndex": 31,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026013,
-                    "controlIssue": 2026026,
-                    "triggerIndex": 33,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026014,
-                    "controlIssue": 2026030,
-                    "triggerIndex": 34,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026018,
-                    "controlIssue": 2026032,
-                    "triggerIndex": 38,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026019,
-                    "controlIssue": 2026035,
-                    "triggerIndex": 39,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026020,
-                    "controlIssue": 2026036,
-                    "triggerIndex": 40,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026021,
-                    "controlIssue": 2026037,
-                    "triggerIndex": 41,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026023,
-                    "controlIssue": 2026040,
-                    "triggerIndex": 43,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026024,
-                    "controlIssue": 2025135,
-                    "triggerIndex": 44,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026027,
-                    "controlIssue": 2025134,
-                    "triggerIndex": 47,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [
-                26,
-                28
-              ],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "L12<10个百分点",
-                  "A6<55%",
-                  "L6<=0"
-                ]
-              },
-              "quality": 0.075,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "CONSECUTIVE_DERIVED",
-              "label": "连号区间衍生",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 30,
-                "n12": 12,
-                "hits12": 10,
-                "controlHits12": 11,
-                "a12": 0.75,
-                "c12": 0.8125,
-                "l12": -0.0625,
-                "n6": 6,
-                "hits6": 6,
-                "controlHits6": 5,
-                "a6": 0.8,
-                "c6": 0.7,
-                "l6": 0.10000000000000009,
-                "consecutiveMisses": 0,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2026019,
-                    "controlIssue": 2026029,
-                    "triggerIndex": 39,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026022,
-                    "controlIssue": 2026030,
-                    "triggerIndex": 42,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026023,
-                    "controlIssue": 2026031,
-                    "triggerIndex": 43,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026025,
-                    "controlIssue": 2026033,
-                    "triggerIndex": 45,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026026,
-                    "controlIssue": 2026036,
-                    "triggerIndex": 46,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026027,
-                    "controlIssue": 2026038,
-                    "triggerIndex": 47,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026028,
-                    "controlIssue": 2026007,
-                    "triggerIndex": 48,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026032,
-                    "controlIssue": 2026006,
-                    "triggerIndex": 52,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026034,
-                    "controlIssue": 2026005,
-                    "triggerIndex": 54,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026035,
-                    "controlIssue": 2025134,
-                    "triggerIndex": 55,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026037,
-                    "controlIssue": 2025133,
-                    "triggerIndex": 57,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026039,
-                    "controlIssue": 2025130,
-                    "triggerIndex": 59,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [
-                23,
-                24,
-                25,
-                26
-              ],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "L12<10个百分点"
-                ]
-              },
-              "quality": 0.65,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "BLUE_0102_TO_RED_31_35",
-              "label": "蓝球01/02关联红球31—35",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 23,
-                "n12": 12,
-                "hits12": 8,
-                "controlHits12": 8,
-                "a12": 0.625,
-                "c12": 0.625,
-                "l12": 0,
-                "n6": 6,
-                "hits6": 4,
-                "controlHits6": 5,
-                "a6": 0.6,
-                "c6": 0.7,
-                "l6": -0.09999999999999998,
-                "consecutiveMisses": 0,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2026011,
-                    "controlIssue": 2026008,
-                    "triggerIndex": 31,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026012,
-                    "controlIssue": 2026015,
-                    "triggerIndex": 32,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026013,
-                    "controlIssue": 2026017,
-                    "triggerIndex": 33,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026014,
-                    "controlIssue": 2026019,
-                    "triggerIndex": 34,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026016,
-                    "controlIssue": 2026020,
-                    "triggerIndex": 36,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026018,
-                    "controlIssue": 2026021,
-                    "triggerIndex": 38,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026023,
-                    "controlIssue": 2026022,
-                    "triggerIndex": 43,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026026,
-                    "controlIssue": 2026025,
-                    "triggerIndex": 46,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026027,
-                    "controlIssue": 2026029,
-                    "triggerIndex": 47,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026028,
-                    "controlIssue": 2026030,
-                    "triggerIndex": 48,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026032,
-                    "controlIssue": 2026031,
-                    "triggerIndex": 52,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026033,
-                    "controlIssue": 2026034,
-                    "triggerIndex": 53,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [
-                31,
-                32,
-                33,
-                34,
-                35
-              ],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "L12<10个百分点",
-                  "L6<=0"
-                ]
-              },
-              "quality": 0.32499999999999996,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "COLD_LOW_REAPPEAR_T2",
-              "label": "小于30冷号间隔1期复开",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 20,
-                "n12": 12,
-                "hits12": 3,
-                "controlHits12": 0,
-                "a12": 0.3125,
-                "c12": 0.125,
-                "l12": 0.1875,
-                "n6": 6,
-                "hits6": 2,
-                "controlHits6": 0,
-                "a6": 0.4,
-                "c6": 0.2,
-                "l6": 0.2,
-                "consecutiveMisses": 4,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2025149,
-                    "controlIssue": 2025148,
-                    "triggerIndex": 19,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026006,
-                    "controlIssue": 2026005,
-                    "triggerIndex": 26,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026007,
-                    "controlIssue": 2026009,
-                    "triggerIndex": 27,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026008,
-                    "controlIssue": 2026010,
-                    "triggerIndex": 28,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026011,
-                    "controlIssue": 2026012,
-                    "triggerIndex": 31,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026015,
-                    "controlIssue": 2026014,
-                    "triggerIndex": 35,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026016,
-                    "controlIssue": 2026017,
-                    "triggerIndex": 36,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026023,
-                    "controlIssue": 2026022,
-                    "triggerIndex": 43,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026025,
-                    "controlIssue": 2026024,
-                    "triggerIndex": 45,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026031,
-                    "controlIssue": 2026030,
-                    "triggerIndex": 51,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026033,
-                    "controlIssue": 2026032,
-                    "triggerIndex": 53,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026039,
-                    "controlIssue": 2026038,
-                    "triggerIndex": 59,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  }
-                ]
-              },
-              "candidates": [],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "A6<55%",
-                  "连续失误>=3",
-                  "当前无目标期候选"
-                ]
-              },
-              "quality": 0,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "COLD_HIGH_REAPPEAR_T1",
-              "label": "30及以上冷号后续1期复开",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 7,
-                "n12": 7,
-                "hits12": 1,
-                "controlHits12": 7,
-                "a12": 0.2727272727272727,
-                "c12": 0.8181818181818182,
-                "l12": -0.5454545454545455,
-                "n6": 6,
-                "hits6": 1,
-                "controlHits6": 6,
-                "a6": 0.3,
-                "c6": 0.8,
-                "l6": -0.5,
-                "consecutiveMisses": 4,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2025131,
-                    "controlIssue": 2025130,
-                    "triggerIndex": 1,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025140,
-                    "controlIssue": 2025139,
-                    "triggerIndex": 10,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025149,
-                    "controlIssue": 2025148,
-                    "triggerIndex": 19,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026014,
-                    "controlIssue": 2026013,
-                    "triggerIndex": 34,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026018,
-                    "controlIssue": 2026017,
-                    "triggerIndex": 38,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026026,
-                    "controlIssue": 2026025,
-                    "triggerIndex": 46,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026029,
-                    "controlIssue": 2026028,
-                    "triggerIndex": 49,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "L12<10个百分点",
-                  "A6<55%",
-                  "L6<=0",
-                  "连续失误>=3",
-                  "当前无目标期候选"
-                ]
-              },
-              "quality": 0,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "DIAGONAL_EXTENSION",
-              "label": "双向斜连延伸",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 13,
-                "n12": 12,
-                "hits12": 3,
-                "controlHits12": 7,
-                "a12": 0.3125,
-                "c12": 0.5625,
-                "l12": -0.25,
-                "n6": 6,
-                "hits6": 1,
-                "controlHits6": 4,
-                "a6": 0.3,
-                "c6": 0.6,
-                "l6": -0.3,
-                "consecutiveMisses": 1,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2025132,
-                    "controlIssue": 2025142,
-                    "triggerIndex": 2,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025133,
-                    "controlIssue": 2025144,
-                    "triggerIndex": 3,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025134,
-                    "controlIssue": 2026003,
-                    "triggerIndex": 4,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025135,
-                    "controlIssue": 2026013,
-                    "triggerIndex": 5,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025136,
-                    "controlIssue": 2026019,
-                    "triggerIndex": 6,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025137,
-                    "controlIssue": 2026020,
-                    "triggerIndex": 7,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025138,
-                    "controlIssue": 2026025,
-                    "triggerIndex": 8,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025139,
-                    "controlIssue": 2026031,
-                    "triggerIndex": 9,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025140,
-                    "controlIssue": 2026033,
-                    "triggerIndex": 10,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025141,
-                    "controlIssue": 2026034,
-                    "triggerIndex": 11,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025143,
-                    "controlIssue": 2026036,
-                    "triggerIndex": 13,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025145,
-                    "controlIssue": 2026040,
-                    "triggerIndex": 15,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [
-                22,
-                23
-              ],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "L12<10个百分点",
-                  "A6<55%",
-                  "L6<=0"
-                ]
-              },
-              "quality": 0.0875,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "LONG_GAP_FILL",
-              "label": "长断区中点补位",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 20,
-                "n12": 12,
-                "hits12": 5,
-                "controlHits12": 8,
-                "a12": 0.4375,
-                "c12": 0.625,
-                "l12": -0.1875,
-                "n6": 6,
-                "hits6": 2,
-                "controlHits6": 4,
-                "a6": 0.4,
-                "c6": 0.6,
-                "l6": -0.19999999999999996,
-                "consecutiveMisses": 0,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2025142,
-                    "controlIssue": 2026007,
-                    "triggerIndex": 12,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025143,
-                    "controlIssue": 2026010,
-                    "triggerIndex": 13,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025144,
-                    "controlIssue": 2026011,
-                    "triggerIndex": 14,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025145,
-                    "controlIssue": 2026015,
-                    "triggerIndex": 15,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025148,
-                    "controlIssue": 2026016,
-                    "triggerIndex": 18,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2025150,
-                    "controlIssue": 2026021,
-                    "triggerIndex": 20,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026001,
-                    "controlIssue": 2026022,
-                    "triggerIndex": 21,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026002,
-                    "controlIssue": 2026027,
-                    "triggerIndex": 22,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026004,
-                    "controlIssue": 2026033,
-                    "triggerIndex": 24,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026005,
-                    "controlIssue": 2026036,
-                    "triggerIndex": 25,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026006,
-                    "controlIssue": 2026039,
-                    "triggerIndex": 26,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026008,
-                    "controlIssue": 2026041,
-                    "triggerIndex": 28,
-                    "triggerSuccess": true,
-                    "controlSuccess": true
-                  }
-                ]
-              },
-              "candidates": [],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "L12<10个百分点",
-                  "A6<55%",
-                  "L6<=0",
-                  "当前无目标期候选"
-                ]
-              },
-              "quality": 0.06250000000000003,
-              "rawWeight": 0,
-              "weight": 0
-            },
-            {
-              "id": "RED35_TO_RED0102",
-              "label": "红球35后首尾联动",
-              "tier": "TRIAL",
-              "metrics": {
-                "completedPairCount": 8,
-                "n12": 8,
-                "hits12": 3,
-                "controlHits12": 1,
-                "a12": 0.4166666666666667,
-                "c12": 0.25,
-                "l12": 0.16666666666666669,
-                "n6": 6,
-                "hits6": 3,
-                "controlHits6": 1,
-                "a6": 0.5,
-                "c6": 0.3,
-                "l6": 0.2,
-                "consecutiveMisses": 1,
-                "recentPairs": [
-                  {
-                    "triggerIssue": 2025133,
-                    "controlIssue": 2025132,
-                    "triggerIndex": 3,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2025139,
-                    "controlIssue": 2025138,
-                    "triggerIndex": 9,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026005,
-                    "controlIssue": 2026004,
-                    "triggerIndex": 25,
-                    "triggerSuccess": false,
-                    "controlSuccess": true
-                  },
-                  {
-                    "triggerIssue": 2026006,
-                    "controlIssue": 2026007,
-                    "triggerIndex": 26,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026014,
-                    "controlIssue": 2026013,
-                    "triggerIndex": 34,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026018,
-                    "controlIssue": 2026017,
-                    "triggerIndex": 38,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026029,
-                    "controlIssue": 2026028,
-                    "triggerIndex": 49,
-                    "triggerSuccess": true,
-                    "controlSuccess": false
-                  },
-                  {
-                    "triggerIssue": 2026038,
-                    "controlIssue": 2026037,
-                    "triggerIndex": 58,
-                    "triggerSuccess": false,
-                    "controlSuccess": false
-                  }
-                ]
-              },
-              "candidates": [],
-              "eligibility": {
-                "passed": false,
-                "reasons": [
-                  "A12<60%",
-                  "A6<55%",
-                  "当前无目标期候选"
-                ]
-              },
-              "quality": 0.25555555555555554,
-              "rawWeight": 0,
-              "weight": 0
-            }
-          ],
-          "baselineV2": {
-            "dan": [
-              7,
-              27,
-              34
-            ],
-            "drag": [
-              12,
-              13,
-              25,
-              26,
-              29
-            ],
-            "all": [
-              7,
-              12,
-              13,
-              25,
-              26,
-              27,
-              29,
-              34
-            ],
-            "blues": [
-              1,
-              12
-            ],
-            "danRepeats": [
-              7
-            ],
-            "selectedRepeats": [
-              7,
-              13
-            ],
-            "danRepeat": 1,
-            "allRepeat": 2,
-            "danHits": 0,
-            "cover": 1,
-            "blueHits": 1,
-            "unionHit": true
-          },
-          "dynamic": {
-            "dan": [
-              7,
-              27,
-              34
-            ],
-            "drag": [
-              12,
-              13,
-              25,
-              26,
-              29
-            ],
-            "all": [
-              7,
-              12,
-              13,
-              25,
-              26,
-              27,
-              29,
-              34
-            ],
-            "blues": [
-              1,
-              12
-            ],
-            "danRepeats": [
-              7
-            ],
-            "selectedRepeats": [
-              7,
-              13
-            ],
-            "danRepeat": 1,
-            "allRepeat": 2,
-            "danHits": 0,
-            "cover": 1,
-            "blueHits": 1,
-            "unionHit": true
-          },
-          "actualReds": [
-            8,
-            12,
-            14,
-            19,
-            22
-          ],
-          "actualBlues": [
-            11,
-            12
-          ]
-        },
         {
           "issue": 2026044,
           "state": "L",
@@ -46777,27 +45725,1100 @@
             7,
             8
           ]
+        },
+        {
+          "issue": 2026081,
+          "state": "L",
+          "ruleHistoryEnd": 2026080,
+          "trialWeight": 0,
+          "coreWeight": 0,
+          "totalRuleWeight": 0,
+          "v2Weight": 1,
+          "changedFromV2": false,
+          "ruleStates": [
+            {
+              "id": "GAP_MIDDLE",
+              "label": "间隔号补中",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 47,
+                "n12": 12,
+                "hits12": 3,
+                "controlHits12": 3,
+                "a12": 0.3125,
+                "c12": 0.3125,
+                "l12": 0,
+                "n6": 6,
+                "hits6": 1,
+                "controlHits6": 2,
+                "a6": 0.3,
+                "c6": 0.4,
+                "l6": -0.10000000000000003,
+                "consecutiveMisses": 4,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2026043,
+                    "controlIssue": 2026058,
+                    "triggerIndex": 63,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026047,
+                    "controlIssue": 2026062,
+                    "triggerIndex": 67,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026049,
+                    "controlIssue": 2026068,
+                    "triggerIndex": 69,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026054,
+                    "controlIssue": 2026070,
+                    "triggerIndex": 74,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026055,
+                    "controlIssue": 2026071,
+                    "triggerIndex": 75,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026057,
+                    "controlIssue": 2026072,
+                    "triggerIndex": 77,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026059,
+                    "controlIssue": 2026073,
+                    "triggerIndex": 79,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026060,
+                    "controlIssue": 2026076,
+                    "triggerIndex": 80,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026061,
+                    "controlIssue": 2026077,
+                    "triggerIndex": 81,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026063,
+                    "controlIssue": 2026078,
+                    "triggerIndex": 83,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026064,
+                    "controlIssue": 2025135,
+                    "triggerIndex": 84,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026065,
+                    "controlIssue": 2025134,
+                    "triggerIndex": 85,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  }
+                ]
+              },
+              "candidates": [
+                7,
+                22
+              ],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "L12<10个百分点",
+                  "A6<55%",
+                  "L6<=0",
+                  "连续失误>=3"
+                ]
+              },
+              "quality": 0,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "CONSECUTIVE_DERIVED",
+              "label": "连号区间衍生",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 48,
+                "n12": 12,
+                "hits12": 10,
+                "controlHits12": 9,
+                "a12": 0.75,
+                "c12": 0.6875,
+                "l12": 0.0625,
+                "n6": 6,
+                "hits6": 5,
+                "controlHits6": 5,
+                "a6": 0.7,
+                "c6": 0.7,
+                "l6": 0,
+                "consecutiveMisses": 0,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2026055,
+                    "controlIssue": 2026063,
+                    "triggerIndex": 75,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026056,
+                    "controlIssue": 2026064,
+                    "triggerIndex": 76,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026057,
+                    "controlIssue": 2026066,
+                    "triggerIndex": 77,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026058,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 78,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026060,
+                    "controlIssue": 2026071,
+                    "triggerIndex": 80,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026065,
+                    "controlIssue": 2026074,
+                    "triggerIndex": 85,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026067,
+                    "controlIssue": 2026075,
+                    "triggerIndex": 87,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026068,
+                    "controlIssue": 2026077,
+                    "triggerIndex": 88,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026070,
+                    "controlIssue": 2026078,
+                    "triggerIndex": 90,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026072,
+                    "controlIssue": 2026007,
+                    "triggerIndex": 92,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026073,
+                    "controlIssue": 2026006,
+                    "triggerIndex": 93,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026076,
+                    "controlIssue": 2026005,
+                    "triggerIndex": 96,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  }
+                ]
+              },
+              "candidates": [
+                25,
+                26,
+                27,
+                28
+              ],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "L12<10个百分点",
+                  "L6<=0"
+                ]
+              },
+              "quality": 0.6249999999999999,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "BLUE_0102_TO_RED_31_35",
+              "label": "蓝球01/02关联红球31—35",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 39,
+                "n12": 12,
+                "hits12": 9,
+                "controlHits12": 9,
+                "a12": 0.6875,
+                "c12": 0.6875,
+                "l12": 0,
+                "n6": 6,
+                "hits6": 4,
+                "controlHits6": 4,
+                "a6": 0.6,
+                "c6": 0.6,
+                "l6": 0,
+                "consecutiveMisses": 0,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2026052,
+                    "controlIssue": 2026054,
+                    "triggerIndex": 72,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026056,
+                    "controlIssue": 2026055,
+                    "triggerIndex": 76,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026058,
+                    "controlIssue": 2026057,
+                    "triggerIndex": 78,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026060,
+                    "controlIssue": 2026059,
+                    "triggerIndex": 80,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026061,
+                    "controlIssue": 2026062,
+                    "triggerIndex": 81,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026063,
+                    "controlIssue": 2026065,
+                    "triggerIndex": 83,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026064,
+                    "controlIssue": 2026066,
+                    "triggerIndex": 84,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026070,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 90,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026071,
+                    "controlIssue": 2026072,
+                    "triggerIndex": 91,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026073,
+                    "controlIssue": 2026075,
+                    "triggerIndex": 93,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026074,
+                    "controlIssue": 2026077,
+                    "triggerIndex": 94,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026076,
+                    "controlIssue": 2026078,
+                    "triggerIndex": 96,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  }
+                ]
+              },
+              "candidates": [],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "L12<10个百分点",
+                  "L6<=0",
+                  "当前无目标期候选"
+                ]
+              },
+              "quality": 0.38749999999999996,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "COLD_LOW_REAPPEAR_T2",
+              "label": "小于30冷号间隔1期复开",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 32,
+                "n12": 12,
+                "hits12": 1,
+                "controlHits12": 5,
+                "a12": 0.1875,
+                "c12": 0.4375,
+                "l12": -0.25,
+                "n6": 6,
+                "hits6": 1,
+                "controlHits6": 2,
+                "a6": 0.3,
+                "c6": 0.4,
+                "l6": -0.10000000000000003,
+                "consecutiveMisses": 3,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2026043,
+                    "controlIssue": 2026042,
+                    "triggerIndex": 63,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026045,
+                    "controlIssue": 2026044,
+                    "triggerIndex": 65,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026047,
+                    "controlIssue": 2026046,
+                    "triggerIndex": 67,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026050,
+                    "controlIssue": 2026049,
+                    "triggerIndex": 70,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026062,
+                    "controlIssue": 2026061,
+                    "triggerIndex": 82,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026065,
+                    "controlIssue": 2026064,
+                    "triggerIndex": 85,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026067,
+                    "controlIssue": 2026066,
+                    "triggerIndex": 87,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026070,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 90,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026072,
+                    "controlIssue": 2026071,
+                    "triggerIndex": 92,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026076,
+                    "controlIssue": 2026075,
+                    "triggerIndex": 96,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026077,
+                    "controlIssue": 2026074,
+                    "triggerIndex": 97,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026078,
+                    "controlIssue": 2026073,
+                    "triggerIndex": 98,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  }
+                ]
+              },
+              "candidates": [
+                8
+              ],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "L12<10个百分点",
+                  "A6<55%",
+                  "L6<=0",
+                  "连续失误>=3"
+                ]
+              },
+              "quality": 0,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "COLD_HIGH_REAPPEAR_T1",
+              "label": "30及以上冷号后续1期复开",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 11,
+                "n12": 11,
+                "hits12": 2,
+                "controlHits12": 11,
+                "a12": 0.26666666666666666,
+                "c12": 0.8666666666666667,
+                "l12": -0.6000000000000001,
+                "n6": 6,
+                "hits6": 1,
+                "controlHits6": 6,
+                "a6": 0.3,
+                "c6": 0.8,
+                "l6": -0.5,
+                "consecutiveMisses": 1,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2025131,
+                    "controlIssue": 2025130,
+                    "triggerIndex": 1,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2025140,
+                    "controlIssue": 2025139,
+                    "triggerIndex": 10,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2025149,
+                    "controlIssue": 2025148,
+                    "triggerIndex": 19,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026014,
+                    "controlIssue": 2026013,
+                    "triggerIndex": 34,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026018,
+                    "controlIssue": 2026017,
+                    "triggerIndex": 38,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026026,
+                    "controlIssue": 2026025,
+                    "triggerIndex": 46,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026029,
+                    "controlIssue": 2026028,
+                    "triggerIndex": 49,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026053,
+                    "controlIssue": 2026052,
+                    "triggerIndex": 73,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026056,
+                    "controlIssue": 2026055,
+                    "triggerIndex": 76,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026070,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 90,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026073,
+                    "controlIssue": 2026072,
+                    "triggerIndex": 93,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  }
+                ]
+              },
+              "candidates": [],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "L12<10个百分点",
+                  "A6<55%",
+                  "L6<=0",
+                  "当前无目标期候选"
+                ]
+              },
+              "quality": 0.12222222222222222,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "DIAGONAL_EXTENSION",
+              "label": "双向斜连延伸",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 26,
+                "n12": 12,
+                "hits12": 6,
+                "controlHits12": 8,
+                "a12": 0.5,
+                "c12": 0.625,
+                "l12": -0.125,
+                "n6": 6,
+                "hits6": 2,
+                "controlHits6": 3,
+                "a6": 0.4,
+                "c6": 0.5,
+                "l6": -0.09999999999999998,
+                "consecutiveMisses": 0,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2025147,
+                    "controlIssue": 2026048,
+                    "triggerIndex": 17,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2025148,
+                    "controlIssue": 2026053,
+                    "triggerIndex": 18,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2025149,
+                    "controlIssue": 2026054,
+                    "triggerIndex": 19,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2025150,
+                    "controlIssue": 2026056,
+                    "triggerIndex": 20,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026001,
+                    "controlIssue": 2026057,
+                    "triggerIndex": 21,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026002,
+                    "controlIssue": 2026059,
+                    "triggerIndex": 22,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026004,
+                    "controlIssue": 2026061,
+                    "triggerIndex": 24,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026005,
+                    "controlIssue": 2026062,
+                    "triggerIndex": 25,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026006,
+                    "controlIssue": 2026067,
+                    "triggerIndex": 26,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026007,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 27,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026008,
+                    "controlIssue": 2026071,
+                    "triggerIndex": 28,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026009,
+                    "controlIssue": 2026072,
+                    "triggerIndex": 29,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  }
+                ]
+              },
+              "candidates": [
+                3,
+                4
+              ],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "L12<10个百分点",
+                  "A6<55%",
+                  "L6<=0"
+                ]
+              },
+              "quality": 2.2204460492503132e-17,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "LONG_GAP_FILL",
+              "label": "长断区中点补位",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 39,
+                "n12": 12,
+                "hits12": 5,
+                "controlHits12": 6,
+                "a12": 0.4375,
+                "c12": 0.5,
+                "l12": -0.0625,
+                "n6": 6,
+                "hits6": 1,
+                "controlHits6": 3,
+                "a6": 0.3,
+                "c6": 0.5,
+                "l6": -0.2,
+                "consecutiveMisses": 4,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2026020,
+                    "controlIssue": 2026059,
+                    "triggerIndex": 40,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026023,
+                    "controlIssue": 2026060,
+                    "triggerIndex": 43,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026024,
+                    "controlIssue": 2026062,
+                    "triggerIndex": 44,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026025,
+                    "controlIssue": 2026064,
+                    "triggerIndex": 45,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026026,
+                    "controlIssue": 2026066,
+                    "triggerIndex": 46,
+                    "triggerSuccess": true,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026028,
+                    "controlIssue": 2026067,
+                    "triggerIndex": 48,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026029,
+                    "controlIssue": 2026068,
+                    "triggerIndex": 49,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026030,
+                    "controlIssue": 2026069,
+                    "triggerIndex": 50,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026031,
+                    "controlIssue": 2026071,
+                    "triggerIndex": 51,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026032,
+                    "controlIssue": 2026075,
+                    "triggerIndex": 52,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026034,
+                    "controlIssue": 2026076,
+                    "triggerIndex": 54,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026035,
+                    "controlIssue": 2026077,
+                    "triggerIndex": 55,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  }
+                ]
+              },
+              "candidates": [],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "L12<10个百分点",
+                  "A6<55%",
+                  "L6<=0",
+                  "连续失误>=3",
+                  "当前无目标期候选"
+                ]
+              },
+              "quality": 0,
+              "rawWeight": 0,
+              "weight": 0
+            },
+            {
+              "id": "RED35_TO_RED0102",
+              "label": "红球35后首尾联动",
+              "tier": "TRIAL",
+              "metrics": {
+                "completedPairCount": 12,
+                "n12": 12,
+                "hits12": 4,
+                "controlHits12": 1,
+                "a12": 0.375,
+                "c12": 0.1875,
+                "l12": 0.1875,
+                "n6": 6,
+                "hits6": 2,
+                "controlHits6": 0,
+                "a6": 0.4,
+                "c6": 0.2,
+                "l6": 0.2,
+                "consecutiveMisses": 3,
+                "recentPairs": [
+                  {
+                    "triggerIssue": 2025133,
+                    "controlIssue": 2025132,
+                    "triggerIndex": 3,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2025139,
+                    "controlIssue": 2025138,
+                    "triggerIndex": 9,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026005,
+                    "controlIssue": 2026004,
+                    "triggerIndex": 25,
+                    "triggerSuccess": false,
+                    "controlSuccess": true
+                  },
+                  {
+                    "triggerIssue": 2026006,
+                    "controlIssue": 2026007,
+                    "triggerIndex": 26,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026014,
+                    "controlIssue": 2026013,
+                    "triggerIndex": 34,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026018,
+                    "controlIssue": 2026017,
+                    "triggerIndex": 38,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026029,
+                    "controlIssue": 2026028,
+                    "triggerIndex": 49,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026038,
+                    "controlIssue": 2026037,
+                    "triggerIndex": 58,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026048,
+                    "controlIssue": 2026047,
+                    "triggerIndex": 68,
+                    "triggerSuccess": true,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026055,
+                    "controlIssue": 2026054,
+                    "triggerIndex": 75,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026061,
+                    "controlIssue": 2026060,
+                    "triggerIndex": 81,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  },
+                  {
+                    "triggerIssue": 2026076,
+                    "controlIssue": 2026075,
+                    "triggerIndex": 96,
+                    "triggerSuccess": false,
+                    "controlSuccess": false
+                  }
+                ]
+              },
+              "candidates": [],
+              "eligibility": {
+                "passed": false,
+                "reasons": [
+                  "A12<60%",
+                  "A6<55%",
+                  "连续失误>=3",
+                  "当前无目标期候选"
+                ]
+              },
+              "quality": 0,
+              "rawWeight": 0,
+              "weight": 0
+            }
+          ],
+          "baselineV2": {
+            "dan": [
+              4,
+              23,
+              26
+            ],
+            "drag": [
+              6,
+              13,
+              21,
+              27,
+              32
+            ],
+            "all": [
+              4,
+              6,
+              13,
+              21,
+              23,
+              26,
+              27,
+              32
+            ],
+            "blues": [
+              2,
+              3
+            ],
+            "danRepeats": [
+              23
+            ],
+            "selectedRepeats": [
+              21,
+              23
+            ],
+            "danRepeat": 1,
+            "allRepeat": 2,
+            "danHits": 0,
+            "cover": 0,
+            "blueHits": 0,
+            "unionHit": false
+          },
+          "dynamic": {
+            "dan": [
+              4,
+              23,
+              26
+            ],
+            "drag": [
+              6,
+              13,
+              21,
+              27,
+              32
+            ],
+            "all": [
+              4,
+              6,
+              13,
+              21,
+              23,
+              26,
+              27,
+              32
+            ],
+            "blues": [
+              2,
+              3
+            ],
+            "danRepeats": [
+              23
+            ],
+            "selectedRepeats": [
+              21,
+              23
+            ],
+            "danRepeat": 1,
+            "allRepeat": 2,
+            "danHits": 0,
+            "cover": 0,
+            "blueHits": 0,
+            "unionHit": false
+          },
+          "actualReds": [
+            8,
+            16,
+            18,
+            24,
+            34
+          ],
+          "actualBlues": [
+            9,
+            12
+          ]
         }
       ],
       "baseline": {
         "danAny": 10,
         "danGe2": 2,
-        "coverGe1": 33,
+        "coverGe1": 32,
         "coverGe2": 9,
         "coverGe3": 3,
-        "totalCover": 45,
-        "blueAny": 21,
-        "union": 26
+        "totalCover": 44,
+        "blueAny": 20,
+        "union": 25
       },
       "dynamic": {
         "danAny": 10,
         "danGe2": 2,
-        "coverGe1": 33,
+        "coverGe1": 32,
         "coverGe2": 9,
         "coverGe3": 3,
-        "totalCover": 45,
-        "blueAny": 21,
-        "union": 26
+        "totalCover": 44,
+        "blueAny": 20,
+        "union": 25
       },
       "difference": {
         "danAny": 0,
@@ -46855,5 +46876,5 @@
       }
     }
   },
-  "analysisHash": "27f1865119ed3d5afbb53fa6d714f60471e3ee1a7fed5508264da92f58d2e15e"
+  "analysisHash": "5448124883f5022c53b89d65146f683b61757449d49badf5e9968282466954e1"
 }

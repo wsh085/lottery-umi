@@ -236,10 +236,11 @@ test('动态最近38期严格滚动行数和权重上限', () => {
   const draws = loadAllDraws();
   const rows = standardizeRange(draws);
   const rolling = rollingDynamicBacktest(draws, rows);
+  const expectedTargets = draws.slice(-38);
   assert.equal(rolling.rows.length, 38);
-  assert.equal(rolling.range, '2026043-2026080');
-  assert.equal(rolling.rows[0].issue, 2026043);
-  assert.equal(rolling.rows.at(-1).issue, 2026080);
+  assert.equal(rolling.range, `${expectedTargets[0].issue}-${expectedTargets.at(-1).issue}`);
+  assert.equal(rolling.rows[0].issue, expectedTargets[0].issue);
+  assert.equal(rolling.rows.at(-1).issue, expectedTargets.at(-1).issue);
   assert.ok(rolling.rows.every((item) => item.ruleHistoryEnd < item.issue));
   assert.ok(rolling.rows.every((item) => item.trialWeight <= 0.05 + 1e-12));
   assert.ok(rolling.rows.every((item) => item.totalRuleWeight <= 0.15 + 1e-12));
@@ -254,12 +255,11 @@ test('动态最近38期严格滚动行数和权重上限', () => {
 test('新增开奖后目标期自动推导且规律时间线扩展但固定门槛范围不滑动', () => {
   const draws = loadAllDraws();
   const rows = standardizeRange(draws);
-  assert.equal(draws.length, 230);
-  assert.equal(draws.at(-1).issue, 2026080);
-  assert.equal(nextIssue(draws.at(-1).issue), 2026081);
-  assert.equal(rows.length, 101);
+  const latestIssue = draws.at(-1).issue;
+  assert.equal(nextIssue(latestIssue), latestIssue + 1);
+  assert.equal(rows.length, draws.filter((item) => item.issue >= 2025130).length);
   assert.equal(rows[0].issue, 2025130);
-  assert.equal(rows.at(-1).issue, 2026080);
+  assert.equal(rows.at(-1).issue, latestIssue);
   assert.equal(rows.filter((item) => item.issue <= 2026049).length, 70);
   assert.equal(rows.filter((item) => item.issue >= 2026050 && item.issue <= 2026079).length, 30);
 });
