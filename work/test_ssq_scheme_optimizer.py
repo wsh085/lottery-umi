@@ -38,9 +38,9 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
 
     def test_validate_draws(self) -> None:
         summary = validate_draws(self.draws)
-        self.assertEqual(summary["draw_count"], 204)
+        self.assertEqual(summary["draw_count"], 207)
         self.assertEqual(summary["first_issue"], 2025030)
-        self.assertEqual(summary["last_issue"], 2026082)
+        self.assertEqual(summary["last_issue"], 2026085)
 
         with self.assertRaisesRegex(ValueError, "红球未升序排列"):
             validate_draws([Draw(issue="2026001", reds=(2, 1, 3, 4, 5, 6), blue=1)])
@@ -148,31 +148,31 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
             self.assertNotIn(english_label, rendered)
 
     def test_latest_completed_forward_audit_before_refreeze(self) -> None:
-        # 2026082 的预测必须只来自前203期；本次重算后再把模型版本冻结于2026082。
+        # 2026085 的预测必须只来自前206期；本次重算后再把模型版本冻结于2026085。
         history = self.draws[:-1]
         actual = self.draws[-1]
         prediction = predict_at(history, len(history))
 
-        self.assertEqual(actual.issue, "2026082")
-        self.assertEqual(prediction["red_champion"]["numbers"], [24, 27])
-        self.assertEqual(prediction["red_challenger"]["numbers"], [24, 33])
-        self.assertEqual(prediction["blue"]["numbers"], [1, 2, 4, 7])
+        self.assertEqual(actual.issue, "2026085")
+        self.assertEqual(prediction["red_champion"]["numbers"], [5, 32])
+        self.assertEqual(prediction["red_challenger"]["numbers"], [5, 27])
+        self.assertEqual(prediction["blue"]["numbers"], [1, 4, 7, 8])
         self.assertFalse(set(prediction["red_champion"]["numbers"]) & set(actual.reds))
         self.assertFalse(set(prediction["red_challenger"]["numbers"]) & set(actual.reds))
-        self.assertIn(actual.blue, prediction["blue"]["numbers"])
+        self.assertNotIn(actual.blue, prediction["blue"]["numbers"])
 
     def test_reuse_guide_matches_current_snapshot(self) -> None:
         # 复用指南必须和当前数据快照、预测号码及38期逐期明细保持同步。
         guide = GUIDE_PATH.read_text(encoding="utf-8")
-        self.assertIn("当前数据：2025030—2026082，共204期", guide)
+        self.assertIn("当前数据：2025030—2026085，共207期", guide)
         self.assertIn(
-            "ddaba886f97e6091279025b8225964918f9368d4a75705f5f49be09b0b3dc4f5",
+            "ae35c285748c60348afa54005ac086475258fa7bc3c6287e7749db190ee6afca",
             guide,
         )
-        self.assertIn("当前预测目标：2026083期", guide)
-        self.assertIn("| 红球主模型 | `14、27` |", guide)
-        self.assertIn("| 红球候选模型 | `11、24` |", guide)
-        self.assertIn("| 蓝球四码模型 | `01、02、04、08` |", guide)
+        self.assertIn("当前预测目标：2026086期", guide)
+        self.assertIn("| 红球主模型 | `27、28` |", guide)
+        self.assertIn("| 红球候选模型 | `14、15` |", guide)
+        self.assertIn("| 蓝球四码模型 | `01、04、07、15` |", guide)
         paired_rows = re.findall(r"^\| 2026\d{3} \|", guide, flags=re.MULTILINE)
         self.assertEqual(len(paired_rows), 38)
 
@@ -181,26 +181,26 @@ class TestSsqSchemeOptimizer(unittest.TestCase):
         self.assertEqual(result["data_summary"]["draw_count"], len(self.draws))
         self.assertEqual(
             result["data_summary"]["sha256"],
-            "ddaba886f97e6091279025b8225964918f9368d4a75705f5f49be09b0b3dc4f5",
+            "ae35c285748c60348afa54005ac086475258fa7bc3c6287e7749db190ee6afca",
         )
-        self.assertEqual(result["next_issue"], "2026083")
-        self.assertEqual(result["metadata"]["parameter_freeze_issue"], "2026082")
-        self.assertEqual(result["red"]["prediction"], [14, 27])
-        self.assertEqual(result["red"]["champion"]["prediction"], [14, 27])
-        self.assertEqual(result["red"]["challenger"]["prediction"], [11, 24])
-        self.assertEqual(result["red"]["champion"]["windows"]["38"]["hits"], 17)
-        self.assertEqual(result["red"]["challenger"]["windows"]["38"]["hits"], 15)
+        self.assertEqual(result["next_issue"], "2026086")
+        self.assertEqual(result["metadata"]["parameter_freeze_issue"], "2026085")
+        self.assertEqual(result["red"]["prediction"], [27, 28])
+        self.assertEqual(result["red"]["champion"]["prediction"], [27, 28])
+        self.assertEqual(result["red"]["challenger"]["prediction"], [14, 15])
+        self.assertEqual(result["red"]["champion"]["windows"]["38"]["hits"], 16)
+        self.assertEqual(result["red"]["challenger"]["windows"]["38"]["hits"], 13)
         self.assertEqual(
             result["red"]["paired_comparison_38"],
             {
-                "both": 12,
-                "champion_only": 5,
+                "both": 10,
+                "champion_only": 6,
                 "challenger_only": 3,
-                "neither": 18,
-                "mcnemar_exact_two_sided": 0.7265625,
+                "neither": 19,
+                "mcnemar_exact_two_sided": 0.5078125,
             },
         )
-        self.assertEqual(result["blue"]["prediction"], [1, 2, 4, 8])
+        self.assertEqual(result["blue"]["prediction"], [1, 4, 7, 15])
         self.assertEqual(result["blue"]["windows"]["38"]["hits"], 15)
         self.assertEqual(result["blue"]["probability_status"], "softmax_normalized_not_calibrated")
         self.assertEqual(result["metadata"]["ml_training_target_lookback"], 72)
