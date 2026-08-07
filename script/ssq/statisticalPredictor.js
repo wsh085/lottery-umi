@@ -18,7 +18,7 @@ class StatisticalPredictor {
           inputShape: [9], // 9个输入特征
           units: 64,
           activation: "relu",
-        })
+        }),
       );
 
       // 添加隐藏层
@@ -26,7 +26,7 @@ class StatisticalPredictor {
         tf.layers.dense({
           units: 32,
           activation: "relu",
-        })
+        }),
       );
 
       // 添加输出层
@@ -34,7 +34,7 @@ class StatisticalPredictor {
         tf.layers.dense({
           units: 7, // 7个输出（6个红球+1个蓝球）
           activation: "sigmoid", // 使用sigmoid确保输出在0-1之间
-        })
+        }),
       );
 
       // 编译模型
@@ -69,7 +69,7 @@ class StatisticalPredictor {
       // 保存模型配置
       fs.writeFileSync(
         path.join(modelDir, "model.json"),
-        JSON.stringify(modelConfig)
+        JSON.stringify(modelConfig),
       );
 
       // 获取模型的权重
@@ -79,7 +79,7 @@ class StatisticalPredictor {
       // 保存权重数据
       fs.writeFileSync(
         path.join(modelDir, "weights.json"),
-        JSON.stringify(weightData)
+        JSON.stringify(weightData),
       );
 
       return true;
@@ -114,7 +114,7 @@ class StatisticalPredictor {
             inputShape: [9],
             units: 64,
             activation: "relu",
-          })
+          }),
         );
 
         // 添加隐藏层
@@ -122,7 +122,7 @@ class StatisticalPredictor {
           tf.layers.dense({
             units: 32,
             activation: "relu",
-          })
+          }),
         );
 
         // 添加输出层
@@ -130,7 +130,7 @@ class StatisticalPredictor {
           tf.layers.dense({
             units: 7,
             activation: "sigmoid",
-          })
+          }),
         );
 
         // 读取权重数据
@@ -223,7 +223,7 @@ class StatisticalPredictor {
           // 红球 (1-33)
           const redNum = Math.round(value * 33);
           return Math.max(1, Math.min(33, redNum));
-        }
+        },
       );
 
       // 处理红球
@@ -234,7 +234,7 @@ class StatisticalPredictor {
       while (finalRedBalls.size < 6) {
         const existingNums = Array.from(finalRedBalls);
         const usedZones = new Set(
-          existingNums.map((num) => Math.floor((num - 1) / 6))
+          existingNums.map((num) => Math.floor((num - 1) / 6)),
         ); // 将1-33分成6个区域
 
         // 在未使用的区域中选择中间值
@@ -267,7 +267,7 @@ class StatisticalPredictor {
             if (!finalRedBalls.has(i)) {
               // 计算与现有数字的最小距离
               const minDistance = Math.min(
-                ...Array.from(finalRedBalls).map((num) => Math.abs(num - i))
+                ...Array.from(finalRedBalls).map((num) => Math.abs(num - i)),
               );
               remainingNums.set(i, minDistance);
             }
