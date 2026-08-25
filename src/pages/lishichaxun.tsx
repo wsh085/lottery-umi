@@ -150,7 +150,7 @@ const LiShiChaXun = () => {
               <Input
                 className="w-1-1"
                 allowClear
-                placeholder="请输入期数"
+                placeholder="小于等于当前期数的号码才会被查询，如2026001"
                 onChange={(e) =>
                   updateParams({
                     qishu: e.target.value,
